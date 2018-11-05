@@ -1,3 +1,6 @@
+# Local ignores
+hmp_client
+
 # History files
 .Rhistory
 .Rapp.history
