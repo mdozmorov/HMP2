@@ -12,4 +12,5 @@
 
 - Why `HMP16SData` splits the data into `V13` and `V35` objects?
 - Why ExperimentalHub?
-- Where to get basic phenotypic information about the HMP2 data?
+- Where to get basic phenotypic information about the HMP2 data, besides downloadable metadata?
+- Can we do more than .biom files, e.g., process .fastq, is it worth it?
