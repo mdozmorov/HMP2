@@ -1,0 +1,38 @@
+---
+title: "Meeting notes"
+author: "author"
+date: "November 7, 2018"
+output: html_document
+---
+
+- Introductions
+- Who will be primary developers of the package?
+  - John & Mikhail
+
+- Why does HMP16SData not include the HMP2 data as well?
+  - would take too much time to include extra data and standardization
+- what will be selling point of new package?
+  - HMP2 were designed experiments and some patients were followed longitudinally or looked at for specific disease
+  - HMP1 was healthy human microbiome
+- Why does HMP16SData split data into V13 and V35?
+  - technical reasons, different dimensions between assays so split up data
+  - Should we do the same for HMP2? 
+    - Not sure, depends on data
+- HMP2 data has lots of different omic data associated with diseases
+- Data might not be processed uniformly
+- Not sure which site to use for downloading the data?
+- Somebody will need to catalogue the data
+- Can forward problems with HMP data download to Jenn
+- Everything should be scripted so package can be rebuilt from scratch
+- Cindy can maybe help with data acess
+- Want to try dbgap data download reproducibility for HMP1 data
+- Want to store raw data in experimenthub or csv files which can be loaded by R functions into S4 objects
+- Is it worth it process fastq files and put those together or just biom files?
+  - depends if all fastq files are available, if files were uniformly processed / used HMP's pipeline then might not be any need to re-process raw data
+  - If we do re-process then should use a docker container to make pipeline reproducible
+  - Should be able to get HMP pipeline code
+- Need to understand what data we have / don't have and come up with uniform dataset
+- What level of data are we trying to provide in the package?
+  - HMP16SData provides summarized experiments; would likely do the same for HMP2 but with multiassayexperiments
+  - matrix level data summarized of different data types - not .fastq files
+
