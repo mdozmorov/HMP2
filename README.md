@@ -15,9 +15,12 @@
 - `data`
     - `hmp_cart_1c572b0ab.tsv` - manifest for first three files
     - `hmp_cart_metadata_b53a6441a.tsv` - metadata for first three files
+    - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 files, 11/09/2018
+    - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 files, 11/09/2018
 
 - `scripts`
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
+    - `ascp-commands.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
 
 ## URLs
 
