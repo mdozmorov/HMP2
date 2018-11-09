@@ -1,0 +1,71 @@
+---
+title: "MOMS-PI"
+# author: "Author's Name"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: no
+  html_document:
+    theme: cerulean
+    toc: yes
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+# Set up the environment
+library(knitr)
+opts_chunk$set(cache.path='cache/', fig.path='img/', cache=F, tidy=T, fig.keep='high', echo=F, dpi=100, warnings=F, message=F, comment=NA, warning=F, results='as.is', fig.width = 10, fig.height = 6) #out.width=700, 
+library(pander)
+panderOptions('table.split.table', Inf)
+set.seed(1)
+library(dplyr)
+options(stringsAsFactors = FALSE)
+```
+
+```{r}
+library(readr)
+library(DataExplorer)
+library(reshape2)
+```
+
+
+```{r settings}
+# Data folder
+dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/MOMS-PI/"
+# Input files
+fileNameIn1  <- "MOMS-PI_16S_STIRRUPS_profiles_POP1.txt"
+# Output files
+fileNameOut1 <- "results/report_momspi.html"
+```
+
+# Exploratory data analysis
+
+Data source: http://vmc.vcu.edu/resources/momspi. Download with `scripts/download_moms-pi.sh`
+
+## `r fileNameIn1`
+
+```{r}
+# mtx1 <- read_tsv(paste0(dataDir, fileNameIn1), col_names = TRUE)
+mtx1 <- read.table(paste0(dataDir, fileNameIn1), sep = "\t", header = TRUE)
+# Fix numbers
+mtx1$No_of_Reads          <- as.numeric(mtx1$No_of_Reads)
+mtx1$Percentage_Abundance <- as.numeric(mtx1$Percentage_Abundance)
+mtx1$Avg._Score           <- as.numeric(mtx1$Avg._Score)
+```
+
+
+```{r eval=FALSE}
+### Standard report
+create_report(mtx1, output_file = fileNameOut1, output_dir = "results/momspi")
+```
+
+### Manual EDA
+
+```{r echo=TRUE}
+table(mtx1$SampleID) %>% head
+unique(mtx1$SampleID) %>% length()
+mtx1_wide <- dcast(mtx1[, c("SampleID", "Taxa", "Percentage_Abundance")], SampleID ~ Taxa, value.var = "Percentage_Abundance", fun.aggregate = sum)
+mtx1_wide[1:15, 1:5] %>% pander
+
+mtx1_wide %>% select(-SampleID) %>% apply(., 2, sum) %>% sort(., decreasing = TRUE) %>% head
+```
+
