@@ -8,6 +8,7 @@
 
 ## Files
 
+- `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data
 - `Methods.md` - Methods notes
 - `ToDo.md` - current todos
 
@@ -15,6 +16,8 @@
     - `hmp_cart_1c572b0ab.tsv` - manifest for first three files
     - `hmp_cart_metadata_b53a6441a.tsv` - metadata for first three files
 
+- `scripts`
+    - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
 
 ## URLs
 
