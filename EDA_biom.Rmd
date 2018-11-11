@@ -1,0 +1,69 @@
+---
+title: "BIOM"
+# author: "Author's Name"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: no
+  html_document:
+    theme: cerulean
+    toc: yes
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+# Set up the environment
+library(knitr)
+opts_chunk$set(cache.path='cache/', fig.path='img/', cache=F, tidy=T, fig.keep='high', echo=F, dpi=100, warnings=F, message=F, comment=NA, warning=F, results='as.is', fig.width = 10, fig.height = 6) #out.width=700, 
+library(pander)
+panderOptions('table.split.table', Inf)
+set.seed(1)
+library(dplyr)
+options(stringsAsFactors = FALSE)
+```
+
+```{r}
+library(readr)
+library(magrittr)
+```
+
+
+```{r settings}
+# Data folder
+dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb/"
+# Input files
+fileNameIn1  <- "data/hmp_cart_41c0aca569.tsv" # Manifest
+fileNameIn2  <- "data/hmp_cart_metadata_26015b0c41.tsv" # Metadata
+fileNameIn3  <- "data/downloaded_ascp.txt" # Downloaded files
+# Output files
+fileNameOut1 <- "results/report_momspi.html"
+```
+
+# Exploratory data analysis
+
+Data source: https://www.hmpdacc.org/hmp/, https://portal.hmpdacc.org/ - data portal. [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D). Download with `scripts/ascp-commands.sh`
+
+## Why the discrepancy between the number of downloaded and manifest files?
+
+```{r}
+# Manifest
+mtx1 <- read_tsv(fileNameIn1)
+# Add file names
+mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
+```
+
+```{r}
+# Downloaded files
+mtx3 <- read_tsv(fileNameIn3, col_names = FALSE)
+```
+
+```{r}
+# Intersecting
+setdiff(mtx3$X1, mtx1$file_name)
+setdiff(mtx1$file_name, mtx3$X1)
+# To download missed files
+# missed <- setdiff(mtx1$file_name, mtx3$X1)
+# mtx1_missed <- mtx1[mtx1$file_name %in% missed, ] %>% dplyr::select(-file_name)
+# write_tsv(mtx1_missed, "tmp.tsv") # ./hmp_client/bin/manifest2ascp.py --manifest=tmp.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_tmp.sh
+```
+
+No discrepancy after downloading missing files
