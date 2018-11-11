@@ -9,6 +9,7 @@
 ## Files
 
 - `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data
+- `EDA_biom.Rmd` - Exploratory data analysis of `.biom` files downloaded with `ascp-commands.sh`, 11/09/2018
 - `Methods.md` - Methods notes
 - `ToDo.md` - current todos
 
@@ -17,7 +18,7 @@
     - `hmp_cart_metadata_b53a6441a.tsv` - metadata for first three files
     - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 files, 11/09/2018
     - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 files, 11/09/2018
-    - `downloaded_ascp.txt` - list of 9,165 files downloaded with `ascp-commands.sh`, 11/09/2018
+    - `downloaded_ascp.txt` - list of 9,170 files downloaded with `ascp-commands.sh`, 11/09/2018
 
 - `scripts`
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
