@@ -33,7 +33,7 @@
 - http://vmc.vcu.edu/resources/momspi - MOMS-PI proof of ptinciple datasets
 - https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad
 - http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford
-
+- MOMS-PI project description, http://vmc.vcu.edu/momspi
 
 ### Software
 
