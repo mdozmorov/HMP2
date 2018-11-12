@@ -35,14 +35,14 @@ fileNameIn1  <- "data/hmp_cart_41c0aca569.tsv" # Manifest
 fileNameIn2  <- "data/hmp_cart_metadata_26015b0c41.tsv" # Metadata
 fileNameIn3  <- "data/downloaded_ascp.txt" # Downloaded files
 # Output files
-fileNameOut1 <- "results/report_momspi.html"
+fileNameOut2 <- "results/report_biom.html"
 ```
 
 # Exploratory data analysis
 
 Data source: https://www.hmpdacc.org/hmp/, https://portal.hmpdacc.org/ - data portal. [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D). Download with `scripts/ascp-commands.sh`
 
-## Why the discrepancy between the number of downloaded and manifest files?
+## Load data
 
 ```{r}
 # Manifest
@@ -52,18 +52,24 @@ mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = "
 ```
 
 ```{r}
+# Metadata
+mtx2 <- read_tsv(fileNameIn2)
+```
+
+```{r}
 # Downloaded files
 mtx3 <- read_tsv(fileNameIn3, col_names = FALSE)
 ```
 
-```{r}
-# Intersecting
-setdiff(mtx3$X1, mtx1$file_name)
-setdiff(mtx1$file_name, mtx3$X1)
-# To download missed files
-# missed <- setdiff(mtx1$file_name, mtx3$X1)
-# mtx1_missed <- mtx1[mtx1$file_name %in% missed, ] %>% dplyr::select(-file_name)
-# write_tsv(mtx1_missed, "tmp.tsv") # ./hmp_client/bin/manifest2ascp.py --manifest=tmp.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_tmp.sh
+## Metadata EDA
+
+```{r echo=TRUE}
+# Quick EDA
+table(mtx2$sample_body_site) %>% sort(., decreasing = TRUE)
+table(mtx2$visit_number)     %>% sort(., decreasing = TRUE)
+table(mtx2$subject_gender)   %>% sort(., decreasing = TRUE)
+table(mtx2$subject_race)     %>% sort(., decreasing = TRUE)
+table(mtx2$study_full_name)  %>% sort(., decreasing = TRUE)
+table(mtx2$project_name)     %>% sort(., decreasing = TRUE)
 ```
 
-No discrepancy after downloading missing files
