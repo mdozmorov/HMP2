@@ -24,6 +24,7 @@ options(stringsAsFactors = FALSE)
 ```{r}
 library(readr)
 library(magrittr)
+library(biomformat)
 ```
 
 
@@ -35,7 +36,6 @@ fileNameIn1  <- "data/hmp_cart_41c0aca569.tsv" # Manifest
 fileNameIn2  <- "data/hmp_cart_metadata_26015b0c41.tsv" # Metadata
 fileNameIn3  <- "data/downloaded_ascp.txt" # Downloaded files
 # Output files
-fileNameOut2 <- "results/report_biom.html"
 ```
 
 # Exploratory data analysis
@@ -71,5 +71,51 @@ table(mtx2$subject_gender)   %>% sort(., decreasing = TRUE)
 table(mtx2$subject_race)     %>% sort(., decreasing = TRUE)
 table(mtx2$study_full_name)  %>% sort(., decreasing = TRUE)
 table(mtx2$project_name)     %>% sort(., decreasing = TRUE)
+```
+
+## Read .biom data
+
+```{r}
+# All biom files
+files <- list.files(path = dataDir, pattern = "biom", full.names = TRUE)
+# Sanity check: Are they all in the manifest?
+all.equal(files %>% basename %>% sort, mtx1$file_name %>% sort)
+
+# Read the first file to append the following files to
+mtx_biom <- read_biom(files[1])
+mtx_biom_data_all <- biom_data(mtx_biom) %>% as.data.frame()
+colnames(mtx_biom_data_all) <- basename(files[1]) # Name column as the filename
+mtx_biom_data_all %<>% mutate(ID = rownames(mtx_biom_data_all)) # Add rownames as IDs
+
+# Set progress bar
+total <- length(files) # Total number of files
+pb <- txtProgressBar(min = 2, max = total, style = 3)
+
+# Starting from the second file, read all
+for (i in 1530:total) {
+  # Skip certain files
+  if (!(i %in% c(145, 159, 208, 308, 819, 1111, 1125, 1189, 1211, 1381, 1529, 1752))) {
+    # setTxtProgressBar(pb, i)
+    print(paste0(i, " ", basename(files[i])))
+    # Read the data
+    mtx_biom <- read_biom(files[i])
+    mtx_biom_data <- biom_data(mtx_biom) %>% as.data.frame()
+    colnames(mtx_biom_data) <- basename(files[i]) # Name column as the filename
+    mtx_biom_data %<>% mutate(ID = rownames(mtx_biom_data))  # Add rownames as IDs
+    # Full join with the main file
+    mtx_biom_data_all <- full_join(mtx_biom_data_all, mtx_biom_data, by = c("ID"))
+  }
+}
+
+# Breask on certain files, e.g, 145, EP016061_K20_MV1D.otu_table.biom
+# Error in read_biom(files[i]) : Both attempts to read input file:
+# /Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb//EP217091_K40_MCHD.otu_table.biom
+# either as JSON (BIOM-v1) or HDF5 (BIOM-v2).
+# Check file path, file name, file itself, then try again.
+
+# https://github.com/joey711/phyloseq/issues/443
+
+# Put ID column in front
+mtx_biom_data_all <- mtx_biom_data_all[, c(colnames(mtx_biom_data_all)[grepl("ID", colnames(mtx_biom_data_all))], colnames(mtx_biom_data_all)[!grepl("ID", colnames(mtx_biom_data_all))])]
 ```
 
