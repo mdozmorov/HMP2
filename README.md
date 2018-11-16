@@ -21,6 +21,7 @@
     - `downloaded_ascp.txt` - list of 9,170 files downloaded with `ascp-commands.sh`, 11/09/2018
 
 - `scripts`
+    - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `ascp-commands.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
 
