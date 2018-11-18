@@ -27,6 +27,7 @@ library(magrittr)
 library(biomformat)
 library(ggplot2)
 library(DataExplorer)
+library(reshape2)
 ```
 
 
@@ -151,6 +152,32 @@ mtx_biom_missed <- read_biom(files_missed[3])
 mtx_biom_data_all[1:5, 1:5]
 ```
 
+Count distribution
+
+```{r}
+# Prepare data for multiple histograms
+data <- mtx_biom_data_all %>% dplyr::select(-ID) %>% melt
+data <- data[ complete.cases(data), ] # Remove NAs
+print("Summary of count data")
+summary(data$value)
+data$value <- log2(data$value) # log-transform
+# Overlaying density curves
+ggplot(data, aes(x = value, fill = variable)) + 
+  geom_density(alpha = 0.25) + 
+  guides(fill = FALSE) +
+  ggtitle("Count distribution") +
+  xlab("log2 non-NA counts") +
+  ylab("Density")
+```
+
+Distribution of sample medians
+
+```{r}
+mtx_medians <- sapply(mtx_biom_data_all %>% dplyr::select(-ID), function(x) median(x, na.rm = TRUE))
+plot_density(mtx_medians)
+```
+
+
 ### Sparsity
 
 ```{r}
@@ -166,7 +193,9 @@ summary(pct_nas)
 # Questions
 
 - What are the row IDs?
-- The data is very sparse - is it expected?
+- Most sample counts are very small, median = 2. Is it expected?
+- There are outliers, like a sample with median counts = 124, maximum count = 206705. Shall we remove such samples?
+- The data is very sparse (~97% NAs) - is it expected?
 
 ## Metadata EDA
 
