@@ -33,6 +33,9 @@ library(reshape2)
 dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/MOMS-PI/"
 # Input files
 fileNameIn1  <- "MOMS-PI_16S_STIRRUPS_profiles_POP1.txt"
+fileNameIn2  <- "MOMS-PI_CytokineProfiles_POP1.txt"
+fileNameIn3  <- "MOMS-PI_LipidomicsProfiles_POP1.txt"
+fileNameIn4  <- "MOMS-PI_subject_kit_sample_mapping_POP1.txt"
 # Output files
 fileNameOut1 <- "results/report_momspi.html"
 ```
@@ -46,26 +49,106 @@ Data source: http://vmc.vcu.edu/resources/momspi. Download with `scripts/downloa
 ```{r}
 # mtx1 <- read_tsv(paste0(dataDir, fileNameIn1), col_names = TRUE)
 mtx1 <- read.table(paste0(dataDir, fileNameIn1), sep = "\t", header = TRUE)
+dim(mtx1)
+head(mtx1) %>% pander
 # Fix numbers
 mtx1$No_of_Reads          <- as.numeric(mtx1$No_of_Reads)
 mtx1$Percentage_Abundance <- as.numeric(mtx1$Percentage_Abundance)
 mtx1$Avg._Score           <- as.numeric(mtx1$Avg._Score)
 ```
 
+**Questions**
+
+- What are the "Threshold.Status", "No_of_Reads", "Percentage_Abundance", "Avg._Score" columns?
 
 ```{r eval=FALSE}
 ### Standard report
 create_report(mtx1, output_file = fileNameOut1, output_dir = "results/momspi")
 ```
 
-### Manual EDA
+**Manual EDA**
 
-```{r echo=TRUE}
-table(mtx1$SampleID) %>% head
-unique(mtx1$SampleID) %>% length()
+```{r}
+print("How many unique samples?")
+mtx1$SampleID %>% unique() %>% length() # 69
+print("How many unique taxa?")
+mtx1$Taxa %>% unique() %>% length() # 299
+print("How many unique Threshold.Status?")
+table(mtx1$Threshold.Status)
+print("What is the distribution of the No_of_Reads?")
+plot_density(mtx1$No_of_Reads %>% log2, title = "log2 No_of_Reads density plot")
+summary(mtx1$No_of_Reads)
+print("What is the distribution of the Percentage_Abundance?")
+plot_density(mtx1$Percentage_Abundance %>% log2, title = "log2 Percentage_Abundance density plot")
+summary(mtx1$Percentage_Abundance)
+print("What is the distribution of the Avg._Score?")
+plot_density((mtx1$Avg._Score + 1) %>% log2, title = "log2 Avg._Score density plot")
+summary(mtx1$Avg._Score)
+```
+
+**Questions**
+
+- No_of_Reads, Percentage_Abundance, Avg._Score have outlies - is that normal?
+
+Convert to wide format
+
+```{r}
 mtx1_wide <- dcast(mtx1[, c("SampleID", "Taxa", "Percentage_Abundance")], SampleID ~ Taxa, value.var = "Percentage_Abundance", fun.aggregate = sum)
+dim(mtx1_wide)
 mtx1_wide[1:15, 1:5] %>% pander
+```
 
+**Questions**
+
+- Many zeros (missing values?) - is that normal?
+
+What are the most abundant strains?
+
+```{r}
 mtx1_wide %>% select(-SampleID) %>% apply(., 2, sum) %>% sort(., decreasing = TRUE) %>% head
 ```
 
+## `r fileNameIn2`
+
+```{r}
+mtx2 <- read.table(paste0(dataDir, fileNameIn2), sep = "\t", header = TRUE, fill = TRUE)
+dim(mtx2)
+head(mtx2) %>% pander
+# Fix numbers
+```
+
+## `r fileNameIn3`
+
+```{r}
+mtx3 <- read.table(paste0(dataDir, fileNameIn3), sep = "\t", header = TRUE, fill = TRUE)
+dim(mtx3)
+head(mtx3) %>% pander
+# Fix numbers
+```
+
+## `r fileNameIn4`
+
+```{r}
+mtx4 <- read.table(paste0(dataDir, fileNameIn4), sep = "\t", header = TRUE, fill = TRUE)
+dim(mtx4)
+head(mtx4) %>% pander
+# Fix numbers
+```
+
+**Manual EDA**
+
+```{r}
+print("How many unique SubjectID?")
+mtx4$SubjectID %>% unique() %>% length()
+print("How many unique SampleType?")
+table(mtx4$SampleType)
+print("How many BodySite?")
+table(mtx4$BodySite)
+print("How many VisitNumber?")
+table(mtx4$VisitNumber)
+```
+
+**Questions**
+
+- 74 unique subjects, but should be 69?
+- What is "mtx4$SampleType"?
