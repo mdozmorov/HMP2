@@ -43,3 +43,7 @@
 - https://github.com/waldronlab/HMP16SData - code for the HMP16SData package
 - https://github.com/biocore/American-Gut - American Gut open-access data and IPython notebooks, >400Mb, .biom files
 - https://www.bioconductor.org/packages/release/bioc/html/biomformat.html - package to read .biom files
+
+### Misc
+
+- BioC 2019: Where Software and Biology Connect, call for abstract. http://bioc2019.bioconductor.org/call-for-abstracts
