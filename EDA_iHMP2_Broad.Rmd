@@ -1,0 +1,314 @@
+---
+title: "MOMS-PI"
+# author: "Author's Name"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: no
+  html_document:
+    theme: cerulean
+    toc: yes
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+# Set up the environment
+library(knitr)
+opts_chunk$set(cache.path='cache/', fig.path='img/', cache=F, tidy=T, fig.keep='high', echo=F, dpi=100, warnings=F, message=F, comment=NA, warning=F, results='as.is', fig.width = 10, fig.height = 6) #out.width=700, 
+library(pander)
+panderOptions('table.split.table', Inf)
+set.seed(1)
+library(dplyr)
+options(stringsAsFactors = FALSE)
+```
+
+```{r}
+library(readr)
+library(biomformat)
+library(ggplot2)
+library(DataExplorer)
+library(reshape2)
+```
+
+# Settings
+
+```{r settings}
+# Data folder
+dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/iHMP2_Broad/"
+# Input files
+fileNameIn1 <- "taxonomic_profiles.biom" # 16S
+fileNameIn2 <- "taxonomic_profiles.tsv"  # 16S
+fileNameIn3 <- "hmp2_serology_Compiled_ELISA_Data.tsv" # Serology
+```
+
+# HMP2 Data
+
+https://ibdmdb.org/tunnel/public/summary.html - 178 samples
+
+## 16S
+
+- **Summary:** mapping statistics, https://ibdmdb.org/tunnel/dataset_summary/HMP2/16S/1806/summary/summary.html
+- **Raw files:** `.tar` files with bgzipped FASTq paired-end files, https://ibdmdb.org/tunnel/public/HMP2/16S/1806/rawfiles
+- **Products:**
+    - **Taxonomic profiles (BIOM):** - 178 BIOM files
+    - **Taxonomic Profiles (Text):** - 178 `.tsv` files. Example:
+    
+| Taxonomy                                                                                                 | 206719 |
+|----------------------------------------------------------------------------------------------------------|--------|
+| Bacteria; __Firmicutes; __Bacilli; __Bacillales; __Alicyclobacillaceae; __Tumebacillus                   | 0      |
+| Bacteria; __Firmicutes; __Clostridia; __Clostridiales; __Lachnospiraceae; __Lachnospiraceae_FCS020_group | 0      |
+| Bacteria; __Proteobacteria; __Betaproteobacteria; __Burkholderiales; __Comamonadaceae; __Ramlibacter     | 0      |
+| Bacteria; __Cyanobacteria; __Melainabacteria; __Obscuribacterales; __f; __g                              | 0      |
+| Bacteria; __Proteobacteria; __Alphaproteobacteria; __Rhizobiales; __Rhizobiaceae; __Rhizobium            | 0      |
+
+    - **Merged Tables:** `taxonomic_profiles.biom.gz` and `taxonomic_profiles.tsv.gz`. Content is the same, just different formats
+    
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, fileNameIn1))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/16S/1806/taxonomic_profiles.biom.gz", destfile = paste0(dataDir, fileNameIn1, ".gz"))
+  GEOquery::gunzip(paste0(dataDir, fileNameIn1, ".gz"))
+}
+# Read in data
+mtx <- read_biom(paste0(dataDir, fileNameIn1)) %>% biom_data() %>% as.matrix()
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+Count distribution
+
+```{r}
+# Prepare the data for plotting
+mtx_biom_data_all <- mtx %>% as.data.frame()
+rownames(mtx_biom_data_all) <- NULL # Remove row names
+# Prepare data for multiple histograms
+data <- mtx_biom_data_all %>% melt
+data <- data[ complete.cases(data), ] # Remove NAs
+print("Summary of count data")
+summary(data$value)
+data$value <- log2(data$value) # log-transform
+# Overlaying density curves
+ggplot(data, aes(x = value, fill = variable)) + 
+  geom_density(alpha = 0.25) + 
+  guides(fill = FALSE) +
+  ggtitle("Count distribution for different samples") +
+  xlab("log2 non-NA counts") +
+  ylab("Density")
+```
+
+Distribution of sample medians
+
+```{r}
+mtx_medians <- sapply(mtx_biom_data_all, function(x) median(x, na.rm = TRUE))
+summary(mtx_medians)
+# plot_density(mtx_medians)
+```
+
+Sparsity
+
+```{r}
+dim_rows <- nrow(mtx_biom_data_all) # Total number of rows
+# Percent of rows with zeros, per sample
+pct_nas  <- sapply(mtx_biom_data_all, function(x) sum(x == 0) / dim_rows) %>% unname
+# Density histogram
+data.frame(pct_nas) %>% plot_density(., title = "Sparsity distribution")
+# Summary statistics
+summary(pct_nas)
+```
+
+# Questions
+
+- What are the row IDs?
+- Most sample counts are very small, median = 0. Is it expected?
+- There are outliers, like a sample with maximum count = 19572 (while mean is ~15). Shall we remove such samples?
+- The data is very sparse (~92% zeros) - is it expected?
+
+## Serology
+
+`hmp2_serology_Compiled_ELISA_Data.tsv`, columns are samples
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, fileNameIn3))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/Serology/1740/hmp2_serology_Compiled_ELISA_Data.tsv", destfile = paste0(dataDir, fileNameIn3))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, fileNameIn3))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+```{r eval=FALSE}
+print("Site")
+table(mtx[mtx$`Serum ID` == "Site", ] %>% dplyr::select(-`Serum ID`) %>% unlist %>% sort(., decreasing = TRUE))
+print("Plate")
+table(mtx[mtx$`Serum ID` == "Plate", ] %>% dplyr::select(-`Serum ID`) %>% unlist %>% sort(., decreasing = TRUE))
+```
+
+## Metagenomes
+
+Lots of files. Look at Products, Merged Tables, https://ibdmdb.org/tunnel/public/HMP2/WGS/1818/products
+
+### taxonomic_profiles.tsv
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "taxonomic_profiles_metagenomes.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/WGS/1818/taxonomic_profiles.tsv.gz", destfile = paste0(dataDir, "taxonomic_profiles_metagenomes.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "taxonomic_profiles_metagenomes.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "taxonomic_profiles_metagenomes.tsv")) 
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+### pathabundances.tsv
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "pathabundances.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/WGS/1818/pathabundances.tsv.gz", destfile = paste0(dataDir, "pathabundances.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "pathabundances.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "pathabundances.tsv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+### ecs.tsv
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "ecs.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/WGS/1818/ecs.tsv.gz", destfile = paste0(dataDir, "ecs.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "ecs.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "ecs.tsv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+## Proteomics
+
+https://ibdmdb.org/tunnel/public/HMP2/Proteomics/1633/products
+
+### HMP2_proteomics_ecs.tsv
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "HMP2_proteomics_ecs.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/Proteomics/1633/HMP2_proteomics_ecs.tsv.gz", destfile = paste0(dataDir, "HMP2_proteomics_ecs.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "HMP2_proteomics_ecs.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "HMP2_proteomics_ecs.tsv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+### HMP2_proteomics_kos.tsv.gz
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "HMP2_proteomics_kos.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/Proteomics/1633/HMP2_proteomics_kos.tsv.gz", destfile = paste0(dataDir, "HMP2_proteomics_kos.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "HMP2_proteomics_kos.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "HMP2_proteomics_kos.tsv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+## Viromics
+
+https://ibdmdb.org/tunnel/public/HMP2/Viromics/1732/products
+
+### taxonomic_profiles.tsv.gz
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "taxonomic_profiles_virome.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/Viromics/1732/taxonomic_profiles.tsv.gz", destfile = paste0(dataDir, "taxonomic_profiles_virome.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "taxonomic_profiles_virome.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "taxonomic_profiles_virome.tsv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+### virome_virmap_analysis.tsv.gz
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "virome_virmap_analysis.tsv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/Viromics/1732/virome_virmap_analysis.tsv.gz", destfile = paste0(dataDir, "virome_virmap_analysis.tsv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "virome_virmap_analysis.tsv.gz"))
+}
+# Read in data
+mtx <- read_tsv(paste0(dataDir, "virome_virmap_analysis.tsv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+## Metabolites
+
+https://ibdmdb.org/tunnel/public/HMP2/Metabolites/1723/products
+
+### HMP2_metabolomics.csv.gz
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "HMP2_metabolomics.csv"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2/Metabolites/1723/HMP2_metabolomics.csv.gz", destfile = paste0(dataDir, "HMP2_metabolomics.csv.gz"))
+  GEOquery::gunzip(paste0(dataDir, "HMP2_metabolomics.csv.gz"))
+}
+# Read in data
+mtx <- read_csv(paste0(dataDir, "HMP2_metabolomics.csv"))
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```
+
+
+# HMP2_Pilot Data
+
+## 16S
+
+### taxonomic_profiles.biom.gz
+
+```{r}
+# Download the data if absent
+if (!file.exists(paste0(dataDir, "taxonomic_profiles_hmp2pilot.biom"))) {
+  download.file(url = "https://ibdmdb.org/tunnel/products/HMP2_Pilot/16S/1547/taxonomic_profiles.biom.gz", destfile = paste0(dataDir, "taxonomic_profiles_hmp2pilot.biom.gz"))
+  GEOquery::gunzip(paste0(dataDir, "taxonomic_profiles_hmp2pilot.biom.gz"))
+}
+# Read in data
+mtx <- read_biom(paste0(dataDir, "taxonomic_profiles_hmp2pilot.biom")) %>% biom_data() %>% as.matrix()
+print("Data dimensions")
+dim(mtx)
+# Peek into it
+mtx[1:5, 1:5] %>% pander
+```

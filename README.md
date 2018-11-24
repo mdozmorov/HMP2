@@ -8,6 +8,8 @@
 
 ## Files
 
+- `EDA_iHMP2_Broad.Rmd` - Exploratory data analysis of Broad's HMP2 data, self-contained download and analysis. 11/24/2018
+
 - `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data, http://vmc.vcu.edu/resources/momspi - MOMS-PI proof of principle datasets, files downloaded with `scripts/download_moms-pi.sh`, [POP1 Dataset](http://vmc.vcu.edu/static/downloads/MOMS-PI_POP1.zip), 11/05/2018
 
 - `EDA_biom.Rmd` - Exploratory data analysis of `.biom` files downloaded with `scripts/ascp-commands.sh` from https://portal.hmpdacc.org/ - data portal. [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), 11/09/2018
@@ -31,11 +33,10 @@
 
 ### Data
 
-- dbGAP controlled access: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section)
-- https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad
-- http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford
-- MOMS-PI project description, http://vmc.vcu.edu/momspi
-- QIIME installation, http://qiime.org/install/install.html
+- dbGAP controlled access: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section). Analyzed with `EDA_biom.Rmd`
+- http://vmc.vcu.edu/resources/momspi - MOMS-PI project, description http://vmc.vcu.edu/momspi. Analyzed with `EDA_MOMS-PI.Rmd`
+- https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad. Analyzed with `EDA_iHMP2_Broad.Rmd`
+- http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford. Mixture of raw and processed sample data. No description, data selection seem random. Not analyzed.
 
 ### Software
 
@@ -43,6 +44,7 @@
 - https://github.com/waldronlab/HMP16SData - code for the HMP16SData package
 - https://github.com/biocore/American-Gut - American Gut open-access data and IPython notebooks, >400Mb, .biom files
 - https://www.bioconductor.org/packages/release/bioc/html/biomformat.html - package to read .biom files
+- QIIME installation, http://qiime.org/install/install.html
 
 ### Misc
 
