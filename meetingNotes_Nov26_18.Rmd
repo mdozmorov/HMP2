@@ -1,0 +1,44 @@
+---
+title: "Meeting notes Nov 26 2018"
+author: "author"
+date: "November 26, 2018"
+output: html_document
+---
+
+
+- Still don't have data for HMP2 
+  - data might not be processed yet
+  - applied for HMP1 data access
+  - we need to find out who is actually responsible for putting the HMP2 data together
+  - data might not be all processed using the same pipeline
+
+- Found study IDs on DBgap but no data
+
+- BIOM files from HMP portal
+  - ~9,000 files
+  - processed 500 files randomly sampled
+  - What are the IDs for the 16s data?
+    - IDs overlap between some files not complete overlap
+    - row IDs should correspond to bacteria species?
+    - likely correspond to a IDs for microbial databases - possibly greengenes?
+      ftp://greengenes.microbio.me/greengenes_release/gg_13_8_otus/taxonomy/
+  - Data from files have many NAs, counts range from 1 to ~200,000, data highly right skewed even on log scale is this normal?
+    - This is normal for microbe data
+    - NAs should be 0
+    - 97% of data is 0 is this normal?
+      - this is normal
+    
+- Need to decide if we want to use BIOM files the way they are or use our own pipeline on raw data
+  - likely ok to just use biom files we have
+  - metadata is in manifest file - see readme file for location
+  - not much metadata information
+  - HMPdacc should be longitudinal data
+  - visit numbers might not be correct - likely did not take 60+ samples from one woman
+  - should be 3-5 samples for each woman - one sample at each trimester, one at delivery, one shortly after discharge
+
+- Can use git LFS for data file storage at least in the early stages
+  - other possibility is gitAnnx
+
+
+- What to do for next time
+  - Mikhail & John find out what the gene ids are for the data portal
