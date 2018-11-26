@@ -63,6 +63,17 @@ mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = "
 mtx2 <- read_tsv(fileNameIn2)
 ```
 
+Number of subjects with vaginal samples
+
+```{r}
+dim(mtx2)
+mtx2_vaginal <- subset(mtx2, sample_body_site == "vagina")
+length(unique(mtx2$subject_id))
+nvisits <- aggregate(visit_number ~ subject_id,  data = mtx2_vaginal, length)
+table(nvisits$visit_number)
+```
+
+
 ```{r}
 # Downloaded files
 mtx3 <- read_tsv(fileNameIn3, col_names = FALSE)
