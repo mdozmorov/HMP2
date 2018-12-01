@@ -8,7 +8,7 @@
 
 ## Files
 
-- `EDA_iHMP2_Broad.Rmd` - Exploratory data analysis of Broad's HMP2 data, self-contained download and analysis. 11/24/2018
+- `EDA_iHMP2_Broad.Rmd` - Exploratory data analysis of Broad's HMP2 data, self-contained download and analysis. https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad. 11/24/2018
 
 - `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data, http://vmc.vcu.edu/resources/momspi - MOMS-PI proof of principle datasets, files downloaded with `scripts/download_moms-pi.sh`, [POP1 Dataset](http://vmc.vcu.edu/static/downloads/MOMS-PI_POP1.zip), 11/05/2018
 
@@ -33,9 +33,7 @@
 
 ### Data
 
-- dbGAP controlled access: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section). Analyzed with `EDA_biom.Rmd`
-- http://vmc.vcu.edu/resources/momspi - MOMS-PI project, description http://vmc.vcu.edu/momspi. Analyzed with `EDA_MOMS-PI.Rmd`
-- https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad. Analyzed with `EDA_iHMP2_Broad.Rmd`
+- dbGAP controlled access for HMP2: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section).
 - http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford. Mixture of raw and processed sample data. No description, data selection seem random. Not analyzed.
 
 ### Software
