@@ -18,6 +18,7 @@
 - `ToDo.md` - current todos
 
 - `data`
+    - `biom_nonreadable.tsv` - 62 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
     - `hmp_cart_1c572b0ab.tsv` - manifest for first three files
     - `hmp_cart_metadata_b53a6441a.tsv` - metadata for first three files
     - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 files, 11/09/2018
@@ -28,6 +29,7 @@
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `ascp-commands.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
+    - `ascp-commands_biom_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
 
 ## URLs
 

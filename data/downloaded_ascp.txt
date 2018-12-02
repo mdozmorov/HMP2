@@ -142,7 +142,6 @@ EP016061_K100_BS1D.otu_table.biom
 EP016061_K10_MRCD.otu_table.biom
 EP016061_K20_MCKD.otu_table.biom
 EP016061_K20_MRCD.otu_table.biom
-EP016061_K20_MV1D.otu_table.biom
 EP016061_K30_MCKD.otu_table.biom
 EP016061_K30_MRCD.otu_table.biom
 EP016061_K30_MV1D.otu_table.biom
@@ -157,7 +156,6 @@ EP016061_K90_BRCD.otu_table.biom
 EP016916_K100_MCKD.otu_table.biom
 EP016916_K10_MCKD.otu_table.biom
 EP016916_K10_MRCD.otu_table.biom
-EP016916_K10_MV1D.otu_table.biom
 EP016916_K110_BCKD.otu_table.biom
 EP016916_K110_BRCD.otu_table.biom
 EP016916_K20_MCKD.otu_table.biom
@@ -205,7 +203,6 @@ EP021899_K40_MV1D.otu_table.biom
 EP021899_K80_MCKD.otu_table.biom
 EP021899_K80_MV1D.otu_table.biom
 EP023111_K10_MCKD.otu_table.biom
-EP023111_K10_MV1D.otu_table.biom
 EP023111_K20_MCKD.otu_table.biom
 EP023111_K20_MV1D.otu_table.biom
 EP023111_K30_MCKD.otu_table.biom
@@ -305,7 +302,6 @@ EP038468_K110_BCKD.otu_table.biom
 EP038468_K110_BRCD.otu_table.biom
 EP038468_K20_MCKD.otu_table.biom
 EP038468_K20_MRCD.otu_table.biom
-EP038468_K20_MV1D.otu_table.biom
 EP038468_K30_MCKD.otu_table.biom
 EP038468_K30_MRCD.otu_table.biom
 EP038468_K30_MV1D.otu_table.biom
@@ -816,7 +812,6 @@ EP101319_K10_MV1D.otu_table.biom
 EP101319_K20_MCKD.otu_table.biom
 EP101319_K20_MV1D.otu_table.biom
 EP101319_K30_MCKD.otu_table.biom
-EP101319_K30_MV1D.otu_table.biom
 EP101319_K40_MV1D.otu_table.biom
 EP101319_K50_BC1D.otu_table.biom
 EP101319_K50_BSTD.otu_table.biom
@@ -1110,7 +1105,6 @@ EP123900_K80_BS1D.otu_table.biom
 EP126323_K100_BCKD.otu_table.biom
 EP126323_K100_BRCD.otu_table.biom
 EP126323_K10_MCKD.otu_table.biom
-EP126323_K10_MRCD.otu_table.biom
 EP126323_K10_MV1D.otu_table.biom
 EP126323_K120_BRCD.otu_table.biom
 EP126323_K130_BS1D.otu_table.biom
@@ -1122,7 +1116,6 @@ EP126323_K20_MV1D.otu_table.biom
 EP126323_K30_MV1D.otu_table.biom
 EP126323_K60_BCKD.otu_table.biom
 EP126323_K60_BRCD.otu_table.biom
-EP126323_K70_BS1D.otu_table.biom
 EP129024_K100_BS1D.otu_table.biom
 EP129024_K10_MCKD.otu_table.biom
 EP129024_K10_MRCD.otu_table.biom
@@ -1186,7 +1179,6 @@ EP131838_K10_MCKD.otu_table.biom
 EP131838_K10_MRCD.otu_table.biom
 EP131838_K10_MV1D.otu_table.biom
 EP131838_K20_MRCD.otu_table.biom
-EP131838_K20_MV1D.otu_table.biom
 EP131838_K30_MCKD.otu_table.biom
 EP131838_K30_MRCD.otu_table.biom
 EP131838_K30_MV1D.otu_table.biom
@@ -1208,7 +1200,6 @@ EP134204_K110_MRCD.otu_table.biom
 EP134204_K110_MV1D.otu_table.biom
 EP134204_K20_MCKD.otu_table.biom
 EP134204_K20_MV1D.otu_table.biom
-EP134204_K30_MCKD.otu_table.biom
 EP134204_K30_MRCD.otu_table.biom
 EP134204_K30_MV1D.otu_table.biom
 EP134204_K40_MCKD.otu_table.biom
@@ -1378,7 +1369,6 @@ EP164977_K40_MV1D.otu_table.biom
 EP164977_K50_MCKD.otu_table.biom
 EP164977_K50_MRCD.otu_table.biom
 EP164977_K50_MV1D.otu_table.biom
-EP164977_K60_MCKD.otu_table.biom
 EP164977_K60_MRCD.otu_table.biom
 EP164977_K60_MV1D.otu_table.biom
 EP164977_K70_BCKD.otu_table.biom
@@ -1526,7 +1516,6 @@ EP191772_K10_MCKD.otu_table.biom
 EP191772_K10_MCVD.otu_table.biom
 EP191772_K10_MRCD.otu_table.biom
 EP191772_K10_MV1D.otu_table.biom
-EP191772_K120_BCKD.otu_table.biom
 EP191772_K120_BRCD.otu_table.biom
 EP191772_K130_BS1D.otu_table.biom
 EP191772_K20_MV1D.otu_table.biom
@@ -1749,7 +1738,6 @@ EP217091_K10_MV1D.otu_table.biom
 EP217091_K20_BCKD.otu_table.biom
 EP217091_K20_BRCD.otu_table.biom
 EP217091_K30_BS1D.otu_table.biom
-EP217091_K40_MCHD.otu_table.biom
 EP217091_K40_MCKD.otu_table.biom
 EP217091_K50_MCKD.otu_table.biom
 EP217091_K50_MV1D.otu_table.biom
@@ -2051,7 +2039,6 @@ EP238905_K80_BRCD.otu_table.biom
 EP238905_K90_MCKD.otu_table.biom
 EP239957_K10_MCKD.otu_table.biom
 EP239957_K10_MV1D.otu_table.biom
-EP239957_K20_MCKD.otu_table.biom
 EP239957_K20_MV1D.otu_table.biom
 EP239957_K30_BC1D.otu_table.biom
 EP239957_K30_BSTD.otu_table.biom
@@ -2172,7 +2159,6 @@ EP247202_K50_MV1D.otu_table.biom
 EP247202_K60_MCKD.otu_table.biom
 EP247202_K60_MRCD.otu_table.biom
 EP247202_K60_MV1D.otu_table.biom
-EP247202_K70_MCKD.otu_table.biom
 EP247202_K70_MRCD.otu_table.biom
 EP247202_K70_MV1D.otu_table.biom
 EP247202_K80_BS1D.otu_table.biom
@@ -2205,7 +2191,6 @@ EP247445_K60_MV1D.otu_table.biom
 EP247445_K70_MRCD.otu_table.biom
 EP247445_K70_MV1D.otu_table.biom
 EP247445_K80_BS1D.otu_table.biom
-EP247445_K90_MCKD.otu_table.biom
 EP247445_K90_MRCD.otu_table.biom
 EP247445_K90_MV1D.otu_table.biom
 EP249375_K10_MCKD.otu_table.biom
@@ -2272,7 +2257,6 @@ EP256139_K10_MCKD.otu_table.biom
 EP256139_K10_MRCD.otu_table.biom
 EP256139_K10_MV1D.otu_table.biom
 EP256139_K20_MCKD.otu_table.biom
-EP256139_K20_MRCD.otu_table.biom
 EP256139_K20_MV1D.otu_table.biom
 EP256139_K30_BS1D.otu_table.biom
 EP256139_K40_BS1D.otu_table.biom
@@ -2491,7 +2475,6 @@ EP275797_K70_BS1D.otu_table.biom
 EP275797_K80_MCKD.otu_table.biom
 EP275797_K90_BCKD.otu_table.biom
 EP275797_K90_BRCD.otu_table.biom
-EP277370_K10_MCKD.otu_table.biom
 EP277370_K10_MV1D.otu_table.biom
 EP277370_K30_MCKD.otu_table.biom
 EP277370_K40_MV1D.otu_table.biom
@@ -2571,7 +2554,6 @@ EP284529_K120_BCKD.otu_table.biom
 EP284529_K120_BRCD.otu_table.biom
 EP284529_K130_BS1D.otu_table.biom
 EP284529_K30_MCKD.otu_table.biom
-EP284529_K30_MRCD.otu_table.biom
 EP284529_K30_MV1D.otu_table.biom
 EP284529_K50_MCKD.otu_table.biom
 EP284529_K50_MRCD.otu_table.biom
@@ -2997,7 +2979,6 @@ EP311701_K60_BCKD.otu_table.biom
 EP311701_K60_BRCD.otu_table.biom
 EP311701_K70_MV1D.otu_table.biom
 EP312022_K100_BCKD.otu_table.biom
-EP312022_K100_BRCD.otu_table.biom
 EP312022_K10_MCKD.otu_table.biom
 EP312022_K10_MRCD.otu_table.biom
 EP312022_K10_MV1D.otu_table.biom
@@ -3007,7 +2988,6 @@ EP312022_K130_MCKD.otu_table.biom
 EP312022_K20_MCKD.otu_table.biom
 EP312022_K20_MRCD.otu_table.biom
 EP312022_K20_MV1D.otu_table.biom
-EP312022_K30_MCKD.otu_table.biom
 EP312022_K30_MRCD.otu_table.biom
 EP312022_K30_MV1D.otu_table.biom
 EP312022_K60_MCKD.otu_table.biom
@@ -3079,7 +3059,6 @@ EP314756_K70_BCKD.otu_table.biom
 EP314756_K70_BRCD.otu_table.biom
 EP314756_K80_BRCD.otu_table.biom
 EP315426_K10_MCKD.otu_table.biom
-EP315426_K20_MCKD.otu_table.biom
 EP315426_K30_MV1D.otu_table.biom
 EP315426_K40_MCKD.otu_table.biom
 EP315426_K40_MV1D.otu_table.biom
@@ -3408,7 +3387,6 @@ EP346571_K30_MV1D.otu_table.biom
 EP346571_K40_MCKD.otu_table.biom
 EP346571_K40_MRCD.otu_table.biom
 EP346571_K40_MV1D.otu_table.biom
-EP346571_K50_MCKD.otu_table.biom
 EP346571_K50_MRCD.otu_table.biom
 EP346571_K50_MV1D.otu_table.biom
 EP346571_K60_MCKD.otu_table.biom
@@ -3445,7 +3423,6 @@ EP353148_K70_MV1D.otu_table.biom
 EP353148_K80_MCKD.otu_table.biom
 EP353148_K80_MV1D.otu_table.biom
 EP353148_K90_MCKD.otu_table.biom
-EP353148_K90_MRCD.otu_table.biom
 EP353148_K90_MV1D.otu_table.biom
 EP354309_K10_MCKD.otu_table.biom
 EP354309_K10_MRCD.otu_table.biom
@@ -3706,7 +3683,6 @@ EP377475_K10_MRCD.otu_table.biom
 EP377475_K10_MV1D.otu_table.biom
 EP377475_K20_MCKD.otu_table.biom
 EP377475_K20_MRCD.otu_table.biom
-EP377475_K20_MV1D.otu_table.biom
 EP377475_K30_MCKD.otu_table.biom
 EP377475_K30_MRCD.otu_table.biom
 EP377475_K30_MV1D.otu_table.biom
@@ -3986,13 +3962,11 @@ EP410533_K30_MCKD.otu_table.biom
 EP410533_K30_MRCD.otu_table.biom
 EP410533_K30_MV1D.otu_table.biom
 EP410533_K40_MCKD.otu_table.biom
-EP410533_K40_MRCD.otu_table.biom
 EP410533_K40_MV1D.otu_table.biom
 EP410533_K60_MCKD.otu_table.biom
 EP410533_K60_MRCD.otu_table.biom
 EP410533_K60_MV1D.otu_table.biom
 EP410533_K70_BCKD.otu_table.biom
-EP410533_K70_BRCD.otu_table.biom
 EP410533_K80_BCKD.otu_table.biom
 EP410533_K80_BRCD.otu_table.biom
 EP410533_K90_BS1D.otu_table.biom
@@ -4121,7 +4095,6 @@ EP426527_K30_MV1D.otu_table.biom
 EP426527_K40_MCKD.otu_table.biom
 EP426527_K40_MRCD.otu_table.biom
 EP426527_K40_MV1D.otu_table.biom
-EP426527_K50_MCKD.otu_table.biom
 EP426527_K50_MCVD.otu_table.biom
 EP426527_K50_MRCD.otu_table.biom
 EP426527_K50_MV1D.otu_table.biom
@@ -4231,7 +4204,6 @@ EP436435_K50_MRCD.otu_table.biom
 EP436435_K50_MV1D.otu_table.biom
 EP436435_K60_BCKD.otu_table.biom
 EP436435_K60_BRCD.otu_table.biom
-EP436435_K80_BS1D.otu_table.biom
 EP436435_K90_BCKD.otu_table.biom
 EP437943_K100_BS1D.otu_table.biom
 EP437943_K10_MCKD.otu_table.biom
@@ -4623,7 +4595,6 @@ EP470960_K70_BRCD.otu_table.biom
 EP470960_K80_BCKD.otu_table.biom
 EP470960_K80_BRCD.otu_table.biom
 EP470960_K90_MCHD.otu_table.biom
-EP470960_K90_MCKD.otu_table.biom
 EP473070_K100_MCKD.otu_table.biom
 EP473070_K10_MCKD.otu_table.biom
 EP473070_K10_MRCD.otu_table.biom
@@ -4759,7 +4730,6 @@ EP483320_K10_MCKD.otu_table.biom
 EP483320_K10_MCVD.otu_table.biom
 EP483320_K10_MRCD.otu_table.biom
 EP483320_K10_MV1D.otu_table.biom
-EP483320_K20_MCHD.otu_table.biom
 EP483320_K20_MCKD.otu_table.biom
 EP483776_K100_BCKD.otu_table.biom
 EP483776_K100_BRCD.otu_table.biom
@@ -4947,7 +4917,6 @@ EP492474_K40_BCKD.otu_table.biom
 EP492474_K40_BRCD.otu_table.biom
 EP492474_K50_MCHD.otu_table.biom
 EP492474_K50_MCKD.otu_table.biom
-EP492474_K60_MCKD.otu_table.biom
 EP492474_K60_MRCD.otu_table.biom
 EP492474_K60_MV1D.otu_table.biom
 EP494740_K10_MCKD.otu_table.biom
@@ -5375,7 +5344,6 @@ EP542782_K10_MRCD.otu_table.biom
 EP542782_K10_MV1D.otu_table.biom
 EP542782_K20_MCKD.otu_table.biom
 EP542782_K20_MRCD.otu_table.biom
-EP542782_K20_MV1D.otu_table.biom
 EP542782_K30_MRCD.otu_table.biom
 EP542782_K30_MV1D.otu_table.biom
 EP542782_K40_BS1D.otu_table.biom
@@ -5393,10 +5361,8 @@ EP543835_K10_MRCD.otu_table.biom
 EP543835_K10_MV1D.otu_table.biom
 EP543835_K20_BCKD.otu_table.biom
 EP543835_K20_BRCD.otu_table.biom
-EP543835_K30_BS1D.otu_table.biom
 EP543835_K40_BCKD.otu_table.biom
 EP543835_K40_BRCD.otu_table.biom
-EP543835_K50_BS1D.otu_table.biom
 EP543835_K60_MCHD.otu_table.biom
 EP543835_K60_MCKD.otu_table.biom
 EP543835_K70_MCVD.otu_table.biom
@@ -5452,7 +5418,6 @@ EP547297_K30_MCKD.otu_table.biom
 EP547297_K30_MRCD.otu_table.biom
 EP547297_K30_MV1D.otu_table.biom
 EP547297_K310_BS1D.otu_table.biom
-EP547297_K320_BCKD.otu_table.biom
 EP547297_K320_BRCD.otu_table.biom
 EP547297_K330_BCKD.otu_table.biom
 EP547297_K330_BRCD.otu_table.biom
@@ -5630,7 +5595,6 @@ EP558013_K80_BS1D.otu_table.biom
 EP558013_K90_BCKD.otu_table.biom
 EP558013_K90_BRCD.otu_table.biom
 EP560280_K10_MCKD.otu_table.biom
-EP560280_K10_MRCD.otu_table.biom
 EP560280_K10_MV1D.otu_table.biom
 EP560280_K20_BCKD.otu_table.biom
 EP560280_K20_BRCD.otu_table.biom
@@ -5752,13 +5716,11 @@ EP573286_K50_MCKD.otu_table.biom
 EP573286_K50_MRCD.otu_table.biom
 EP573286_K60_MCKD.otu_table.biom
 EP573286_K70_BS1D.otu_table.biom
-EP573286_K80_BS1D.otu_table.biom
 EP573286_K90_BCKD.otu_table.biom
 EP573286_K90_BRCD.otu_table.biom
 EP573960_K10_MCKD.otu_table.biom
 EP573960_K10_MRCD.otu_table.biom
 EP573960_K10_MV1D.otu_table.biom
-EP573960_K20_MCKD.otu_table.biom
 EP573960_K20_MRCD.otu_table.biom
 EP573960_K20_MV1D.otu_table.biom
 EP573960_K30_MCKD.otu_table.biom
@@ -5768,7 +5730,6 @@ EP573960_K40_BS1D.otu_table.biom
 EP573960_K50_BCKD.otu_table.biom
 EP573960_K50_BRCD.otu_table.biom
 EP573960_K60_BS1D.otu_table.biom
-EP573960_K70_MCHD.otu_table.biom
 EP573960_K70_MCKD.otu_table.biom
 EP573960_K80_BCKD.otu_table.biom
 EP573960_K80_BRCD.otu_table.biom
@@ -6096,7 +6057,6 @@ EP601434_K60_MCHD.otu_table.biom
 EP601434_K60_MCKD.otu_table.biom
 EP601434_K70_BCKD.otu_table.biom
 EP601434_K70_BRCD.otu_table.biom
-EP601434_K80_MRCD.otu_table.biom
 EP601434_K80_MV1D.otu_table.biom
 EP602090_K10_MCKD.otu_table.biom
 EP602090_K10_MV1D.otu_table.biom
@@ -6108,7 +6068,6 @@ EP602090_K40_MV1D.otu_table.biom
 EP602090_K60_BC1D.otu_table.biom
 EP602120_K10_MV1D.otu_table.biom
 EP603154_K10_MCKD.otu_table.biom
-EP603154_K10_MRCD.otu_table.biom
 EP603154_K10_MV1D.otu_table.biom
 EP603154_K20_MCKD.otu_table.biom
 EP603154_K20_MRCD.otu_table.biom
@@ -6233,11 +6192,9 @@ EP615135_K20_BRCD.otu_table.biom
 EP615135_K40_MCKD.otu_table.biom
 EP618350_K20_MCKD.otu_table.biom
 EP618350_K20_MV1D.otu_table.biom
-EP618350_K30_MCKD.otu_table.biom
 EP618350_K30_MV1D.otu_table.biom
 EP618350_K40_MV1D.otu_table.biom
 EP618350_K50_BSTD.otu_table.biom
-EP618350_K60_BC1D.otu_table.biom
 EP618350_K70_MCKD.otu_table.biom
 EP622785_K10_MCVD.otu_table.biom
 EP622785_K10_MV1D.otu_table.biom
@@ -6433,7 +6390,6 @@ EP641566_K500_BRCD.otu_table.biom
 EP641566_K50_MCKD.otu_table.biom
 EP641566_K510_BCKD.otu_table.biom
 EP641566_K510_BRCD.otu_table.biom
-EP641566_K540_BCKD.otu_table.biom
 EP641566_K540_BRCD.otu_table.biom
 EP641566_K550_BCKD.otu_table.biom
 EP641566_K550_BRCD.otu_table.biom
@@ -6562,7 +6518,6 @@ EP646235_K40_MRCD.otu_table.biom
 EP646235_K40_MV1D.otu_table.biom
 EP646235_K50_MCKD.otu_table.biom
 EP646235_K50_MRCD.otu_table.biom
-EP646235_K50_MV1D.otu_table.biom
 EP646235_K60_BS1D.otu_table.biom
 EP646235_K80_BCKD.otu_table.biom
 EP646235_K80_BRCD.otu_table.biom
@@ -7448,7 +7403,6 @@ EP785033_K80_BCKD.otu_table.biom
 EP785033_K80_BRCD.otu_table.biom
 EP785033_K90_MCHD.otu_table.biom
 EP785033_K90_MCKD.otu_table.biom
-EP786740_K100_MCHD.otu_table.biom
 EP786740_K100_MCKD.otu_table.biom
 EP786740_K10_MCKD.otu_table.biom
 EP786740_K10_MRCD.otu_table.biom
@@ -7461,7 +7415,6 @@ EP786740_K30_MCKD.otu_table.biom
 EP786740_K40_MCKD.otu_table.biom
 EP786740_K40_MRCD.otu_table.biom
 EP786740_K40_MV1D.otu_table.biom
-EP786740_K50_MCKD.otu_table.biom
 EP786740_K50_MRCD.otu_table.biom
 EP786740_K50_MV1D.otu_table.biom
 EP786740_K60_MCKD.otu_table.biom
@@ -7562,7 +7515,6 @@ EP794231_K10_MCKD.otu_table.biom
 EP794231_K10_MCVD.otu_table.biom
 EP794231_K10_MRCD.otu_table.biom
 EP794231_K10_MV1D.otu_table.biom
-EP798108_K100_BS1D.otu_table.biom
 EP798108_K10_MCKD.otu_table.biom
 EP798108_K40_MCKD.otu_table.biom
 EP798108_K40_MRCD.otu_table.biom
@@ -7747,7 +7699,6 @@ EP828081_K40_BRCD.otu_table.biom
 EP828081_K60_BS1D.otu_table.biom
 EP828081_K70_MCKD.otu_table.biom
 EP828081_K80_BCKD.otu_table.biom
-EP828081_K80_BRCD.otu_table.biom
 EP828421_K10_MCKD.otu_table.biom
 EP828421_K20_MCKD.otu_table.biom
 EP828421_K20_MRCD.otu_table.biom
@@ -7940,7 +7891,6 @@ EP843963_K50_MV1D.otu_table.biom
 EP843963_K60_MCKD.otu_table.biom
 EP843963_K60_MRCD.otu_table.biom
 EP843963_K70_BS1D.otu_table.biom
-EP843963_K80_MCKD.otu_table.biom
 EP843963_K90_BCKD.otu_table.biom
 EP843963_K90_BRCD.otu_table.biom
 EP844868_K10_MCKD.otu_table.biom
@@ -8319,7 +8269,6 @@ EP897729_K130_BS1D.otu_table.biom
 EP897729_K20_MCKD.otu_table.biom
 EP897729_K20_MRCD.otu_table.biom
 EP897729_K20_MV1D.otu_table.biom
-EP897729_K30_MCKD.otu_table.biom
 EP897729_K30_MRCD.otu_table.biom
 EP897729_K30_MV1D.otu_table.biom
 EP897729_K60_MCKD.otu_table.biom
@@ -8357,7 +8306,6 @@ EP903758_K30_MV1D.otu_table.biom
 EP903758_K40_MCKD.otu_table.biom
 EP903758_K40_MRCD.otu_table.biom
 EP903758_K40_MV1D.otu_table.biom
-EP903758_K50_MCHD.otu_table.biom
 EP903758_K50_MCKD.otu_table.biom
 EP908409_K100_MCKD.otu_table.biom
 EP908409_K10_MCKD.otu_table.biom
@@ -8422,7 +8370,6 @@ EP912323_K90_MCKD.otu_table.biom
 EP912323_K90_MRCD.otu_table.biom
 EP912323_K90_MV1D.otu_table.biom
 EP915249_K10_MCKD.otu_table.biom
-EP915249_K20_MRCD.otu_table.biom
 EP915249_K20_MV1D.otu_table.biom
 EP915249_K30_BCKD.otu_table.biom
 EP915249_K30_BRCD.otu_table.biom
@@ -8430,7 +8377,6 @@ EP915249_K40_BCKD.otu_table.biom
 EP915249_K40_BRCD.otu_table.biom
 EP915249_K50_BS1D.otu_table.biom
 EP915249_K60_BS1D.otu_table.biom
-EP915249_K70_MCHD.otu_table.biom
 EP915249_K70_MCKD.otu_table.biom
 EP915249_K80_MCKD.otu_table.biom
 EP915249_K80_MRCD.otu_table.biom
@@ -8458,7 +8404,6 @@ EP925066_K10_MCKD.otu_table.biom
 EP925066_K10_MV1D.otu_table.biom
 EP925066_K120_BCKD.otu_table.biom
 EP925066_K120_BRCD.otu_table.biom
-EP925066_K130_MCKD.otu_table.biom
 EP925066_K140_BS1D.otu_table.biom
 EP925066_K20_MCKD.otu_table.biom
 EP925066_K20_MRCD.otu_table.biom
@@ -8636,7 +8581,6 @@ EP941670_K100_MCKD.otu_table.biom
 EP941670_K100_MV1D.otu_table.biom
 EP941670_K10_MCKD.otu_table.biom
 EP941670_K10_MRCD.otu_table.biom
-EP941670_K10_MV1D.otu_table.biom
 EP941670_K20_MCKD.otu_table.biom
 EP941670_K20_MRCD.otu_table.biom
 EP941670_K20_MV1D.otu_table.biom
@@ -8689,7 +8633,6 @@ EP951326_K20_MCKD.otu_table.biom
 EP951326_K20_MRCD.otu_table.biom
 EP951326_K20_MV1D.otu_table.biom
 EP951326_K30_MCHD.otu_table.biom
-EP951326_K30_MCKD.otu_table.biom
 EP951326_K50_MCKD.otu_table.biom
 EP951326_K50_MRCD.otu_table.biom
 EP951326_K50_MV1D.otu_table.biom
@@ -8767,7 +8710,6 @@ EP959101_K60_MRCD.otu_table.biom
 EP959101_K60_MV1D.otu_table.biom
 EP959101_K70_MCKD.otu_table.biom
 EP959101_K70_MRCD.otu_table.biom
-EP959101_K70_MV1D.otu_table.biom
 EP959101_K80_MCKD.otu_table.biom
 EP959101_K80_MRCD.otu_table.biom
 EP959101_K80_MV1D.otu_table.biom
@@ -9054,7 +8996,6 @@ EP988019_K110_BS1D.otu_table.biom
 EP988019_K20_MCKD.otu_table.biom
 EP988019_K30_MCKD.otu_table.biom
 EP988019_K30_MRCD.otu_table.biom
-EP988019_K30_MV1D.otu_table.biom
 EP988019_K40_MCKD.otu_table.biom
 EP988019_K40_MRCD.otu_table.biom
 EP988019_K40_MV1D.otu_table.biom
@@ -9084,7 +9025,6 @@ EP989401_K50_MV1D.otu_table.biom
 EP990110_K10_MV1D.otu_table.biom
 EP992349_K10_MCKD.otu_table.biom
 EP992349_K10_MCVD.otu_table.biom
-EP992349_K10_MRCD.otu_table.biom
 EP992349_K10_MV1D.otu_table.biom
 EP992349_K20_MCKD.otu_table.biom
 EP992349_K20_MRCD.otu_table.biom
@@ -9104,7 +9044,6 @@ EP994584_K20_MV1D.otu_table.biom
 EP994584_K30_MCKD.otu_table.biom
 EP994584_K30_MV1D.otu_table.biom
 EP994584_K40_MV1D.otu_table.biom
-EP994584_K50_MCKD.otu_table.biom
 EP994584_K60_BC1D.otu_table.biom
 EP994584_K70_BSTD.otu_table.biom
 EP994895_K10_MCKD.otu_table.biom
@@ -9121,7 +9060,6 @@ EP994895_K30_MRCD.otu_table.biom
 EP994895_K30_MV1D.otu_table.biom
 EP994895_K50_MCKD.otu_table.biom
 EP994895_K50_MRCD.otu_table.biom
-EP994895_K50_MV1D.otu_table.biom
 EP994895_K60_MCKD.otu_table.biom
 EP994895_K60_MRCD.otu_table.biom
 EP994895_K60_MV1D.otu_table.biom
