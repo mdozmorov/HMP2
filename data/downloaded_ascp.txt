@@ -8346,7 +8346,6 @@ EP909375_K60_MCKD.otu_table.biom
 EP909375_K70_BCKD.otu_table.biom
 EP909375_K70_BRCD.otu_table.biom
 EP912225_K10_MV1D.otu_table.biom
-EP912225_K60_BCKD.otu_table.biom
 EP912225_K60_BRCD.otu_table.biom
 EP912225_K90_BCKD.otu_table.biom
 EP912225_K90_BRCD.otu_table.biom
