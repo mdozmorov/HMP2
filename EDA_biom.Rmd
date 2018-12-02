@@ -128,10 +128,11 @@ write_tsv(mtx1_missed, "biom_nonreadable.tsv")
 
 
 # Non-readable files
-files_missed <- list.files(path = "ptb", pattern = "biom", full.names = TRUE, recursive = TRUE)
+
+files_missed <- list.files(path = "/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb_nonreadable", pattern = "biom", full.names = TRUE, recursive = TRUE)
 files_missed
 # Test reading before/after JSON conversion
-mtx_biom_missed <- read_biom(files_missed[3])
+mtx_biom_missed <- read_biom(files_missed[2])
 
 # JSON conversion
 # https://github.com/joey711/phyloseq/issues/443
@@ -139,6 +140,20 @@ mtx_biom_missed <- read_biom(files_missed[3])
 # for file in *.biom; do biom convert -i $file -o test.biom  --table-type="OTU table" --to-json && mv test.biom $file; done
 # source deactivate
 ```
+
+### Checking each .biom file for readability
+
+After we remove non-readable files, we still check if each of the remaining files can be read. `r length(files)` files should be read without errors (warnings OK).
+
+```{r}
+# Check all files for readability
+for (i in 1:length(files)) {
+    print(paste0(i, " ", basename(files[i])))
+    # Read the data
+    mtx_biom <- read_biom(files[i]) # Don't do anything, just check if read without errors
+}
+```
+
 
 ### Extract full matrix
 
