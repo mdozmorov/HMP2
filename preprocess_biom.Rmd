@@ -284,6 +284,6 @@ for (i in 2:total) {
     mtx_biom_ID_all <- c(mtx_biom_ID_all, mtx_biom_data) %>% unique()
   }
 }
-# 7720 unique IDs
+# 7665 unique IDs
 write_csv(x = data.frame(mtx_biom_ID_all), path = fileNameOut1)
 ```
