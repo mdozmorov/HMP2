@@ -1,0 +1,2 @@
+*.rda filter=lfs diff=lfs merge=lfs -text
+*.txt.gz filter=lfs diff=lfs merge=lfs -text
