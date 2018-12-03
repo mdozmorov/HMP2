@@ -10,10 +10,11 @@ output:
     toc: yes
 ---
 
+
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
 # Set up the environment
 library(knitr)
-opts_chunk$set(cache.path='cache/', fig.path='img/', cache=F, tidy=T, fig.keep='high', echo=F, dpi=100, warnings=F, message=F, comment=NA, warning=F, results='as.is', fig.width = 10, fig.height = 6) #out.width=700, 
+opts_chunk$set(cache.path='cache/', fig.path='img/', cache=T, tidy=T, fig.keep='high', echo=F, dpi=100, warnings=F, message=F, comment=NA, warning=F, results='as.is', fig.width = 10, fig.height = 6) #out.width=700, 
 library(pander)
 panderOptions('table.split.table', Inf)
 set.seed(1)
@@ -32,74 +33,80 @@ library(openxlsx)
 library(MDmisc)
 ```
 
+# Settings
 
 ```{r settings}
-# Data folder
-dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+# Big Data folder
+dataDir      <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+
 # Input files
-fileNameIn1  <- "data/hmp_cart_41c0aca569.tsv" # Manifest
+fileNameIn1  <- "mtx_biom_data_all_ID_merged.xlsx"     # All data from .biom files, merged by ID
 fileNameIn2  <- "data/hmp_cart_metadata_26015b0c41.tsv" # Metadata
-fileNameIn3  <- "data/downloaded_ascp.txt" # Downloaded files
+fileNameIn3  <- "data/hmp_cart_41c0aca569.tsv" # Manifest
+fileNameIn4  <- "data/99_otu_taxonomy.txt.gz" # Greengene taxonomy
 # Output files
-fileNameOut1 <- "data/mtx_biom_ID_all.csv" # All IDs from .biom files
-fileNameOut2 <- "mtx_biom_data_all_ID-Tax_merged.xlsx" # All data from .biom files, merged by ID and Taxonomy
-fileNameOut3 <- "mtx_biom_data_all_ID_merged.xlsx"     # All data from .biom files, merged by ID
+fileNameOut1 <- "data/hmp2_biom_momspi.rda"
 
 # Misc
-max_files <- 500 # How many files to process
-full_data <- TRUE # If true, `max_files` is ignored and all files are processed
+max_samples  <- 500 # For some time-consuming operations, process that many randomly selected samples
 ```
 
-# Exploratory data analysis
+# Load data
 
 Data source: https://www.hmpdacc.org/hmp/, https://portal.hmpdacc.org/ - data portal. [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D). Download with `scripts/ascp-commands.sh`
 
-## Load data
-
 ```{r}
-# Manifest
-mtx1 <- read_tsv(fileNameIn1)
-# Add file names
-mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
+# All data. read.xlsx is slow, takes ~10 min
+mtx_biom_data_all_df <- read.xlsx(xlsxFile = paste0(dataDir, fileNameIn1), sheet = "Biom")
+# Clean columns from ".otu_table.biom" suffix
+colnames(mtx_biom_data_all_df) <- sub(pattern = ".otu_table.biom", replacement = "", colnames(mtx_biom_data_all_df))
+# Make IDs numeric
+mtx_biom_data_all_df$ID <- as.numeric(mtx_biom_data_all_df$ID)
 ```
 
 ```{r}
 # Metadata
-mtx2 <- read_tsv(fileNameIn2)
+mtx_metadata <- read_tsv(fileNameIn2)
+# Manifest
+mtx_manifest <- read_tsv(fileNameIn3)
+# Select cpecific columns from the manifest
+mtx_manifest_selected <- data.frame(sample_id = mtx_manifest$sample_id, file = basename(mtx_manifest$urls))
+# Clean columns from ".otu_table.biom" suffix
+mtx_manifest_selected$file <- sub(pattern = ".otu_table.biom", replacement = "", mtx_manifest_selected$file)
+# Attach file names to Metadata
+mtx_metadata <- left_join(mtx_metadata, mtx_manifest_selected, by = c("sample_id"))
+# Subset to the files in mtx_biom_data_all_df
+mtx_metadata <- mtx_metadata[mtx_metadata$file %in% colnames(mtx_biom_data_all_df %>% dplyr::select(-ID)), ]
+# Make the same order as in mtx_biom_data_all_df
+mtx_metadata <- mtx_metadata[match(colnames(mtx_biom_data_all_df %>% dplyr::select(-ID)), mtx_metadata$file), ]
+# Sanity check, should be TRUE
+# all_equal(mtx_metadata$file, colnames(mtx_biom_data_all_df %>% dplyr::select(-ID)))
 ```
 
 ```{r}
-# Downloaded files
-mtx3 <- read_tsv(fileNameIn3, col_names = FALSE)
-# Subset manifest to downloaded files only
-mtx1 <- mtx1[ mtx1$file_name %in% mtx3$X1, ]
+# Greengenes annotation
+mtx_greengenes <- read_tsv(file = fileNameIn4, col_names = FALSE)
+colnames(mtx_greengenes) <- c("ID", "Taxonomy")
+# head(mtx_greengenes)
 ```
-
-Number of subjects with vaginal samples
-
-```{r}
-dim(mtx2)
-mtx2_vaginal <- subset(mtx2, sample_body_site == "vagina")
-length(unique(mtx2$subject_id))
-nvisits <- aggregate(visit_number ~ subject_id,  data = mtx2_vaginal, length)
-table(nvisits$visit_number)
-```
-
 
 
 ## Biom EDA
 
-`r total` files are processed. Data dimensions: `r dim(mtx_biom_data_all)`
+Biom data dimensions: `r dim(mtx_biom_data_all_df)`
 
 ```{r}
-mtx_biom_data_all[1:5, 1:5]
+mtx_biom_data_all_df[1:5, 1:5]
 ```
 
-Count distribution
+\pagebreak
 
-```{r}
+### Count distribution for `r max_samples` randomly selected samples
+
+```{r fig.height=4}
+set.seed(1)
 # Prepare data for multiple histograms
-data <- mtx_biom_data_all %>% dplyr::select(-ID) %>% melt
+data <- mtx_biom_data_all_df[, sample(2:ncol(mtx_biom_data_all_df), size = max_samples)] %>% melt # Randomly select max_samples
 data <- data[ complete.cases(data), ] # Remove NAs
 print("Summary of count data")
 summary(data$value)
@@ -113,61 +120,157 @@ ggplot(data, aes(x = value, fill = variable)) +
   ylab("Density")
 ```
 
-Distribution of sample medians
+**Question:** There are outlier counts. With median/mean counts equal to 4/300, respectively, we have  counts as high as 956642. 
 
-```{r}
-mtx_medians <- sapply(mtx_biom_data_all %>% dplyr::select(-ID), function(x) median(x, na.rm = TRUE))
+\pagebreak
+
+### Distribution of sample medians for all samples
+
+```{r fig.height=4}
+mtx_medians <- sapply(mtx_biom_data_all_df %>% dplyr::select(-ID), function(x) median(x, na.rm = TRUE))
+summary(mtx_medians)
 plot_density(mtx_medians)
 ```
 
+**Question:** The range of medians vary across samples. Most samples have median counts ~3-4, but some have as high as 138.
 
-### Sparsity
+### Boxplots of low/high median samples
 
-```{r}
-dim_rows <- nrow(mtx_biom_data_all) # Total number of rows
+We see how different are count distributions between low/high median samples
+
+```{r fig.height=4}
+# Sample indices with high and low median counts
+index_high <- which(mtx_medians > quantile(mtx_medians, .99))
+index_low  <- which(mtx_medians < quantile(mtx_medians, .17))
+# Randomly subset ten of them from each group
+index_high <- index_high[sample(x = 1:length(index_high), size = 10)]
+index_low  <- index_low[sample( x = 1:length(index_low) , size = 10)]
+# Get data for plotting
+mtx_to_plot <- cbind(mtx_biom_data_all_df[, index_low + 1], mtx_biom_data_all_df[, index_high + 1]) # +1 because of "ID" column still present
+mtx_to_plot <- mtx_to_plot %>% melt()
+# Actually plot
+ggplot(mtx_to_plot, aes(x = variable, y = value)) +
+  geom_boxplot() +
+  ylim(0, 100) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  xlab("Samples") + ylab("Counts") + ggtitle("Boxplots of low/high median samples")
+```
+
+\pagebreak
+
+### Sparsity of samples (across columns)
+
+```{r fig.height=3.4}
+dim_rows <- nrow(mtx_biom_data_all_df) # Total number of rows
 # Percent of rows with NAs, per sample
-pct_nas  <- sapply(mtx_biom_data_all %>% dplyr::select(-ID), function(x) sum(is.na(x)) / dim_rows) %>% unname
+pct_nas  <- sapply(mtx_biom_data_all_df %>% dplyr::select(-ID), function(x) sum(is.na(x)) / dim_rows) %>% unname
 # Density histogram
-data.frame(pct_nas) %>% plot_density(., title = "Sparsity distribution")
+data.frame(pct_nas) %>% plot_density(., title = "Sparsity distribution across samples")
 # Summary statistics
 summary(pct_nas)
 ```
 
-# Questions
+**Question:** The data across samples is very sparse (~97% NAs) - is it expected? There are samples with >99% sparsity.
 
-- What are the row IDs?
-- Most sample counts are very small, median = 2. Is it expected?
-- There are outliers, like a sample with median counts = 124, maximum count = 206705. Shall we remove such samples?
-- The data is very sparse (~97% NAs) - is it expected?
+```{r}
+# Add sample names to percent NAs
+names(pct_nas) <- colnames(mtx_biom_data_all_df %>% dplyr::select(-ID))
+pct_nas <- sort(pct_nas) # Sort from low to high
+
+print("Top 10 least sparse samples:")
+pct_nas_least <- pct_nas[1:10]
+kable(mtx_metadata[mtx_metadata$file %in% names(pct_nas_least), c("file", "sample_body_site", "visit_number")])
+
+print("Top 10 most sparse samples:")
+pct_nas_most <- pct_nas[(length(pct_nas) - 10):length(pct_nas)]
+kable(mtx_metadata[mtx_metadata$file %in% names(pct_nas_most), c("file", "sample_body_site", "visit_number")])
+```
+
+**Observation:** Samples from rectum and first visits may be least sparse. Samples from buccal mucosa/rectum and later visits may be most sparse.
+
+\pagebreak
+
+### Sparsity of counts (across rows)
+
+```{r fig.height=3.5}
+dim_cols <- ncol(mtx_biom_data_all_df %>% dplyr::select(-ID)) # Total number of columns
+# Percent of rows with NAs, per sample
+pct_nas  <- apply(mtx_biom_data_all_df %>% dplyr::select(-ID), 1, function(x) sum(is.na(x)) / dim_cols) %>% unname
+# Density histogram
+data.frame(pct_nas) %>% plot_density(., title = "Sparsity distribution across counts")
+# Summary statistics
+summary(pct_nas)
+```
+
+**Question:** The data across counts is very sparse (~99% NAs) - is it expected? There are counts with almost 100% sparsity.
+
+```{r}
+# Add sample names to percent NAs
+names(pct_nas) <- mtx_biom_data_all_df$ID
+pct_nas <- sort(pct_nas) # Sort from low to high
+
+print("Top 10 least sparse counts:")
+pct_nas_least <- pct_nas[1:10]
+kable(mtx_greengenes[mtx_greengenes$ID %in% names(pct_nas_least), ])
+
+print("Top 10 most sparse counts:")
+pct_nas_most <- pct_nas[(length(pct_nas) - 10):length(pct_nas)]
+kable(mtx_greengenes[mtx_greengenes$ID %in% names(pct_nas_most), ])
+```
+
+**Observation:** Counts for "Lacto*" bacteria seem to be least sparse.
+
+\pagebreak
 
 ## Metadata EDA
 
-
-```{r}
-plot_bar(mtx2$sample_body_site)
-table(mtx2$sample_body_site) %>% sort(., decreasing = TRUE)
-```
-
-```{r}
-plot_density(mtx2$visit_number)
-table(mtx2$visit_number)     %>% sort(., decreasing = TRUE)
-```
-
-```{r}
-print(paste0("How many total samples: ", nrow(mtx2) ))
-print(paste0("How many unique sample IDs: ", unique(mtx2$sample_id) %>% length() ))
-print(paste0("How many unique subject IDs: ", unique(mtx2$subject_id) %>% length() ))
-print(paste0("How many samples at visit 1: ", sum(mtx2$visit_number == 1) ))
-```
-
 ```{r echo=TRUE}
 # Quick EDA
-table(mtx2$subject_gender)   %>% sort(., decreasing = TRUE)
-table(mtx2$subject_race)     %>% sort(., decreasing = TRUE)
-table(mtx2$study_full_name)  %>% sort(., decreasing = TRUE)
-table(mtx2$project_name)     %>% sort(., decreasing = TRUE)
+table(mtx_metadata$subject_gender)   %>% sort(., decreasing = TRUE)
+table(mtx_metadata$subject_race)     %>% sort(., decreasing = TRUE)
+table(mtx_metadata$study_full_name)  %>% sort(., decreasing = TRUE)
+table(mtx_metadata$project_name)     %>% sort(., decreasing = TRUE)
 ```
 
+### sample_body_site
 
+```{r fig.height=4}
+plot_bar(mtx_metadata$sample_body_site)
+table(mtx_metadata$sample_body_site) %>% sort(., decreasing = TRUE)
+```
 
+### visit_number
+
+```{r fig.height=4}
+plot_density(mtx_metadata$visit_number)
+table(mtx_metadata$visit_number)    %>% sort(., decreasing = TRUE)
+```
+
+```{r}
+print(paste0("How many total samples: "     , ncol(mtx_biom_data_all_df %>% dplyr::select(-ID)) ))
+print(paste0("How many samples at visit 1: ", sum(mtx_metadata$visit_number == 1) ))
+```
+
+### Number of subjects with vaginal samples
+
+```{r}
+dim(mtx_metadata)
+mtx2_vaginal <- subset(mtx_metadata, sample_body_site == "vagina")
+length(unique(mtx_metadata$subject_id))
+nvisits <- aggregate(visit_number ~ subject_id,  data = mtx2_vaginal, length)
+table(nvisits$visit_number)
+```
+
+## Save the results
+
+```{r}
+# Attach Greengene taxonomy
+mtx_biom_data <- left_join(mtx_biom_data_all_df, mtx_greengenes, by = c("ID"))
+# Rearrange columns, so Taxonomy is in front
+mtx_biom_data <- mtx_biom_data[, c("ID", "Taxonomy", colnames(mtx_biom_data)[grepl("EP", colnames(mtx_biom_data))])]
+# Sanity check for file names in "mtx_biom_data" are the same as in "mtx_metadata"
+# all.equal(mtx_metadata$file, colnames(mtx_biom_data)[grep("EP", colnames(mtx_biom_data))])
+save(list = c("mtx_biom_data", "mtx_metadata"), file = fileNameOut1)
+# load(file = fileNameOut1)
+```
 
