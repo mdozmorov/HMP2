@@ -26,13 +26,11 @@ options(stringsAsFactors = FALSE)
 library(readr)
 ```
 
-
-```{r}
 # Settings
 
-fileNameIn1  <- "99_otu_taxonomy.txt.gz"
+```{r}
+fileNameIn1  <- "data/99_otu_taxonomy.txt.gz"
 fileNameIn2  <- "data/mtx_biom_ID_all.csv" # All IDs from .biom files
-dirOut1      <- "greengenes" # Where to download Greengenes data
 ```
 
 Greengenes download page: http://greengenes.secondgenome.com/downloads/database/13_5. FTP: ftp://greengenes.microbio.me/greengenes_release/, taxonomy: ftp://greengenes.microbio.me/greengenes_release/gg_13_8_otus/taxonomy/
@@ -44,13 +42,12 @@ gzip 99_otu_taxonomy.txt
 
 
 ```{r}
-
-mtx_greengenes <- read_tsv(file = paste0(dirOut1, "/", fileNameIn1), col_names = FALSE)
+# Greengenes
+mtx_greengenes <- read_tsv(file = fileNameIn1, col_names = FALSE)
 head(mtx_greengenes)
-
+# Biom IDs
 mtx_biom_ID_all <- read_csv(file = fileNameIn2, col_types = "c")
-mtx_biom_ID_all[grepl("EP", mtx_biom_ID_all$mtx_biom_ID_all), ]
-
+# Are there any biom ID that is not in Greengenes?
 setdiff(mtx_biom_ID_all$mtx_biom_ID_all, mtx_greengenes$X1)
 ```
 
