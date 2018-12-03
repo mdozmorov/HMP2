@@ -199,22 +199,25 @@ for (i in 1:total) {
 
 ### Merge by both ID and Taxonlomy
 
-```{r}
-# Combine all elements in a list into a data frame, merging by both IDs. Time consuming
+```{r eval=FALSE}
+# Combine all elements in a list into a data frame, merging by both IDs. Time consuming, over 5 hours
 mtx_biom_data_all_df <- mtx_biom_data_all %>% purrr::reduce(full_join, by = c("ID", "Taxonomy"))
+dim(mtx_biom_data_all_df) # 13711 x 9109
 # Sort by numerical ID
 mtx_biom_data_all_df <- mtx_biom_data_all_df[order(mtx_biom_data_all_df$ID), ]
-# Save the data
+# Save the data in Excel format
 unlink(paste0(dataDir, fileNameOut2)) # Delete previous file
 wb <- openxlsx::createWorkbook(paste0(dataDir, fileNameOut2)) # openxlsx::loadWorkbook(fileName) # Or, load existing
 save_res(mtx_biom_data_all_df, fileName = paste0(dataDir, fileNameOut2), wb = wb, sheetName = "Biom")
+# Save the data in CSV format
+write_csv2(x = mtx_biom_data_all_df, path = paste0(dataDir, sub(pattern = "xlsx", replacement = "csv", fileNameOut2)))
 ```
 
 ### Investigate duplicates
 
 Many IDs are duplicated because Taxonomy mismatch
 
-```{r}
+```{r eval=FALSE}
 # How many unique IDs
 unique(mtx_biom_data_all_df$ID) %>% length() # 7665
 # Check duplicates
@@ -239,14 +242,19 @@ mtx_biom_data_all_df[mtx_biom_data_all_df$ID %in% duplicated_IDs, c("ID", "Taxon
 ### Merge by ID only
 
 ```{r}
-# Combine all elements in a list into a data frame, merging by ID only. Time consuming
+# Combine all elements in a list into a data frame, merging by ID only. Time consuming, over 5 hours
 mtx_biom_data_all_df <- mtx_biom_data_all %>% purrr::reduce(full_join, by = c("ID"))
+# Remove taxonomy columns that double the number of columns
+mtx_biom_data_all_df <- mtx_biom_data_all_df[, !grepl("Taxonomy", colnames(mtx_biom_data_all_df))]
+dim(mtx_biom_data_all_df) # 7665 x 9108
 # Sort by numerical ID
 mtx_biom_data_all_df <- mtx_biom_data_all_df[order(mtx_biom_data_all_df$ID), ]
-# Save the data
+# Save the data in Excel format
 unlink(paste0(dataDir, fileNameOut3)) # Delete previous file
 wb <- openxlsx::createWorkbook(paste0(dataDir, fileNameOut3)) # openxlsx::loadWorkbook(fileName) # Or, load existing
 save_res(mtx_biom_data_all_df, fileName = paste0(dataDir, fileNameOut3), wb = wb, sheetName = "Biom")
+# Save the data in CSV format
+write_csv2(x = mtx_biom_data_all_df, path = paste0(dataDir, sub(pattern = "xlsx", replacement = "csv", fileNameOut3)))
 ```
 
 
