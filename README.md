@@ -23,11 +23,9 @@
 
 - `data`
     - `biom_nonreadable.tsv` - 62 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
-    - `hmp_cart_1c572b0ab.tsv` - manifest for first three files
-    - `hmp_cart_metadata_b53a6441a.tsv` - metadata for first three files
     - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 files, 11/09/2018
     - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 files, 11/09/2018
-    - `downloaded_ascp.txt` - list of 9,170 files downloaded with `ascp-commands.sh`, 11/09/2018
+    - `downloaded_ascp.txt` - list of files downloaded with `ascp-commands.sh`, 11/09/2018
 
 - `scripts`
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
