@@ -45,6 +45,7 @@ fileNameIn3  <- "data/downloaded_ascp.txt" # Downloaded files
 fileNameOut1 <- "data/mtx_biom_ID_all.csv" # All IDs from .biom files
 fileNameOut2 <- "mtx_biom_data_all_ID-Tax_merged.xlsx" # All data from .biom files, merged by ID and Taxonomy
 fileNameOut3 <- "mtx_biom_data_all_ID_merged.xlsx"     # All data from .biom files, merged by ID
+fileNameOut4 <- "data/hmp_cart_metadata_26015b0c41_extended.tsv" # Metadata with added fields from .biom files
 
 # Misc
 max_files <- 500 # How many files to process
@@ -256,6 +257,61 @@ save_res(mtx_biom_data_all_df, fileName = paste0(dataDir, fileNameOut3), wb = wb
 # Save the data in CSV format
 write_csv2(x = mtx_biom_data_all_df, path = paste0(dataDir, sub(pattern = "xlsx", replacement = "csv", fileNameOut3)))
 ```
+
+### Extract extended metadata from .biom files
+
+```{r}
+sample_name <- list() # Store file name
+# Slots, and examples of data in them
+mtx_slot_1  <- list() # chr "No Table ID"
+mtx_slot_2  <- list() # chr "Biological Observation Matrix 2.1"
+mtx_slot_3  <- list() # chr "http://biom-format.org"
+mtx_slot_4  <- list() # chr "OTU table"
+mtx_slot_5  <- list() # chr "QIIME 1.9.1"
+mtx_slot_6  <- list() # chr "2016-08-31T20:18:41.394155"
+mtx_slot_7  <- list() # chr "dense"
+mtx_slot_8  <- list() # chr "int"
+mtx_slot_11 <- list() # int [1:2] 43 1
+# Extracted in `manual_biom_extract` function
+# Slot 9  - IDs ($id (chr "807795"), $metadata (chr [1:7] "k__Bacteria" "p__Firmicutes"))
+# Slot 10 - sample name ($id (chr "EP003595"), $metadata (list()))
+# Slot 12 - data
+
+# Starting from the second file
+for (i in 1:length(files)) {
+    print(paste0(i, " ", basename(files[i])))
+    sample_name <- c(sample_name, basename(files[i]) %>% sub(pattern = ".otu_table.biom", replacement = ""))
+    # Read the data
+    mtx_biom    <- read_biom(files[i])
+    mtx_slot_1  <- c(mtx_slot_1 , mtx_biom@.Data[[1]] )
+    mtx_slot_2  <- c(mtx_slot_2 , mtx_biom@.Data[[2]] )
+    mtx_slot_3  <- c(mtx_slot_3 , mtx_biom@.Data[[3]] )
+    mtx_slot_4  <- c(mtx_slot_4 , mtx_biom@.Data[[4]] )
+    mtx_slot_5  <- c(mtx_slot_5 , mtx_biom@.Data[[5]] )
+    mtx_slot_6  <- c(mtx_slot_6 , mtx_biom@.Data[[6]] )
+    mtx_slot_7  <- c(mtx_slot_7 , mtx_biom@.Data[[7]] )
+    mtx_slot_8  <- c(mtx_slot_8 , mtx_biom@.Data[[8]] )
+    mtx_slot_11 <- c(mtx_slot_11, paste(mtx_biom@.Data[[11]], collapse = "-"))
+}
+# Construct extended metadata 
+biom_metadata <- data.frame(file   = sample_name %>% purrr::reduce(c),
+                            slot1  = mtx_slot_1  %>% purrr::reduce(c),
+                            slot2  = mtx_slot_2  %>% purrr::reduce(c),
+                            slot3  = mtx_slot_3  %>% purrr::reduce(c),
+                            slot4  = mtx_slot_4  %>% purrr::reduce(c),
+                            slot5  = mtx_slot_5  %>% purrr::reduce(c),
+                            slot6  = mtx_slot_6  %>% purrr::reduce(c),
+                            slot7  = mtx_slot_7  %>% purrr::reduce(c),
+                            slot8  = mtx_slot_8  %>% purrr::reduce(c),
+                            slot11 = mtx_slot_11 %>% purrr::reduce(c))
+# Quick EDA - nothing really interesting
+biom_metadata %>% dplyr::select(-slot6, -slot11) %>% sapply(table)
+# Combine with the original metedata
+mtx_metadata_extended <- left_join(mtx_metadata, biom_metadata, by = c("file"))
+# Save the extended metadata
+write_tsv(mtx_metadata_extended, path = fileNameOut4)
+```
+
 
 
 ```{r eval=FALSE}

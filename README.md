@@ -27,6 +27,7 @@
     - `biom_nonreadable.tsv` - 62 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
     - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 files, 11/09/2018
     - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 files, 11/09/2018
+    - `hmp_cart_metadata_26015b0c41_extended.tsv` - extended metadata for 9107 readable files, added slots from .biom files (available on-demand)
     - `downloaded_ascp.txt` - list of files downloaded with `ascp-commands.sh`, 11/09/2018
 
 - `scripts`
