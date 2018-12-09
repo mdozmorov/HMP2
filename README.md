@@ -35,6 +35,7 @@
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `ascp-commands.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
     - `ascp-commands_biom_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
+    - `phyloseq_analysis.R` - phyloseq analysis vignette code
 
 ## URLs
 
