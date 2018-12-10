@@ -43,6 +43,7 @@
 
 - dbGAP controlled access for HMP2: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section).
 - http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford. Mixture of raw and processed sample data. No description, data selection seem random. Not analyzed.
+- Human Microbiome Data in phyloseq format, http://joey711.github.io/phyloseq-demo/HMP_import_example.html
 
 ### Software
 
