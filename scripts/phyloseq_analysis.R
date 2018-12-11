@@ -223,3 +223,17 @@ GP.tip.labels <- as(get_variable(GlobalPatterns, "SampleType"), "character")
 # This is the actual hierarchical clustering call, specifying average-link clustering
 GP.hclust     <- hclust(GPUF, method="average")
 plot(GP.hclust, col=cols)
+
+
+
+# Explore `phyloseq::import_biom` 
+dataDir1   <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb/" # Readable BIOM files
+fileNames1 <- list.files(path = dataDir1, full.names = TRUE)
+mtx1 <- import_biom(BIOMfilename = fileNames1[1])
+mtx1
+otu_table(mtx1)
+tax_table(mtx1)
+
+dataDir2   <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb_nonreadable/" # Nonreadable BIOM files
+fileNames2 <- list.files(path = dataDir2, full.names = TRUE)
+mtx2 <- import_biom(BIOMfilename = fileNames2[1])
