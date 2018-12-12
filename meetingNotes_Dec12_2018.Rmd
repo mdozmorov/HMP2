@@ -1,0 +1,50 @@
+---
+title: "notes 12/12/2018"
+author: "author"
+date: "December 12, 2018"
+output: html_document
+---
+
+
+- Project plan is on github
+  - we have the data processed now in a matrix format
+  - 7,000x9,000 - 97% is 0
+  - want to put data in phyloseq format
+  - MOMSPI data will serve as starting point
+  - HMP16SData vignettes have good description of data and download process
+  - John will put together package and write vignette - Mikhail & Katia edit
+  - Need repository key to download data from dbGAP
+  - Getting data from Curtis probably possible but might not be worth it
+  - we can proceed with the data we have for putting the package together
+
+- can do multiomics analysis with what we have
+  - multiple body sites available
+  - can do this for vignette
+  - see phyloseq tutorials
+  - do MDS to make plots
+  - we have 16S data currently, for same subjects there is also WGS, cytokine, tramscroptome
+    - don't use lipids data
+  - need to download cytokine and transcrptiome dataset to put into package
+    - Mikhail will figure out how to download this data
+
+- 63 files could not be read into R as biom format
+  - with HMP1 there was a csv file missing a comma and wouldnt read correctly, these files might have been corrupted
+  - should ask technical contact about this
+
+- Levi can demo the multiAssayExperiment package
+
+- Curtis doesn't know when dbGAP will become available
+
+- forward HMP2 package to same journal as original paper
+- epidemiology journals might be good choice
+- initial illustrative analysis for what you can do with the data
+
+- any methods to promote and can be applied to the data could be included with the package
+
+- need to have matrices to put into experiment hub
+  - we have 16S data as a matrix already
+- if datasets are not that big we might not need experimenthub, just put data in data directory
+
+- what are the rules for bioconductor workshop? Might put what we do as a workshop
+  - follow format on bioconductor website, deadline in march
+  
