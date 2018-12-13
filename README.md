@@ -8,11 +8,18 @@
 
 ## Files
 
-- `Analysis_biom.Rmd` - Loads `mtx_biom_data` count object and `mtx_metadata` annotation object from `data/hmp2_biom_momspi.rda`
+- `Methods.md` - Methods notes
+- `ToDo.md` - current todos
 
-- `preprocess_biom.Rmd` - extracting data from `.biom` files downloaded with `scripts/ascp-commands.sh` from https://portal.hmpdacc.org/ - data portal. [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), 11/09/2018
+### 16S
 
-- `EDA_biom.Rmd` - Exploratory data analysis of `.biom` files. Creates R object `data/hmp2_biom_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
+- `preprocess_biom_16S.Rmd` - extracting data from `.biom` files downloaded with `scripts/ascp-commands.sh` from https://portal.hmpdacc.org/ - data portal. [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), 11/09/2018
+
+- `EDA_biom_16S.Rmd` - Exploratory data analysis of `.biom` files. Creates R object `data/hmp2_biom_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
+
+- `Analysis_biom_16S.Rmd` - Loads `mtx_biom_data` count object and `mtx_metadata` annotation object from `data/hmp2_biom_momspi.rda`
+
+### Misc
 
 - `EDA_Greengenes.Rmd` - Associating biom IDs with Greengene taxonomy
 
@@ -20,21 +27,19 @@
 
 - `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data, http://vmc.vcu.edu/resources/momspi - MOMS-PI proof of principle datasets, files downloaded with `scripts/download_moms-pi.sh`, [POP1 Dataset](http://vmc.vcu.edu/static/downloads/MOMS-PI_POP1.zip), 11/05/2018
 
-- `Methods.md` - Methods notes
-- `ToDo.md` - current todos
 
 - `data`
-    - `biom_nonreadable.tsv` - 62 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
-    - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 files, 11/09/2018
-    - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 files, 11/09/2018
-    - `hmp_cart_metadata_26015b0c41_extended.tsv` - extended metadata for 9107 readable files, added slots from .biom files (available on-demand)
-    - `downloaded_ascp.txt` - list of files downloaded with `ascp-commands.sh`, 11/09/2018
+    - `biom_nonreadable.tsv` - 63 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
+    - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 16S `.biom` files, 11/09/2018
+    - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 16S `.biom` files, 11/09/2018
+    - `hmp_cart_metadata_26015b0c41_extended.tsv` - extended metadata for 9107 readable 16S `.biom` files, added slots from .biom files (available on-demand)
+    - `downloaded_ascp.txt` - list of files downloaded with `ascp-commands_biom_16S.sh`, 11/09/2018
 
 - `scripts`
+    - `ascp-commands_biom_16S.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
+    - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
-    - `ascp-commands.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
-    - `ascp-commands_biom_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
 
 ## URLs
