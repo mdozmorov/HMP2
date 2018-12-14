@@ -13,13 +13,17 @@
 
 ### 16S
 
-- [Files to download](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Samples/Studies: MOMS-PI, Files/Format: "Biological Observation Matrix", Files/Matrix Type: "16s_community" - selects 9170 files, 11/09/2018
+- [Samples/Studies: MOMS-PI, Files/Format: "Biological Observation Matrix", Files/Matrix Type: "16s_community" - selects 9170 files](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Downloaded 11/09/2018
 
 - `preprocess_biom_16S.Rmd` - extracting data from `.biom` files downloaded with `scripts/ascp-commands.sh` from https://portal.hmpdacc.org/ - data portal. 
 
 - `EDA_biom_16S.Rmd` - Exploratory data analysis of `.biom` files. Creates R object `data/hmp2_biom_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
 
 - `Analysis_biom_16S.Rmd` - Loads `mtx_biom_data` count object and `mtx_metadata` annotation object from `data/hmp2_biom_momspi.rda`
+
+## host_cytokine
+
+- [Samples/Studies: MOMS-PI, Files/Matrix Type: "host_cytokine" - selects 872 files](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%22host_cytokine%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Downloaded 11/09/2018
 
 ### Misc
 
@@ -37,9 +41,15 @@
     - `hmp_cart_metadata_26015b0c41_extended.tsv` - extended metadata for 9107 readable 16S `.biom` files, added slots from .biom files (available on-demand)
     - `downloaded_ascp.txt` - list of files downloaded with `ascp-commands_biom_16S.sh`, 11/09/2018
 
+    - `hmp_cart_b10350603.tsv` - manifest for all 872 cytokine `.txt` files, 12/13/2018
+    - `hmp_cart_metadata_1e3cf1e9c1.tsv` - metadata for all 872 cytokine `.txt` files, 12/13/2018
+
 - `scripts`
-    - `ascp-commands_biom_16S.sh` - download `.biom`files from https://portal.hmpdacc.org, creates `ptb` folder, 11/09/2018
+    - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
     - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
+    
+    - `ascp-commands_biom_host_cytokine.sh` - download host_cytokine `.txt` files into `ptb` folder, 12/13/2018
+    
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
