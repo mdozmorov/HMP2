@@ -17,7 +17,7 @@
 
 - `preprocess_biom_16S.Rmd` - extracting data from `.biom` files downloaded with `scripts/ascp-commands.sh` from https://portal.hmpdacc.org/ - data portal. 
 
-- `EDA_biom_16S.Rmd` - Exploratory data analysis of `.biom` files. Creates R object `data/hmp2_biom_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
+- `EDA_biom_16S.Rmd` - Exploratory data analysis of `.biom` files. Creates R object `data/hmp2_biom_16S_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
 
 - `Analysis_biom_16S.Rmd` - Loads `mtx_biom_data` count object and `mtx_metadata` annotation object from `data/hmp2_biom_momspi.rda`
 
