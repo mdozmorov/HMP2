@@ -21,7 +21,7 @@
 
 - `preprocess_phyloseq_16S.Rmd` - Creates phyloseq object from `data/hmp2_biom_16S_momspi.rda` and saves it to `data/hmp2_phyloseq_16S_momspi.rda` containing `mtx_phyloseq_16S` phyloseq object
 
-- `Analysis_biom_16S.Rmd` - Loads `mtx_biom_data` count object and `mtx_metadata` annotation object from `data/hmp2_biom_momspi.rda`
+- `Analysis_biom_16S.Rmd` - Loads `mtx_phyloseq_16S` phyloseq object from `data/hmp2_phyloseq_16S_momspi.rda`
 
 ## host_cytokine
 

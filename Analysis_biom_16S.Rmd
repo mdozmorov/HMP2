@@ -21,15 +21,20 @@ library(dplyr)
 options(stringsAsFactors = FALSE)
 ```
 
+```{r libraries}
+library(phyloseq)
+```
+
 # Settings
 
 ```{r}
-fileNameIn1 <- "data/hmp2_biom_momspi.rda"
+# Input file name
+fileNameIn1  <- "data/hmp2_phyloseq_16S_momspi.rda"
 ```
 
 # Load data
 
 ```{r}
 load(file = fileNameIn1)
+mtx_phyloseq_16S
 ```
-
