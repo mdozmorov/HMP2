@@ -59,6 +59,7 @@
 ### Data
 
 - dbGAP controlled access for HMP2: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section).
+    - Curtis Huttenhower: BioProject PRJNA476195, dbGaP phs001626. A manuscript with methods description, "Multi'omics Detail the Gut Microbial Ecosystem in 2 Inflammatory Bowel Disease", [Dropbox download link](https://www.dropbox.com/s/nhloprbetszkda5/322196_1_merged_1536386292.pdf?dl=0). Questions about data to be addressed to Cesar Arze, carze@hsph.harvard.edu
 - http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford. Mixture of raw and processed sample data. No description, data selection seem random. Not analyzed.
 - Human Microbiome Data in phyloseq format, http://joey711.github.io/phyloseq-demo/HMP_import_example.html
 
