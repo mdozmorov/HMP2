@@ -15,9 +15,9 @@
 
 - [Samples/Studies: MOMS-PI, Files/Format: "Biological Observation Matrix", Files/Matrix Type: "16s_community" - selects 9170 files](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Downloaded 11/09/2018
 
-- `preprocess_biom_16S.Rmd` - extracting data from `.biom` files downloaded with `scripts/ascp-commands.sh` from https://portal.hmpdacc.org/ - data portal. 
+- `preprocess_biom_16S.Rmd` - extracting data from `.biom` files downloaded with `scripts/ascp-commands_16S.sh` from https://portal.hmpdacc.org/. Outputs `mtx_biom_data_all_ID_merged.xlsx`
 
-- `EDA_biom_16S.Rmd` - Exploratory data analysis of `.biom` files. Creates R object `data/hmp2_biom_16S_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
+- `EDA_biom_16S.Rmd` - Exploratory data analysis of `.biom` files. Uses `mtx_biom_data_all_ID_merged.xlsx`. Creates R object `data/hmp2_biom_16S_momspi.rda` containing `mtx_biom_data` count object and `mtx_metadata` annotation object
 
 - `preprocess_phyloseq_16S.Rmd` - Creates phyloseq object from `data/hmp2_biom_16S_momspi.rda` and saves it to `data/hmp2_phyloseq_16S_momspi.rda` containing `mtx_phyloseq_16S` phyloseq object
 
@@ -26,6 +26,12 @@
 ## host_cytokine
 
 - [Samples/Studies: MOMS-PI, Files/Matrix Type: "host_cytokine" - selects 872 files](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%22host_cytokine%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Downloaded 11/09/2018
+
+- `preprocess_biom_cytokines.Rmd` - extracting data from cytokine files downloaded with `scripts/ascp-commands_cytokines.sh` from https://portal.hmpdacc.org/. Outputs `mtx_cytokine_data_all_ID_merged.xlsx`
+
+- `EDA_cytokines.Rmd` - Exploratory data analysis of cytokine files. Uses `mtx_cytokine_data_all_ID_merged.xlsx`. Creates R object `data/hmp2_cytokine_momspi.rda` containing `mtx_cytokine_data` count object and `mtx_metadata` annotation object
+
+
 
 ### Misc
 
