@@ -16,4 +16,20 @@
        - host_cytokine: `./hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_b10350603.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_host_cytokine.sh`
 
 
+## T2D notes
 
+- https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "T2D"
+- Files/Matrix Type: "16s_community" selects 1,418 `.biom` files
+- Files/Matrix Type: "wgs_community", "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
+- Files/Format: "FASTQ" - 6,208 files
+- Files/Format: "raw" - 6,161 files
+
+## IBDMBD notes
+
+- https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "IBDMBD"
+- Files/Matrix Type: "16s_community" selects 86 `.biom` files. But Files/Format: "Biological Observation Matrix" (also, Files/Type: "abundance_matrix") selects 1,466 `.biom` files
+- Files/Matrix Type: "wgs_community" selects 1,380 `.biom` files. 
+- Files/Type: "wgs_raw_seq_set" selects 1,388 `.tar` files
+- Files/Matrix Type: "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
+- Files/Format: "FASTQ" - 2,686 files
+- Files/Format: "raw" - 6,161 files
