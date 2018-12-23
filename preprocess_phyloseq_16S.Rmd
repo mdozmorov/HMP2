@@ -65,6 +65,7 @@ all.equal(mtx_metadata$file, colnames(mtx_biom_data)[grepl("EP", colnames(mtx_bi
 # Make OTU table
 mtx_otu_table <- mtx_biom_data[, grepl("EP", colnames(mtx_biom_data))] # Select only columns with "EP*" sample names
 rownames(mtx_otu_table) <- mtx_biom_data$ID # Rownames as Greengene IDs
+mtx_otu_table[is.na(mtx_otu_table)] <- 0 # Replace NAs by zeros
 mtx_otu_table[1:5, 1:5]
 ```
 
