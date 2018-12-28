@@ -52,6 +52,10 @@
     - `hmp_cart_b10350603.tsv` - manifest for all 872 cytokine `.txt` files, 12/13/2018
     - `hmp_cart_metadata_1e3cf1e9c1.tsv` - metadata for all 872 cytokine `.txt` files, 12/13/2018
 
+- `data.T2D`
+    - `hmp_cart_50199a791.tsv` - manifest for 1,418 `biom` files for T2D study, 12-25-2018.
+    - `hmp_cart_metadata_12019e21a0.tsv` - metadata for 1,418 `biom` files for T2D study, 12-25-2018.
+
 - `scripts`
     - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
     - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
