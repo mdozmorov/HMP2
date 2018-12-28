@@ -56,6 +56,10 @@
     - `hmp_cart_50199a791.tsv` - manifest for 1,418 `biom` files for T2D study, 12-25-2018.
     - `hmp_cart_metadata_12019e21a0.tsv` - metadata for 1,418 `biom` files for T2D study, 12-25-2018.
 
+- `data.IBD`
+    - `hmp_cart_2bcd863c2e.tsv` - manifest for 1,466 `biom` files for IBD study, 12-25-2018.
+    - `hmp_cart_metadata_35c73e52bd.tsv`- metadata for 1,466 `biom` files for IBD study, 12-25-2018.
+
 - `scripts`
     - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
     - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
