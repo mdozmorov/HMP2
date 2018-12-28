@@ -31,9 +31,7 @@
 
 - `EDA_cytokines.Rmd` - Exploratory data analysis of cytokine files. Uses `mtx_cytokine_data_all_ID_merged.xlsx`. Creates R object `data/hmp2_cytokine_momspi.rda` containing `mtx_cytokine_data` count object and `mtx_metadata` annotation object
 
-
-
-### Misc
+## Misc
 
 - `EDA_iHMP2_Broad.Rmd` - Exploratory data analysis of Broad's HMP2 data, self-contained download and analysis. https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad. 11/24/2018
 
@@ -64,6 +62,7 @@
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
     - `EDA_Greengenes.Rmd` - Associating biom IDs with Greengene taxonomy
+    - `EDA_manifests.R` - Testing for overlap among samples from MOMS-PI, T2D, and IBD studies - none.
 
 ## URLs
 
