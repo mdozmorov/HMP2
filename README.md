@@ -35,8 +35,6 @@
 
 ### Misc
 
-- `EDA_Greengenes.Rmd` - Associating biom IDs with Greengene taxonomy
-
 - `EDA_iHMP2_Broad.Rmd` - Exploratory data analysis of Broad's HMP2 data, self-contained download and analysis. https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad. 11/24/2018
 
 - `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data, http://vmc.vcu.edu/resources/momspi - MOMS-PI proof of principle datasets, files downloaded with `scripts/download_moms-pi.sh`, [POP1 Dataset](http://vmc.vcu.edu/static/downloads/MOMS-PI_POP1.zip), 11/05/2018
@@ -45,6 +43,7 @@
 - `Analysis`
     - `EDA_biom_16S_122118.Rmd` - Analysis of the original `phyloseq` object from `hmp2_phyloseq_16S_momspi_KS.rda` with NAs replaced by zeros. ES, 12-21-2018.
     - `EDA_biom_16S_122123.Rmd` - Analysis of the `hmp2_phyloseq_16S_momspi.rda` `phyloseq` object created 12-23-2018 by `preprocess_phyloseq_16S.Rmd`, NAs replaced by zeros. Summarized the data by genus and saves it as `hmp2_phyloseq_16S_momspi_genus.rda` object. MD, 12-23-2018.
+
 - `data`
     - `biom_nonreadable.tsv` - 63 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
     - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 16S `.biom` files, 11/09/2018
@@ -64,6 +63,7 @@
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
+    - `EDA_Greengenes.Rmd` - Associating biom IDs with Greengene taxonomy
 
 ## URLs
 
