@@ -15,3 +15,4 @@
 - Unreadable biom files - going to contact Cesar Arze, carze@hsph.harvard.edu
 - Only MOMS-PI has a substantial number of cytokine data. Is it worth it to make a MultiAssayExperiment object? 
     - Broad (https://ibdmdb.org/tunnel/public/summary.html) has relatively well-organized datasets amenable for integration. Need expert interpretation, it is currently unclear what column/row IDs are.
+- Analysis question: What kind of filtering/normalization we should do? There is a wide variety of library sizes (column totals), from 2 to 1501486 - some filtering/normalization should be done. Same for taxa counts (row totals), many rows are completely zeros, some have median count of 1, some - ~2000, and a maximum is 3222950.
