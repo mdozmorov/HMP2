@@ -1,0 +1,30 @@
+---
+title: "Notes Jan 3 2019"
+author: "author"
+date: "January 3, 2019"
+output: html_document
+---
+
+- we have MOMSPI data, type 2 diabetes, IBD, 16S data
+  - MOMSPI only has cytokine data
+  - Not much data to do integrative analysis 
+  - Should we contact Curtis about other datasets? 
+    - Yes, ask about this
+    - Data should have been available as soon as produced but it is not on the website
+  
+- First step is to make the single assay matrices, preparing multiAssayexperiments should be last step
+
+- HMP16S package - should we provide data as 2 matrices like in this package or as just one large matrix?
+  - provide matrix, annotations for rows and columns as data.frames
+  
+- John will put together package and use method for accessing dbgap
+
+- On the github is an analysis folder - markdown file with basic info on how to put biom files together and make .RDA object
+  - Can start working with data but not much metadata info
+  - what taxa are people interested in?
+  - For data analysis can do workflow format - how to download, what to do, correspondence, etc.
+    - Concentrate on specific results or how to approach analysis?
+    - Can also reproduce analysis if they are published by HMP group 
+    - They did release code for HMP1 project
+    
+- Could provide shortcuts by putting different bodysites as different assays
