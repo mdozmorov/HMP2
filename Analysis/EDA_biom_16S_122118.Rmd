@@ -10,6 +10,7 @@ output:
     toc: yes
 ---
 
+
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
 # Set up the environment
 library(knitr)
@@ -21,10 +22,22 @@ library(dplyr)
 options(stringsAsFactors = FALSE)
 ```
 
+Follow analyses presented in microbiomeSEQ package
+
+http://userweb.eng.gla.ac.uk/umer.ijaz/projects/microbiomeSeq_Tutorial.html
+
 ```{r libraries}
 library(phyloseq)
 library(ggplot2)
 library(magrittr)
+
+#BiocManager::install("DESeq2", version = "3.8")
+library(DESeq2)
+
+#library(devtools)  # Load the devtools package
+#install_github("umerijaz/microbiomeSeq")  # Install the package
+library(microbiomeSeq)  #load the package
+
 ```
 
 
@@ -61,22 +74,14 @@ Merge taxa based on phylogenetic information
 ```
 
 
-Select subsample of the data for 50 subjects
+Total number of counts for this sample data
 
-```{r, echo=TRUE}
-ids <- sample(sample_data(mtx_phyloseq_16S)$subject_id, 50)
 
-mtx_phyloseq_16S.sample <- subset_samples(mtx_phyloseq_16S, subject_id %in% ids)
-mtx_phyloseq_16S.sample
-```
+```{r}
+df <- data.frame(total_counts = apply(otu_table(mtx_phyloseq_16S), 2, sum),
+                 sample_id = 1:length(apply(otu_table(mtx_phyloseq_16S), 2, sum)))
 
-Remove unobserved taxa
-
-```{r, echo=TRUE}
-mtx_phyloseq_16S.sample %<>%
-    taxa_sums() %>%
-    is_greater_than(0) %>%
-    prune_taxa(mtx_phyloseq_16S.sample)
+ggplot(df, aes(x=sample_id, y = total_counts))+geom_point(col = "blue")+theme_bw()
 ```
 
 
@@ -89,14 +94,17 @@ various alpha diversity measures.
 First a vector of richness (i.e. alpha diversity) measures is created to be
 passed to the `plot_richness` method.
 
+
+We start by comparing alpha diversity metrics for each body site. Alpha diversity is estimated using raw microbiome counts. 
+
 ```{r, echo=TRUE}
 richness_measures <-
     c("Observed", "Shannon", "Simpson")
 ```
 
 ```{r, echo=TRUE}
-alpha_div <- estimate_richness(mtx_phyloseq_16S.sample, measures=richness_measures)
-mtx_phyloseq_16S.sample %>%
+alpha_div <- estimate_richness(mtx_phyloseq_16S, measures=richness_measures)
+mtx_phyloseq_16S %>%
     plot_richness(x = "sample_body_site", color = "sample_body_site", measures = richness_measures) +
     stat_boxplot(geom ="errorbar") +
     geom_boxplot() +
@@ -104,13 +112,40 @@ mtx_phyloseq_16S.sample %>%
     theme(axis.title.x = element_blank(), legend.position = "none")
 ```
 
+
 ### Principle Coordinates Analysis
 
-```{r, echo=TRUE}
-mtx_ordination <-
-    ordinate(mtx_phyloseq_16S.sample, method = "PCoA", distance = "bray")
+Bray-Curtis distance multidimensional scaling plots based on proportions data. This one takes a lot of time to run, use a sample of 50 subjects instead.
 
-mtx_phyloseq_16S.sample %>%
+
+```{r, echo=TRUE}
+mtx_phyloseq_16S.prop <- mtx_phyloseq_16S
+row.sums <- apply(otu_table(mtx_phyloseq_16S.prop), 2, sum)
+otu_table(mtx_phyloseq_16S.prop) <- t(t(otu_table(mtx_phyloseq_16S.prop))/row.sums)
+
+ids <- sample(sample_data(mtx_phyloseq_16S.prop)$subject_id, 50)
+
+mtx_phyloseq_16S.prop.samp <- subset_samples(mtx_phyloseq_16S.prop, subject_id %in% ids)
+
+```
+
+Remove unobserved taxa
+
+```{r, echo=TRUE}
+mtx_phyloseq_16S.prop.samp %<>%
+    taxa_sums() %>%
+    is_greater_than(0) %>%
+    prune_taxa(mtx_phyloseq_16S.prop.samp)
+
+mtx_phyloseq_16S.prop.samp
+```
+
+```{r, echo=TRUE}
+
+mtx_ordination <-
+    ordinate(mtx_phyloseq_16S.prop.samp, method = "PCoA", distance = "bray")
+
+mtx_phyloseq_16S.prop.samp %>%
     plot_ordination(mtx_ordination, color = "sample_body_site", shape = "sample_body_site") +
     theme_bw() +
     theme(legend.position = "bottom")
