@@ -31,16 +31,16 @@
 
 - `EDA_cytokines.Rmd` - Exploratory data analysis of cytokine files. Uses `mtx_cytokine_data_all_ID_merged.xlsx`. Creates R object `data/hmp2_cytokine_momspi.rda` containing `mtx_cytokine_data` count object and `mtx_metadata` annotation object
 
-
-
-### Misc
-
-- `EDA_Greengenes.Rmd` - Associating biom IDs with Greengene taxonomy
+## Misc
 
 - `EDA_iHMP2_Broad.Rmd` - Exploratory data analysis of Broad's HMP2 data, self-contained download and analysis. https://ibdmdb.org/tunnel/public/summary.html - iHMP2 data from Broad. 11/24/2018
 
 - `EDA_MOMS-PI.Rmd` - Exploratory data analysis of MOMS-PI data, http://vmc.vcu.edu/resources/momspi - MOMS-PI proof of principle datasets, files downloaded with `scripts/download_moms-pi.sh`, [POP1 Dataset](http://vmc.vcu.edu/static/downloads/MOMS-PI_POP1.zip), 11/05/2018
 
+
+- `Analysis`
+    - `EDA_biom_16S_122118.Rmd` - Analysis of the original `phyloseq` object from `hmp2_phyloseq_16S_momspi_KS.rda` with NAs replaced by zeros. ES, 12-21-2018.
+    - `EDA_biom_16S_122123.Rmd` - Analysis of the `hmp2_phyloseq_16S_momspi.rda` `phyloseq` object created 12-23-2018 by `preprocess_phyloseq_16S.Rmd`, NAs replaced by zeros. Summarized the data by genus and saves it as `hmp2_phyloseq_16S_momspi_genus.rda` object. MD, 12-23-2018.
 
 - `data`
     - `biom_nonreadable.tsv` - 63 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
@@ -52,6 +52,14 @@
     - `hmp_cart_b10350603.tsv` - manifest for all 872 cytokine `.txt` files, 12/13/2018
     - `hmp_cart_metadata_1e3cf1e9c1.tsv` - metadata for all 872 cytokine `.txt` files, 12/13/2018
 
+- `data.T2D`
+    - `hmp_cart_50199a791.tsv` - manifest for 1,418 `biom` files for T2D study, 12-25-2018.
+    - `hmp_cart_metadata_12019e21a0.tsv` - metadata for 1,418 `biom` files for T2D study, 12-25-2018.
+
+- `data.IBD`
+    - `hmp_cart_2bcd863c2e.tsv` - manifest for 1,466 `biom` files for IBD study, 12-25-2018.
+    - `hmp_cart_metadata_35c73e52bd.tsv`- metadata for 1,466 `biom` files for IBD study, 12-25-2018.
+
 - `scripts`
     - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
     - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
@@ -61,6 +69,8 @@
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
+    - `EDA_Greengenes.Rmd` - Associating biom IDs with Greengene taxonomy
+    - `EDA_manifests.R` - Testing for overlap among samples from MOMS-PI, T2D, and IBD studies - none.
 
 ## URLs
 
@@ -70,6 +80,7 @@
     - Curtis Huttenhower: BioProject PRJNA476195, dbGaP phs001626. A manuscript with methods description, "Multi'omics Detail the Gut Microbial Ecosystem in 2 Inflammatory Bowel Disease", [Dropbox download link](https://www.dropbox.com/s/nhloprbetszkda5/322196_1_merged_1536386292.pdf?dl=0). Questions about data to be addressed to Cesar Arze, carze@hsph.harvard.edu
 - http://hmp2-data.stanford.edu/ - iHMP2 Prediabetic Data from Stanford. Mixture of raw and processed sample data. No description, data selection seem random. Not analyzed.
 - Human Microbiome Data in phyloseq format, http://joey711.github.io/phyloseq-demo/HMP_import_example.html
+- https://www.dropbox.com/sh/omnsii1km3nwycs/AABbDRYsyGEZzQEeVO6fdYj7a?dl=0
 
 ### Software
 

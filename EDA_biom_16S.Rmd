@@ -122,6 +122,36 @@ ggplot(data, aes(x = value, fill = variable)) +
 
 **Question:** There are outlier counts. With median/mean counts equal to 4/300, respectively, we have  counts as high as 956642. 
 
+### Library sizes (column sums)
+
+```{r}
+set.seed(1)
+data <- mtx_biom_data_all_df[, sample(2:ncol(mtx_biom_data_all_df), size = max_samples)] # Randomly select max_samples
+library_sizes <- sapply(data, sum, na.rm = TRUE)
+summary(library_sizes)
+```
+
+### Taxa counts (row sums)
+
+```{r}
+taxa_counts <- apply(data, 1, sum, na.rm = TRUE)
+summary(taxa_counts)
+```
+
+### Library variability (column SD)
+
+```{r}
+library_sds <- apply(data, 2, sd, na.rm = TRUE)
+summary(library_sds)
+```
+
+### Taxa variability (row SD)
+
+```{r}
+taxa_sds <- apply(data, 1, sd, na.rm = TRUE)
+summary(taxa_sds)
+```
+
 \pagebreak
 
 ### Distribution of sample medians for all samples

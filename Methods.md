@@ -25,6 +25,7 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 - Files/Matrix Type: "wgs_community", "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
 - Files/Format: "FASTQ" - 6,208 files
 - Files/Format: "raw" - 6,161 files
+- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.T2D/hmp_cart_50199a791.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_T2D.sh`
 
 ## IBDMBD notes
 
@@ -35,3 +36,4 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 - Files/Matrix Type: "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
 - Files/Format: "FASTQ" - 2,686 files
 - Files/Format: "raw" - 6,161 files
+- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_2bcd863c2e.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`

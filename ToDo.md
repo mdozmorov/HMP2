@@ -8,18 +8,11 @@
 - Clone and understand https://github.com/waldronlab/HMP16SData - code for the HMP16SData package
 - Read in some .biom files using https://www.bioconductor.org/packages/release/bioc/html/biomformat.html - package to read .biom files
 
+## For the joint meeting
 
-## Meeting
-
-- Discuss 16S phyloseq object
-    - Do we need to worry about phyloseq for MultiAssayExperiment?
-
-- Discuss `EDA_cytokines.pdf`
-
-In [MOMS-PI study](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:100,%22sort%22:%22file_name.raw:asc%22%7D%7D), Matrix Type: "host_transcriptome", "microb_metatranscriptome", "wgs_community" are not available. Only "16S_community", "host_cytokine", "host_lipidomics", the latter we don't use.
-
-
-- Sirota, Marina, Cristel G. Thomas, Rebecca Liu, Maya Zuhl, Payal Banerjee, Ronald J. Wong, Cecele C. Quaintance, et al. “Enabling Precision Medicine in Neonatology, an Integrated Repository for Preterm Birth Research.” Scientific Data 5 (November 6, 2018): 180219. https://doi.org/10.1038/sdata.2018.219. - Database for Preterm Birth Research. Other databases - dbPTB, GEneSTATION. Different studies. Predominantly microbiome, but also CyTOF, RNA-Seq, cell-free DNA and RNA sequencing, and genotyping. Open access. http://www.immport.org/resources/mod
-
-
-
+- The MOMS-PI data and the phyloseq objects are ready. The data will be in a form of a matrix and a phyoseq object - any other data format suggestions?
+- How do we release MOMS-PI, T2D, and IBD data - in one package? These studies are non-overlapping.
+- Unreadable biom files - going to contact Cesar Arze, carze@hsph.harvard.edu
+- Only MOMS-PI has a substantial number of cytokine data. Is it worth it to make a MultiAssayExperiment object? 
+    - Broad (https://ibdmdb.org/tunnel/public/summary.html) has relatively well-organized datasets amenable for integration. Need expert interpretation, it is currently unclear what column/row IDs are.
+- Analysis question: What kind of filtering/normalization we should do? There is a wide variety of library sizes (column totals), from 2 to 1501486 - some filtering/normalization should be done. Same for taxa counts (row totals), many rows are completely zeros, some have median count of 1, some - ~2000, and a maximum is 3222950. Consequently, variability across columns and rows varies a lot, from 0 to ~46K-71K. 

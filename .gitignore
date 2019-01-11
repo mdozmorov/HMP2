@@ -1,5 +1,7 @@
 # Local ignores
 hmp_client
+img
+cache
 
 # History files
 .Rhistory
