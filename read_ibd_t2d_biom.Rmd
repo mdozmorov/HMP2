@@ -16,7 +16,7 @@ library(magrittr)
 
 # Input files
 fileNameIn1  <- "data.T2D/hmp_cart_50199a791.tsv" # Manifest
-fileNameIn2  <- "data/hmp_cart_metadata_12019e21a0.tsv" # Metadata
+fileNameIn2  <- "data.T2D/hmp_cart_metadata_12019e21a0.tsv" # Metadata
 files <- list.files("data.T2D/t2d")
 green <- read.table("data/gg_13_5_taxonomy.txt", sep = "\t")
 
@@ -24,6 +24,8 @@ green <- read.table("data/gg_13_5_taxonomy.txt", sep = "\t")
 mtx1 <- read_tsv(fileNameIn1)
 # Add file names
 mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
+mtx2 <- read_tsv(fileNameIn2)
+mtx1 <- left_join(mtx1, mtx2, by = c("sample_id"))
 
 # Sanity check: Are they all in the manifest?
 all.equal(files %>% basename %>% sort, mtx1$file_name %>% sort)
@@ -124,7 +126,7 @@ options(stringsAsFactors = FALSE)
 
 # Input files
 fileNameIn1  <- "data.IBD/hmp_cart_2bcd863c2e.tsv" # Manifest
-fileNameIn2  <- "data/hmp_cart_metadata_35c73e52bd.tsv" # Metadata
+fileNameIn2  <- "data.IBD/hmp_cart_metadata_35c73e52bd.tsv" # Metadata
 # files <- list.files("data.IBD/ibd")
 load('data/ibd_readable_files.rda')
 green <- read.table("data/gg_13_5_taxonomy.txt", sep = "\t")
@@ -133,7 +135,8 @@ green <- read.table("data/gg_13_5_taxonomy.txt", sep = "\t")
 mtx1 <- read_tsv(fileNameIn1)
 # Add file names
 mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
-meta <- mtx1
+mtx2 <- read_tsv(fileNameIn2)
+meta <- left_join(mtx1, mtx2, by = c("sample_id"))
 
 # Sanity check: Are they all in the manifest?
 all.equal(files %>% basename %>% sort, mtx1$file_name %>% sort)
