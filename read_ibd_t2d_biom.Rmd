@@ -10,6 +10,7 @@ output: html_document
 ```{r}
 library(phyloseq)
 library(dplyr)
+library(readr)
 library(magrittr)
 
 
@@ -105,6 +106,7 @@ tax.idx <- tax.idx[!is.na(tax.idx)]
 taxa <- mtx_tax_table[tax.idx,]
 
 T2D_phyloseq <- phyloseq(otu, samp, taxa)
+save(T2D_phyloseq, file = "data/hmp2_phyloseq_16S_T2D.rda")
 ```
 
 
@@ -115,18 +117,23 @@ T2D_phyloseq <- phyloseq(otu, samp, taxa)
 library(phyloseq)
 library(dplyr)
 library(magrittr)
+library(readr)
 
+
+options(stringsAsFactors = FALSE)
 
 # Input files
 fileNameIn1  <- "data.IBD/hmp_cart_2bcd863c2e.tsv" # Manifest
 fileNameIn2  <- "data/hmp_cart_metadata_35c73e52bd.tsv" # Metadata
-files <- list.files("data.IBD/ibd")
+# files <- list.files("data.IBD/ibd")
+load('data/ibd_readable_files.rda')
 green <- read.table("data/gg_13_5_taxonomy.txt", sep = "\t")
 
 # Manifest
 mtx1 <- read_tsv(fileNameIn1)
 # Add file names
 mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
+meta <- mtx1
 
 # Sanity check: Are they all in the manifest?
 all.equal(files %>% basename %>% sort, mtx1$file_name %>% sort)
@@ -139,30 +146,50 @@ for(i in 1:length(files)) {
   # print(i)
 }
 
-#### THIS WONT WORK ON FIRST RUN, NEED TO GET UNREADABLE FILES FIRST
-# get unreadable files
-unreadable <- sapply(phylo_list, is.null) # 8 unreadable files
-# update files list with only files that were read
-files <- files[!unreadable]
-phylo_list <- phylo_list[!unreadable]
+
+# # get unreadable files
+# unreadable <- sapply(phylo_list, is.null) # 8 unreadable files
+# # update files list with only files that were read
+# files <- files[!unreadable]
+# save(files, file = 'data/ibd_readable_files.rda')
+# phylo_list <- phylo_list[!unreadable]
 
 # Merge data
-mat <- otu_table(phylo_list[[1]])
-mat <- data.frame(taxa = as.numeric(rownames(mat)), counts = mat[,1])
-for (i in 2:length(phylo_list)) {
-  tmp <- otu_table(phylo_list[[i]])
-  tmp <- data.frame(taxa = as.numeric(rownames(tmp)), counts = tmp[,1])
-  mat <- full_join(mat, tmp, by = c("taxa" = "taxa"))
-}
+# mat <- otu_table(phylo_list[[1]])
+# mat <- data.frame(taxa = as.numeric(rownames(mat)), counts = mat[,1])
+# # phylo_list <- lapply(phylo_list, function(x) as.data.frame(otu_table(x)))
+# for (i in 2:length(phylo_list)) {
+#   # print(i)
+#   tmp <- otu_table(phylo_list[[i]])
+#   tmp <- data.frame(taxa = as.numeric(rownames(tmp)), tmp[,1])
+#   colnames(tmp) <- c("taxa", paste('s', i))
+#   mat <- full_join(mat, tmp, by = c("taxa" = "taxa"))
+#   dim(mat)
+# }
 
-rownames(mat) <- mat$taxa
+phylo_list_df <- list()
+for(i in 1:length(phylo_list)) {
+  print(i)
+  mtx1 <- phylo_list[[i]] %>% otu_table() %>% as.data.frame()
+  mtx1 <- data.frame(ID = rownames(mtx1), mtx1)
+  colnames(mtx1) <- c("ID", paste0('s', i))
+  phylo_list_df <- c(phylo_list_df, list(mtx1))
+}
+phylo_list_df[[1]] %>% head
+# Combine all elements in a list into a data frame, merging by both IDs. Time consuming, over 5 hours
+mtx_biom_data_all_df <- phylo_list_df %>% purrr::reduce(full_join, by = c("ID"))
+head(mtx_biom_data_all_df)
+mtx_biom_data_all_df[is.na(mtx_biom_data_all_df)] <- 0
+mat <- mtx_biom_data_all_df
+
+rownames(mat) <- mat$ID
 colnames(mat)[-1] <- files
-mat[is.na(mat)] <- 0
-mat.taxa <- mat$taxa
+# mat[is.na(mat)] <- 0
+mat.taxa <- mat$ID
 mat <- mat[,-1]
 mat <- as.matrix(mat)
 # get which files are in metadata
-idx <- match(files, mtx1$file_name)
+idx <- match(files, meta$file_name)
 
 
 ```
@@ -205,7 +232,7 @@ mtx_tax_table[1:5, 1:5]
 ## make phyloseq object
 
 ```{r}
-meta <- as.data.frame(mtx1[idx,])
+meta <- as.data.frame(meta[idx,])
 rownames(meta) <- meta$file_name
 
 otu <- otu_table(mat, taxa_are_rows = TRUE)
@@ -216,6 +243,7 @@ tax.idx <- match(rownames(mtx_tax_table), rownames(mat))
 tax.idx <- tax.idx[!is.na(tax.idx)]
 taxa <- mtx_tax_table[tax.idx,]
 
-T2D_phyloseq <- phyloseq(otu, samp, taxa)
+IBD_phyloseq <- phyloseq(otu, samp, taxa)
+save(IBD_phyloseq, file = "data/hmp2_phyloseq_16S_ibd.rda")
 ```
 
