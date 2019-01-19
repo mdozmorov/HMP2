@@ -93,3 +93,10 @@
 ### Misc
 
 - BioC 2019: Where Software and Biology Connect, call for abstract. http://bioc2019.bioconductor.org/call-for-abstracts
+
+## Papers
+
+- Schiffer, Lucas, Rimsha Azhar, Lori Shepherd, Marcel Ramos, Ludwig Geistlinger, Curtis Huttenhower, Jennifer B Dowd, Nicola Segata, and Levi Waldron. “HMP16SData: Efficient Access to the Human Microbiome Project through Bioconductor,” August 29, 2018. https://doi.org/10.1101/299115. - HMP16SData - SummarizedExperiment of 16S sequencing data (counts) for V13 and V35 variable regions with clinical annotations (visit number, sex, run center, body site, and body subsite) and an option to attach controlled access clinical annotations. Compatible with phyloseq. https://bioconductor.org/packages/release/data/experiment/html/HMP16SData.html
+
+- Griffith, Jocelyn C, and Xochitl C Morgan. “Invited Commentary: Improving Accessibility of the Human Microbiome Project Data through Integration with R/Bioconductor.” American Journal of Epidemiology, January 10, 2019. https://doi.org/10.1093/aje/kwz007. - Commentary to the HMP16Sdata package. Challenges in data processing and analysis, sparsity, normalization, batch effect.
+
