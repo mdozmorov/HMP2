@@ -1,0 +1,138 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+rm(list=ls())
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#token 35f0903098e0c9ef30faf7514e382e6bbd5c7179
+#BiocManager::install("HMP2Data")
+
+#devtools::install_github("jstansfield0/HMP2Data", auth_token = "35f0903098e0c9ef30faf7514e382e6bbd5c7179")
+
+library(HMP2Data)
+library(phyloseq)
+library(SummarizedExperiment)
+library(MultiAssayExperiment)
+library(dplyr)
+
+```
+# MOMS-PI
+
+The MOMS-PI data can be loaded as follows.
+
+## 16S data
+
+Load 16S data as a matrix, rows are Greengene IDs, columns are sample names:
+
+```{r}
+data("momspi16S_mtx")
+momspi16S_mtx[1:5, 1:5]
+```
+
+Load the Greengenes taxonomy table as a matrix, rows are Greengene IDs, columns are taxonomic ranks:
+
+```{r}
+data("momspi16S_tax")
+# Check if Greengene IDs match between the 16S and taxonomy data
+# all.equal(rownames(momspi16S_mtx), rownames(momspi16S_tax)) # Should be TRUE
+```
+
+Load the 16S sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r}
+data("momspi16S_samp")
+
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspi16S_mtx), rownames(momspi16S_samp)) # Should be TRUE
+```
+
+The `momspi16S` function assembles those matrices into a `phyloseq` object.
+
+```{r, message=FALSE}
+momspi16S_phyloseq <- momspi16S()
+momspi16S_phyloseq
+```
+
+## Cytokine data
+
+The MOMS-PI cytokine data can be loaded as a matrix, rownames are cytokine names, colnames are sample names:
+
+```{r}
+data("momspiCyto_mtx")
+momspiCyto_mtx[1:5, 1:5]
+```
+
+Load the cytokine sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r}
+data("momspiCyto_samp")
+momspiCyto_samp[1:5, ]
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspiCyto_mtx), rownames(momspiCyto_samp)) # Should be TRUE
+```
+
+The function `momspiCytokines` will make a `SummarizedExperiment` containing cytokine data
+
+```{r}
+momspiCyto <- momspiCytokines()
+momspiCyto
+```
+
+The cytokine data contains data for `r nrow(momspiCyto)` cytokines over `r ncol(momspiCyto)` samples.
+
+# Multi-table analysis
+
+Combine 16S and cytokines data
+
+```{r}
+
+#any(momspi16S_samp$sample_id %in% momspiCyto_samp$sample_id)
+#any(rownames(momspi16S_samp) %in% rownames(momspiCyto_samp))
+#any(momspi16S_samp$subject_id %in% momspiCyto_samp$subject_id)
+#sum(momspi16S_samp$subject_id %in% momspiCyto_samp$subject_id)
+
+#order both sets by visit number within a subject
+momspi16S_samp <- momspi16S_samp[
+  with(momspi16S_samp, order(subject_id, sample_body_site, visit_number)),
+] 
+
+momspiCyto_samp <- momspiCyto_samp[
+  with(momspiCyto_samp, order(subject_id, sample_body_site, visit_number)),
+] 
+
+#merge data by subject id and sample_body_site
+combined_samp <- merge(momspi16S_samp, momspiCyto_samp, 
+                       by = c("subject_id", "sample_body_site", 
+                        "project_name", "study_full_name",
+                        "subject_gender", "subject_race"))
+
+#select data collected at the same visit
+combined_samp <- merge(momspi16S_samp, momspiCyto_samp, 
+                       by = c("subject_id", "sample_body_site", 
+                        "project_name", "study_full_name",
+                        "subject_gender", "subject_race",
+                        "visit_number"))
+
+table(combined_samp$visit_number)
+
+#select data from first visit only
+combined_samp <- combined_samp[combined_samp$visit_number ==  1,]
+
+#select earliest visit from each subject
+#combined_samp.agg <- aggregate(visit_number ~  subject_id, data = combined_samp, min)
+#combined_samp <- merge(combined_samp.agg, combined_samp, by = c("subject_id"))
+#combined_samp <- combined_samp[combined_samp$visit_number %in% c(1,2),]
+
+table(combined_samp$sample_body_site)#all vaginal samples
+
+#select 16S data for those samples
+combined_16S_phyloseq <- subset_samples(momspi16S_phyloseq, file %in% combined_samp$file.x) 
+combined_Cyto_mtx <- momspiCyto_mtx[, colnames(momspiCyto_mtx) %in% combined_samp$file.y ]
+dim(combined_Cyto_mtx)
+```
+
