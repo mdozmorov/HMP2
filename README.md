@@ -23,6 +23,8 @@
 
 - `Analysis_biom_16S.Rmd` - Loads `mtx_phyloseq_16S` phyloseq object from `data/hmp2_phyloseq_16S_momspi.rda`
 
+- `read_ibd_t2d_biom.rda` - Make phyloseq objects for T2D and IBD data from biom files
+
 ## host_cytokine
 
 - [Samples/Studies: MOMS-PI, Files/Matrix Type: "host_cytokine" - selects 872 files](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%22host_cytokine%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Downloaded 11/09/2018
@@ -51,6 +53,8 @@
 
     - `hmp_cart_b10350603.tsv` - manifest for all 872 cytokine `.txt` files, 12/13/2018
     - `hmp_cart_metadata_1e3cf1e9c1.tsv` - metadata for all 872 cytokine `.txt` files, 12/13/2018
+    - `hmp2_phyloseq_16s_T2D.rda` - phyloseq object for T2D data
+    - `hmp2_phyloseq_16s_ibd.rda` - phyloseq object for IBD data
 
 - `data.T2D`
     - `hmp_cart_50199a791.tsv` - manifest for 1,418 `biom` files for T2D study, 12-25-2018.

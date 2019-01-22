@@ -1,0 +1,236 @@
+---
+title: "VIGNETTE"
+output: html_document
+---
+---
+title: "HMP2Data"
+author: "John Stansfield & Mikhail Dozmorov"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{HMP2Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+# Introduction
+
+`HMP2Data` is a Bioconductor ExperimentData package of the Human Microbiome Project 2 (HMP2). It includes 16S rRNA sequencing data and cytokine data from the Multi-Omic Microbiome Study-Pregnancy Initiative (MOMS-PI) study, 16S data for Type 2 diabetes (T2D) patients, and 16S data for Inflammatory bowel disease (IBD). Processed data is provided as `MultiAssayExerpiment` objects or `SummarizedExperiment` objects. 
+
+`HMP2Data` can be installed using `BiocManager` as follows.
+
+```{r, eval = FALSE}
+#BiocManager::install("HMP2Data")
+```
+
+```{r}
+library(HMP2Data)
+library(phyloseq)
+library(SummarizedExperiment)
+library(MultiAssayExperiment)
+library(dplyr)
+```
+
+Once installed, `HMP2Data` provides functions to access the HMP2 data. 
+
+# MOMS-PI
+
+The MOMS-PI data can be loaded as follows.
+
+## 16S data
+
+Load 16S data as a matrix, rows are Greengene IDs, columns are sample names:
+
+```{r}
+data("momspi16S_mtx")
+momspi16S_mtx[1:5, 1:5]
+```
+
+Load the Greengenes taxonomy table as a matrix, rows are Greengene IDs, columns are taxonomic ranks:
+
+```{r}
+data("momspi16S_tax")
+momspi16S_tax[1:5, ]
+# Check if Greengene IDs match between the 16S and taxonomy data
+# all.equal(rownames(momspi16S_mtx), rownames(momspi16S_tax)) # Should be TRUE
+```
+
+Load the 16S sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r}
+data("momspi16S_samp")
+momspi16S_samp[1:5, ]
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspi16S_mtx), rownames(momspi16S_samp)) # Should be TRUE
+```
+
+The `momspi16S` function assembles those matrices into a `phyloseq` object.
+
+```{r, message=FALSE}
+momspi16S_phyloseq <- momspi16S()
+momspi16S_phyloseq
+```
+
+Here we have a `phyloseq` object containing the 16S rRNA seq data for `r nrow(otu_table(momspi16S_phyloseq))` taxa and `r ncol(otu_table(momspi16S_phyloseq))` samples. 
+
+## Cytokine data
+
+The MOMS-PI cytokine data can be loaded as a matrix, rownames are cytokine names, colnames are sample names:
+
+```{r}
+data("momspiCyto_mtx")
+momspiCyto_mtx[1:5, 1:5]
+```
+
+Load the cytokine sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r}
+data("momspiCyto_samp")
+momspiCyto_samp[1:5, ]
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspiCyto_mtx), rownames(momspiCyto_samp)) # Should be TRUE
+```
+
+The function `momspiCytokines` will make a `SummarizedExperiment` containing cytokine data
+
+```{r}
+momspiCyto <- momspiCytokines()
+momspiCyto
+```
+
+The cytokine data contains data for `r nrow(momspiCyto)` cytokines over `r ncol(momspiCyto)` samples.
+
+## MultiAssayExperiment
+
+We can construct a `MultiAssayExperiment` that will contain 16S and cytokine data for the common samples. Use `momspiMultiAssay` function.
+
+```{r}
+momspiMA <- momspiMultiAssay()
+momspiMA
+```
+
+
+## IBD
+
+The IBD data can be loaded as follows.
+
+```{r}
+IBD <- IBD16S()
+IBD
+```
+
+## T2D
+
+The the T2D data can be loaded like so.
+
+```{r}
+T2D <- T2D16S()
+T2D
+```
+
+
+# Features
+
+## Frequency Table Generation
+
+The MOMS-PI 16S data contains samples from `r length(unique(sample_data(momspi)$sample_body_site))` body sites. The number of samples from each site can be displayed as follows.
+
+```{r}
+table(sample_data(momspi)$sample_body_site)
+```
+
+
+The MOMS-PI cytokine data contains samples from `r length(unique(colData(momspiCyto)$sample_body_site))` body sites.
+
+```{r}
+table(colData(momspiCyto)$sample_body_site)
+```
+
+The IBD data contains samples from feces from males and females and multiple races.
+
+```{r}
+table(sample_data(IBD)$subject_gender)
+table(sample_data(IBD)$subject_race)
+```
+
+The T2D data contains samples from the feces and nasal cavity.
+
+```{r}
+table(sample_data(T2D)$sample_body_site)
+```
+
+The demographics of the samples are shown below.
+
+```{r}
+table(sample_data(T2D)$subject_gender)
+table(sample_data(T2D)$subject_race)
+```
+
+
+
+# Exporting Data to CSV Format
+
+To our knowledge, R and Bioconductor provide the most and best methods for the
+analysis of microbiome data. However, we realize they are not the only analysis
+environments and wish to provide methods to export the data from
+`r BiocStyle::Biocpkg("HMP16SData")` to CSV format. 
+
+
+## Preparing the data
+
+For `SummarizedExperiment` objects, we will need to separate the data and metadata first before exportation. First, make a `data.frame` for participant data.
+
+```{r}
+momspi_cytokines_participants <- colData(momspiCyto)
+momspi_cytokines_participants[1:5, ]
+```
+
+Then we need to pull out the data matrix.
+
+```{r}
+momspi_cytokines <- assay(momspiCyto)
+momspi_cytokines[1:5, 1:5]
+```
+
+For `phyloseq` objects the data, metadata, and taxonomy can be separated as follows. First, pull out metadata.
+
+```{r}
+momspi_16S_participants <- sample_data(momspi)
+```
+
+Next, we can save the counts data as a matrix.
+
+```{r}
+momspi16s_data <- as.matrix(otu_table(momspi))
+```
+
+Finally, the taxonomy table can be extracted.
+
+```{r}
+momspi16s_taxa <- tax_table(momspi) %>% as.data.frame()
+```
+
+## Save data as CSV
+
+The data can be saved as `.csv` files as follows.
+
+```{r, eval = FALSE}
+library(readr)
+write_csv(data.frame(file_id = rownames(momspi_cytokines_participants), momspi_cytokines_participants), "momspi_cytokines_participants.csv")
+write_csv(data.frame(momspi_cytokines), "momspi_cytokines.csv")
+```
+
+
+# Session Info
+
+```{r}
+sessionInfo()
+```

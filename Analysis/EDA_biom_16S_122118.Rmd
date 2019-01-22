@@ -45,9 +45,11 @@ library(microbiomeSeq)  #load the package
 # Big Data folder
 dataDir      <- "~/Dropbox/MBWG/HMP2"
 
-# Input files
+# Input microbiome files
 fileNameIn  <- "hmp2_phyloseq_16S_momspi_KS.rda"     # All data from .biom files, merged by ID
 
+#Input cytokines files
+fileNameIn_cyto  <- "hmp2_cytokines_momspi_KS.rda" 
 ```
 
 
@@ -55,6 +57,7 @@ fileNameIn  <- "hmp2_phyloseq_16S_momspi_KS.rda"     # All data from .biom files
 
 ```{r}
 load(file.path(dataDir, "data", fileNameIn))
+load(file.path(dataDir, "data", fileNameIn_cyto))
 mtx_phyloseq_16S
 #replace na with a 0
 otu_table(mtx_phyloseq_16S)[is.na(otu_table(mtx_phyloseq_16S))] <- 0
@@ -151,4 +154,17 @@ mtx_phyloseq_16S.prop.samp %>%
     theme(legend.position = "bottom")
 ```
 
+# Cytokines data
+
+```{r}
+dim(mtx_cytokine_data)
+#find matching samples:
+#column names of mtx_cytokine_data correspond to rownames of metadata
+cyto_ids <- colnames(mtx_cytokine_data)[-1]
+meta_inx <- match(colnames(mtx_cytokine_data)[-1], rownames(sample_data(mtx_phyloseq_16S)))
+a <- sub('\\_.*', '', colnames(mtx_cytokine_data)[-1])
+b <- sub('\\_.*', '', rownames(sample_data(mtx_phyloseq_16S)))
+
+
+```
 
