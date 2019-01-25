@@ -25,6 +25,9 @@ library(colorspace)
 library(ade4)
 source("ScreePlot.R")
 source("CIAPlots.R")
+
+pathtoplots <- file.path(getwd(), "Plots/")#change me 
+  
 ```
 # MOMS-PI
 
@@ -204,14 +207,84 @@ rownames(combined_16S_mtx) <- substr(
 all(rownames(combined_16S_mtx) == rownames(combined_16S_mtx))
 ```
 
+16S PCA on centered and scaled data
+
 ```{r}
-taxa.pca <- dudi.pca(combined_16S_mtx, scannf=FALSE, nf =61)
+taxa.pca <- dudi.pca(combined_16S_mtx, scannf=FALSE, nf =61,
+                     center = TRUE, scale = TRUE)
 breaks <- c(50, 70, 80, 90)
-#scree.taxa.pca <- screePlot(taxa.pca, breaks) + 
+scree.taxa.pca <- screePlot(taxa.pca, breaks) + 
            theme( panel.background = element_rect(fill = "white"),
                   panel.grid.major = element_line(colour = "grey90"))
-#scree.taxa.pca
+scree.taxa.pca
 ```
+
+Cytokines PCA on centered and scaled data
+
+```{r}
+cyto.pca <- dudi.pca(combined_Cyto_mtx, scannf=FALSE, nf =61,
+                     center = TRUE, scale = TRUE)
+breaks <- c(50, 70, 80, 90)
+scree.cyto.pca <- screePlot(cyto.pca, breaks) + 
+           theme( panel.background = element_rect(fill = "white"),
+                  panel.grid.major = element_line(colour = "grey90"))
+scree.cyto.pca
+```
+
+#Combine the tables using co-inertia
+
+```{r}
+coin <- coinertia(taxa.pca, cyto.pca, scannf = FALSE, nf = 2)
+```
+
+RV coefficient -- measure of similarity between 16S and cytokines tables
+
+```{r}
+RV<- coin$RV
+RV
+```
+
+Sample scores plots. Length of the arrows indicates the samples that have larger differences across two data sets.
+
+```{r}
+
+Samp.coin <- CoinertiaPlot(coin = coin, 
+                  Quant = 0.9, Prop.Var = 0.9,
+                  Env_Var=NULL, 
+                  Env_Var2 = NULL,
+                  color=NULL, shape=NULL,
+                  PtColor= "magenta",PtShape=1, PtSize=1,
+                  linetype=1, LblSize=3, 
+                  LabelsOpt = NULL,
+                  ArrLen=0.10, ArrAngle=20)
+
+Samp.coin$p + theme_bw()
+
+```
+
+Samples with largest difference across two data sets. Samples with arrow lengths in 0.9 quatile are chosen. 
+
+```{r}
+#Taxa with major differences across two sets
+rownames(Samp.coin$Dissimilarity[Samp.coin$Dissimilarity$Quantile >= 0.9, ])
+```
+
+Plots of  taxa weights 
+
+```{r}
+#Plot Canonical weights based on No BV taxa as reference point
+CW.coin.ca <- PlotCW(coin = coin, name="Coin", path = pathtoplots, color = "magenta",
+            Title1 = "Canonical weights for taxa",
+            Title2 = "Canonical weights for cytokines",
+            Labels1 = colnames(combined_16S_mtx), Labels2 = colnames(combined_Cyto_mtx),
+            scale = TRUE,
+            PtShape=2, PtSize=2,linesize=0.4,
+            linetype=1, LblSize=2.5, 
+            ArrLen=0.15, ArrAngle=10,
+            TitleSize = 10) 
+
+```
+
 
 
 ## Additional details about the method.
