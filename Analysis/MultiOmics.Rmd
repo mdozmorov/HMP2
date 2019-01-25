@@ -1,0 +1,313 @@
+---
+title: "16S and cytokines combination"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+rm(list=ls())
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning= FALSE)
+```
+
+```{r}
+#token 35f0903098e0c9ef30faf7514e382e6bbd5c7179
+#BiocManager::install("HMP2Data")
+
+#devtools::install_github("jstansfield0/HMP2Data", auth_token = "35f0903098e0c9ef30faf7514e382e6bbd5c7179")
+
+library(HMP2Data)
+library(phyloseq)
+library(SummarizedExperiment)
+library(MultiAssayExperiment)
+library(dplyr)
+library(magrittr)
+library(Hmisc)
+library(colorspace)
+library(ade4)
+source("ScreePlot.R")
+source("CIAPlots.R")
+```
+# MOMS-PI
+
+The MOMS-PI data can be loaded as follows.
+
+## 16S data
+
+Load 16S data as a matrix, rows are Greengene IDs, columns are sample names:
+
+```{r, echo = TRUE}
+data("momspi16S_mtx")
+
+```
+
+Load the Greengenes taxonomy table as a matrix, rows are Greengene IDs, columns are taxonomic ranks:
+
+```{r, echo = TRUE}
+data("momspi16S_tax")
+# Check if Greengene IDs match between the 16S and taxonomy data
+# all.equal(rownames(momspi16S_mtx), rownames(momspi16S_tax)) # Should be TRUE
+```
+
+Load the 16S sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r, echo = TRUE}
+data("momspi16S_samp")
+
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspi16S_mtx), rownames(momspi16S_samp)) # Should be TRUE
+```
+
+The `momspi16S` function assembles those matrices into a `phyloseq` object.
+
+```{r, message=FALSE}
+momspi16S_phyloseq <- momspi16S()
+momspi16S_phyloseq
+```
+
+## Cytokine data
+
+The MOMS-PI cytokine data can be loaded as a matrix, rownames are cytokine names, colnames are sample names:
+
+```{r}
+data("momspiCyto_mtx")
+dim(momspiCyto_mtx)
+```
+
+Load the cytokine sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r}
+data("momspiCyto_samp")
+dim(momspiCyto_samp)
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspiCyto_mtx), rownames(momspiCyto_samp)) # Should be TRUE
+```
+
+The function `momspiCytokines` will make a `SummarizedExperiment` containing cytokine data
+
+```{r}
+momspiCyto <- momspiCytokines()
+momspiCyto
+```
+
+The cytokine data contains data for `r nrow(momspiCyto)` cytokines over `r ncol(momspiCyto)` samples.
+
+# Multi-table analysis
+
+Combine 16S and cytokines data
+
+```{r, echo = FALSE}
+#order both sets by visit number within a subject
+momspi16S_samp <- momspi16S_samp[
+  with(momspi16S_samp, order(subject_id, sample_body_site, visit_number)),
+] 
+
+momspiCyto_samp <- momspiCyto_samp[
+  with(momspiCyto_samp, order(subject_id, sample_body_site, visit_number)),
+] 
+
+#merge data by subject id and sample_body_site
+combined_samp <- merge(momspi16S_samp, momspiCyto_samp, 
+                       by = c("subject_id", "sample_body_site", 
+                        "project_name", "study_full_name",
+                        "subject_gender", "subject_race"))
+
+```
+
+```{r}
+#select data collected at the same visit
+combined_samp <- merge(momspi16S_samp, momspiCyto_samp, 
+                       by = c("subject_id", "sample_body_site", 
+                        "project_name", "study_full_name",
+                        "subject_gender", "subject_race",
+                        "visit_number"))
+
+table(combined_samp$visit_number)
+
+```
+
+Select first visit data, this assures that samples we look at were taken at the same time and at the first or second trimester. We don't have trimesters information in the data, but know it from the study design. 
+
+```{r, echo=FALSE}
+#select earliest visit from each subject
+#combined_samp.agg <- aggregate(visit_number ~  subject_id, data = combined_samp, min)
+#combined_samp <- merge(combined_samp.agg, combined_samp, by = c("subject_id"))
+#combined_samp <- combined_samp[combined_samp$visit_number %in% c(1,2),]
+```
+
+
+```{r, echo = TRUE}
+#select data from first visit only
+combined_samp <- combined_samp[combined_samp$visit_number ==  1,]
+
+table(combined_samp$sample_body_site)#all vaginal samples
+```
+
+The two objects we use for combined 16S and cytokines analysis are: 'combined_16S_mtx' and 'combined_Cyto_mtx'. Phylogenetic information for those OTUs is available in 'tax_table(combined_16S_phyloseq)' object. 
+
+```{r}
+#select 16S data for those samples
+combined_16S_phyloseq <- subset_samples(momspi16S_phyloseq, file %in% combined_samp$file.x)
+
+#get rif of otus that are not observed in any sample for this subset
+combined_16S_phyloseq %<>%
+    taxa_sums() %>%
+    is_greater_than(0) %>%
+    prune_taxa(combined_16S_phyloseq)
+
+combined_16S_mtx <- otu_table(combined_16S_phyloseq)
+
+combined_Cyto_mtx <- momspiCyto_mtx[, colnames(momspiCyto_mtx) %in% combined_samp$file.y ]
+dim(combined_Cyto_mtx)
+
+```
+
+We match the samples (contained in columns of both tables)  by the file names contained in colnames of each table.
+
+In 'combined_samp' object the names of matched files names for 16S data are recorded in column 'file.x' and for cytokines data in column 'file.y'. 
+
+```{r}
+#make sure all samples across 3 tables are in the same order
+combined_samp <- combined_samp[order(combined_samp$subject_id),]
+#reorder cytokines samples
+combined_Cyto_mtx <- combined_Cyto_mtx[,combined_samp$file.y]
+#reorder taxa samples
+combined_16S_mtx <- combined_16S_mtx[,combined_samp$file.x]
+```
+
+# Co-inertia analysis
+
+## Basics:
+
+\begin{itemize}
+
+	\item Let $Z_1$ and  $Z_2$ be 16S and cytokines tables respectively
+	\item rows: same $n$ women at first visit 
+	\item Columns: $p_1$ taxa, $p_2$ cytokines  
+	\item To visualize differences/similarities among taxa and cytokines data sets we view samples as  rows while taxa and cytokines as columns
+	\item PCA analysis for each table: $(X, Q_X, D)$ and $(Y, Q_Y, D)$
+	\item Co-inertia axes: $Y^TDX = K\Lambda^{1/2}A^T$ of decomposition $(Y^TDX,Q_X, Q_Y)$
+	\item Plot $F_X = XA $ and $F_Y = YK$
+\end{itemize}
+
+```{r}
+combined_16S_mtx <- t(combined_16S_mtx)
+combined_16S_mtx <- combined_16S_mtx/apply(combined_16S_mtx, 1, sum)
+combined_Cyto_mtx <- t(combined_Cyto_mtx)
+
+#cut the last 5 characters that correspond to the -omics type identifier
+rownames(combined_Cyto_mtx) <- substr(
+  rownames(combined_Cyto_mtx), 1,nchar(rownames(combined_Cyto_mtx))-5)
+
+rownames(combined_16S_mtx) <- substr(
+  rownames(combined_16S_mtx), 1,nchar(rownames(combined_16S_mtx))-5)
+
+#make sure all rownames match
+all(rownames(combined_16S_mtx) == rownames(combined_16S_mtx))
+```
+
+```{r}
+taxa.pca <- dudi.pca(combined_16S_mtx, scannf=FALSE, nf =61)
+breaks <- c(50, 70, 80, 90)
+#scree.taxa.pca <- screePlot(taxa.pca, breaks) + 
+           theme( panel.background = element_rect(fill = "white"),
+                  panel.grid.major = element_line(colour = "grey90"))
+#scree.taxa.pca
+```
+
+
+## Additional details about the method.
+
+\begin{itemize}
+\item $Z_{n \times p}$ data matrix
+ 	\begin{itemize}
+		\item $n$ samples
+		\item $p$ variables (taxa)
+	\end{itemize}
+\item Transformation $Z_{n \times p} \rightarrow X_{n \times p}$
+ 		\begin{itemize}
+		\item Different transformation for each ordination method   
+		\item Column weights: $Q_{p \times p}$
+		\item Row weights: $D_{n \times n}$
+	\end{itemize}
+\item Statistical triplet: $(X, Q, D)$
+\item Eigen decomposition of $(WD)_{n \times n} =  XQX^TD$ or $(VQ)_{p \times p} =  X^TDXQ$
+\item Write: $X = K\Lambda^{1/2}A^T$
+	\begin{itemize}
+		\item $K^TDK = \mathbb I_r$, $K$ - samples scores
+		\item $A^TQA = \mathbb I_r$, $A$ - taxa loadings
+		\item $r$ rank of $X$
+	\end{itemize}
+\end{itemize}
+
+
+```{r, echo = FALSE, out.width = '100%', out.height= '100%', results='hold'}
+knitr::include_graphics(file.path(getwd(), "Plots/TriplDiagFull.pdf"))
+```
+
+Given statistical triplet $(X, Q, D)$   the PCA is 
+\begin{itemize}
+\item  $X_{n \times p}$ - \textcolor{blue}{column centered and scaled} matrix
+	\begin{itemize}
+		\item $n$ number of samples
+		\item $p$ number of taxa
+	\end{itemize}
+\item   $Q = \mathbb{I}_p$ 
+\item  Correlation PCA: $Q = diag \{sd(\boldsymbol z_1), \dots, sd(\boldsymbol z_p)\}$, where $sd(\boldsymbol z_j)$ standard deviation for  $j^{th}$ column of original data matrix $Z$ 
+\item  $D = diag\{\frac{1}{n}, \dots, \frac{1}{n}\} = \frac{1}{n}\mathbb{I}_n$ 
+\item  Then  eigendecomposition of 
+$$
+ \textcolor{blue}{VQ} = X^TDXQ = \frac{1}{n}X^TX = \textcolor{blue}{\Sigma}
+$$ 
+\item Inertia: $\textcolor{blue}{\mathcal I} = tr(\Sigma) = \textcolor{blue}{\sum_{i=1}^p \sigma^2_i} = \sum_{i=1}^r \lambda_i$
+\end{itemize}
+
+Co-inertia analysis idea:
+	\begin{itemize}
+		\item Analysis of $Z_1, Z_2, \dots, Z_K$. Same rows, but different columns
+		\item  $Z_1$ -- 16S data 
+		\item  $Z_2$ -- cytokines data 
+  \end{itemize}
+
+
+\begin{enumerate}
+\item Co-Inertia Analysis
+	\begin{itemize}
+		\item Seeks  a \textcolor{blue}{common structure} between two datasets $Z_1$ and $Z_2$
+		\item Two tables: $Z_1$ and $Z_2$ of dimensions $n \times p_1$ and $n \times p_2$
+		\item Use any one table method to obtain triplets: $(X, Q_X, D)$ and $(Y, Q_Y, D)$
+		\item \textcolor{blue}{coinertia} -- coinertia analysis function in ade4
+		\item Co-inertia triplet: $(Y^TDX, Q_X, Q_Y)$
+		\item Decomposition: $Y^TDX = K\Lambda^{1/2}A^T$
+		\item Project $X$ and $Y$ onto $A$ and $K$ respectively
+		\item Let $A = XQ_XX^TD$ and $B = YQ_YY^TD$
+		\item RV coefficient: $RV(A,B) = \frac{tr(AB^T)}{\sqrt{tr(AA^T)tr(BB^T)}} = \frac{\mathcal I_{XY}}{\sqrt{\mathcal I_X} \sqrt{\mathcal I_Y}}$
+		\item $RV \in [0,1]$  with values closer to $1$ indicating stronger  similarity among $X$ and $Y$
+	\end{itemize}
+\end{enumerate}
+
+Objects in ade4
+
+SVD of a transformed table $X =  K\Lambda^{1/2}A^T$
+
+$k$ -- rank of $X$
+
+\begin{flushleft}
+\resizebox{1\textwidth}{!}{\begin{minipage}{\textwidth}
+\begin{tabular}{lcll} \hline
+matrix 			&	dimensions	&ade4	&description \\ \hline
+$Z$				&	$n \times p$	&		&raw data; argument for dudi functions \\
+$X$				&	$n \times p$	&\$tab	&transformed data 				\\
+$Q$				&	$p \times p$	&\$cw	&diagonal matrix of column weights 	\\
+$D$				&	$n \times n$	&\$lw	&diagonal matrix of row weights 	\\
+$A$				&	$p \times k$	&\$c1	&the principal axes or column normed scores \\
+$K$				&	$n \times k$	&\$l1		&the row normed scores					\\
+$\Lambda$		&	$k\times k$	&\$eig	&diagonal matrix of the $k$ largest eigenvalues \\
+$A\Lambda^{1/2}$	&	$p \times k$	&\$co	&column coordinates						\\
+$K\Lambda^{1/2}$	&	$n \times k$	&\$li		&the row coordinates					\\
+\end{tabular} 
+  \end{minipage}}\\
+\end{flushleft}
+
+```{r}
+
+```
+

@@ -200,7 +200,7 @@ function call.
 ```{r, eval=FALSE}
 V35_stool_protected <-
     V35_stool %>%
-    attach_dbGaP("~/prj_12146.ngc")
+    attach_dbGaP("~/Dropbox/MBWG/HMP2/ProjectNotes/HMP1/prj_20464.ngc")
 ```
 
 The returned `V35_stool_protected` object contains controlled-access participant
