@@ -96,12 +96,9 @@ screePlot = function(First.pca, breaks) {
     scale_x_continuous("Rank of Eigenvalue",
                        limits = c(0,max(x_Breaks)+1),
                        breaks = x_Breaks, labels = x_Labels ) +
-    theme(axis.text.x = element_text( face="italic", size = 12),
-          panel.background = element_rect(fill = "white"),
-          panel.grid.major = element_line(colour = "grey90")) +
+    theme(axis.text.x = element_text( face="italic", size = 12)) +
     scale_fill_manual(name = "Variance Explained",
-                      values = plot_colors, breaks=levels(VarExplained))+ 
-
+                      values = plot_colors, breaks=levels(VarExplained))
   return(p)
 }  
 
@@ -165,8 +162,7 @@ PlotPCA <- function(Res.pca, Env_Var=NULL,axes = c(1,2), color=NULL,
   p <- ggplot(df, ord_map) + geom_point(size = ptSize, na.rm = TRUE)
   
   #Add percent var explained by axes on plot
-  #strivar = as(c(p$label$x, p$label$y), "character")
-  strivar = c(paste("Axis", axes[1], sep = ""), paste("Axis", axes[2], sep = ""))
+  strivar = as(c(p$label$x, p$label$y), "character")
   strivar = paste0(strivar, "   [", percvar, "%]")
   p = p + xlab(strivar[1]) + ylab(strivar[2])
   
@@ -196,7 +192,6 @@ BiPlot <- function (Ordin, Row_Cov=NULL,Col_Cov=NULL, axes = c(1, 2), Scaling = 
     pCaiv = FALSE, dudiOrd = NULL, LblSpec = FALSE, LblSamp = FALSE, LblEnv = FALSE,
     ClarConst = 1, ptSize = 3) 
 {
-  
   #If Vect option is used, vectors are drawn ponting towards species. The need to have color option based on species information 
     DF = NULL
     siteDF = NULL
@@ -289,7 +284,7 @@ BiPlot <- function (Ordin, Row_Cov=NULL,Col_Cov=NULL, axes = c(1, 2), Scaling = 
     }
 #Obtain Combined Tables
         #Row ids
-        id.type <- rep("Taxa", dim(specDF)[1])
+        id.type <- rep("Species", dim(specDF)[1])
         specDF <- cbind(specDF, id.type)
         #Col ids
         id.type <- rep("Samples", dim(siteDF)[1])
@@ -302,13 +297,13 @@ BiPlot <- function (Ordin, Row_Cov=NULL,Col_Cov=NULL, axes = c(1, 2), Scaling = 
             DF <- rp.joint.fill(DF, size, "Samples")
         }
         if (!is.null(size)) {
-            DF <- rp.joint.fill(DF, size, "Taxa")
+            DF <- rp.joint.fill(DF, size, "Species")
         }
         if (!is.null(color)) {
             DF <- rp.joint.fill(DF, color, "Samples")
         }
         if (!is.null(color)) {
-            DF <- rp.joint.fill(DF, color, "Taxa")
+            DF <- rp.joint.fill(DF, color, "Species")
         }
  }#end if triplot = FALSE      
     
@@ -319,7 +314,7 @@ BiPlot <- function (Ordin, Row_Cov=NULL,Col_Cov=NULL, axes = c(1, 2), Scaling = 
     ##########################################
     if(Triplot == TRUE){  
       envDF <- Env*ClarConst
-      id.type <- rep("Covariates", dim(envDF)[1])
+      id.type <- rep("Env", dim(envDF)[1])
       envDF <- cbind(envDF, id.type)
       
       colnames(specDF)[1:2] <- colnames(siteDF)[1:2]
@@ -330,16 +325,16 @@ BiPlot <- function (Ordin, Row_Cov=NULL,Col_Cov=NULL, axes = c(1, 2), Scaling = 
         DF <- rp.joint.fill(DF, size, "Samples")
       }
       if (!is.null(size)) {
-        DF <- rp.joint.fill(DF, size, "Taxa")
+        DF <- rp.joint.fill(DF, size, "Species")
       }
       if (!is.null(size)) {
-        DF <- rp.joint.fill(DF, size, "Covariates")
+        DF <- rp.joint.fill(DF, size, "Env")
       }
       if (!is.null(color)) {
         DF <- rp.joint.fill(DF, color, "Samples")
       }
       if (!is.null(color)) {
-        DF <- rp.joint.fill(DF, color, "Taxa")
+        DF <- rp.joint.fill(DF, color, "Species")
       }
       if (!is.null(color)) {
         DF <- rp.joint.fill(DF, color, "Env")
@@ -414,8 +409,7 @@ BiPlot <- function (Ordin, Row_Cov=NULL,Col_Cov=NULL, axes = c(1, 2), Scaling = 
 
     #Add percent variability expressed by plot
     percvar <- round((100 * Ordin$eig/sum(Ordin$eig))[axes],2)
-    #strivar = as(c(p$label$x, p$label$y), "character")
-    strivar = c(paste("Axis", axes[1], sep = ""), paste("Axis", axes[2], sep = ""))
+    strivar = as(c(p$label$x, p$label$y), "character")
     strivar = paste0(strivar, "   [", percvar, "%]")
     p = p + xlab(strivar[1]) + ylab(strivar[2])
 
