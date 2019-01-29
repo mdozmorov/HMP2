@@ -1,0 +1,25 @@
+screePlot
+
+Description
+
+screePlot is a function that takes an ade4 ordination object (multivariate data which has been processed in the ade4 ordination package), a vector of integers 0 - 100, and optional plot title; returns a screeplot that is colored by intervals showing percents of explained variance.   
+
+Usage
+
+screePlot = function(First.pca, breaks, mainTitle=NULL)
+
+Arguments
+
+First.pca	
+an ade4 ordination object (required)
+breaks	
+a vector of breakpoints (in percents (0, 100)) for the screeplot that define intervals showing percent of variance explained.  The largest percent entered in the vector will be considered the percent greater than which no further cumulative variance will be calculated for the eigen values. (required)
+mainTitle	
+text which will be appended to the title text which describes the percent of variance explained (optional)
+
+Example:
+
+Prop.pca <- dudi.pca(OTU_Prop, scannf=FALSE, nf =61) # creates ade4 object
+breaks <- c(40, 70, 80, 90)
+screePlot(Prop.pca, breaks)
+screePlot(Prop.pca, breaks, "Correlation PCA")

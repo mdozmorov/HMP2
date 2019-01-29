@@ -1,0 +1,57 @@
+sortAndMapHandsFree (in workflow.R)
+
+Description
+
+sortAndMapHandsFree is a function that takes multivariate data, some of which has been processed in the ade4 ordination package, and formats it for use in qiime's Emperor visualisation software.   
+
+Usage
+
+sortAndMapHandsFree <- function(inputMatrix, covarColNums = 0, 
+                      covarColNames = c(), ade4Out, eigenScaling=NULL,
+                      type = c("species", "samples"), 
+                      mappingFile, eigenFile, 
+                      filteredTaxa=NULL,biplotFile=NULL) 
+
+Arguments
+
+inputMatrix	
+the covariate information for either the samples or the species (required)
+covarColNums	
+a vector specifying which columns of the inputMatrix contain the covariates (required)
+covarColNames	
+a vector of covariate names in the order corresponding to covarColNums (use the default if the columns are already named)
+ade4out	
+the dudi object that was created using ade4 (required)
+eigenScaling	
+specify one of "l1" or "li" if examining samples; or one of "co" or "c1" if examining species.  The default is "l1" for samples and "co" for species.
+type	
+enter "species" or "samples" (required)
+mappingFile	
+path to and name of mapping file output (required) 
+eigenFile	
+path to and name of eigenvector file output (required)
+
+The following two parameters are only used if you are examining samples and want to make a biplot in Emperor
+
+filteredTaxa	
+matrix of n named rows of samples and p named columns of taxa, possibly the same table that was processed in the dudi step in ade4. Use to create the biplot in Emperor.  
+biplotFile	
+path to and name of biplot file output 
+
+
+Examples
+                      
+sortAndMapHandsFree(inputMatrix = Sample_Data, covarColNums = 1:7, 
+                    covarColNames = names(Sample_Data), 
+                    ade4Out = Prop.pca, eigenScaling="l1", type = "samples",
+                    mappingFile ="Emperor_Out/mappingFile_Prop_PCA.txt",  
+                    eigenFile = "Emperor_Out/eigenFile_Prop_PCA.txt",
+                    filteredTaxa = OTU_Prop,
+                    biplotFile = "Emperor_Out/biplot.txt") 
+
+
+sortAndMapHandsFree(inputMatrix = Taxa_Info, covarColNums = 1:4, 
+                    covarColNames = names(Taxa_Info), 
+                    ade4Out = Prop.pca, eigenScaling="co", type = "species",
+                    mappingFile ="Emperor_Out/mappingFile_Spec_Prop_PCA.txt",  
+                    eigenFile = "Emperor_Out/eigenFile_Spec_Prop_PCA.txt")

@@ -1,0 +1,131 @@
+plotRankByPC
+
+Description
+
+plotRankByPC is a collection of functions for creating intensity plots
+to visualize the influence on variation by number of components used
+
+workflow: 
+starting with a data frame of object projections on axes (ade4 species or samples object),
+
+	getDistances derives distances from origin from projections
+	getDeciles or getTenths derives rank indices of objects from getDistances
+		getDeciles ranks by sample density
+		getTenths ranks by "range", i.e. distance
+	getRankLiers is used internally for sorting
+	plotPASD or plotIntensity plots data frame of rank indices from getTenths or getDeciles
+		plotPASD plots data frame of rank indices for a specific rank
+		plotIntensity plots data frame of rank indices
+		
+or makePCVisualizationPlot on projections to perform complete workflow in one step
+	makePCVisualizationPlot also allows optional vertical lines placed in graph for the number of axes of interest
+	and titling
+	
+	makeCumulativeVariancePlot to create the associated cumulative variance explained plot
+
+	CountstoProps: converts table of p count variables to p proportions of row totals for each of n rows
+
+	TestDiffs: performs paired t tests on corresponding columns of two tables of the same dimensions (n x p) and returns (+1) if column in first table is less than the corresponding column in second table, (-1) if column in first table is more than the corresponding column in second table, or (0) for no difference.  Output is a vector of 1s,0s, and -1s of length p.  Confidence level, CL, is 0.8 by default.
+
+	plotIntensityCountsdiff : Creates a single intensity plot with two rows of intensities for two sets of rank indices using the same species from two different data sets and colored by whether the counts increased (purple) or decreased (green) in the second data set with respect to the first data set
+	
+	plotIntensityPropsdiff : Creates a single intensity plot with two rows of intensities for two sets of rank indices using the same species from two different data sets and colored by whether the proportions increased (red), decreased (blue), or stayed the same (gray) in the second data set with respect to the first data set
+
+Usage and arguments
+
+getDistances <- function(df)
+								input: projection matrix for either taxa or samples
+								output: matrix where ith column entries are Euclidean distances from origin based on first i projections  
+
+getDeciles <- function(df)
+								input: matrix where ith column entries are Euclidean distances from origin based on first i projections 
+								output: matrix rank indices, ranked entries of each column 1-10, by decile membership, smallest to largest
+	OR
+getTenths <- function(df)
+								input: matrix where ith column entries are Euclidean distances from origin based on first i projections 
+								output: matrix of rank indices, ranked entries of each column 1-10, by tenth of range membership, smallest to largest
+
+getRankLiers <- function(df, rank)
+									input: matrix of rank indices and an integer from 1-10 specifying which tenth of distance is of interest
+									output: new data frame with number of times in the rank and max axes used in rank; required for sorting
+
+plotPASD <- function(df, rank, covar=NULL, covarColors=NULL)
+																input: df=getDeciles or getTenths, rank=rank of interest, covar=NULL or covariate of 
+																	interest associated with rows, covarColors=NULL or vector of colors by which to color 
+																	rows in plot corresponding to covariate levels
+																output: plot for all objects satisfying given distance rank by number of axes
+
+plotIntensity <- function(df, covar=NULL, covarColors=NULL, plotOrder=NULL)
+																	input: df=getDeciles or getTenths, covar=NULL or covariate of interest 
+																				associated with rows, covarColors=NULL or vector of colors by which to 
+																				color rows in plot corresponding to covariate levels, plotOrder=Null or 
+																				user specified ordering 
+																	output: plot for all objects with color intensity 
+																				indicating distance rank by number of axes lighter color: closer to origin; 
+																				darker color: further from origin); 
+																				returns ordering of objects plotted for use in subsequent plots (plotOrder).
+
+makePCVisualizationPlot <- function(projections, type="presence", byRank="decile", atRank=1, plotTitle=NULL, 
+                                    xLabel="Number of PCs used", yLabel="Object", covar=NULL, covarColors=NULL,
+                                    plotOrder=NULL, breaks=NULL)
+																			input:
+																					projections: projection matrix for either taxa or samples 
+																					type: use "presence" for PASD plot; use "intensity" for Intensity plot.
+																					byRank:	use "decile" to specify matrix rank indices, 1-10, by decile membership use "range"
+																								to specify matrix rank indices, 1-10, by tenth of range membership
+																					atRank: rank of interest, an integer 1 through 10
+																					plotTitle: NULL or user supplied text
+																					xLabel: "Number of PCs used" or other user supplied text
+																					yLabel:  "Object" or other user supplied text
+																					covar: NULL or covariate of interest associated with rows
+																					covarColors: NULL or vector of colors by which to color rows in plot corresponding to
+																								covariate levels
+																					plotOrder: Null or user specified ordering
+																					breaks:	vector specifying the axes of interest to be drawn on plot, 
+																							any integers of interest from 1 through the maximum number of axes 
+																							specified
+																			output: either PASD or Intensity plot; if Intensity plot, also returns plotOrder
+Note: makePCVisualizationPlot is not recommended if you're using the a subset of the data.
+
+makeCumulativeVariancePlot <- function(eigenValues, numPCs)	input: eigenValues = vector of eigenvalues from ade4 for data, numPCs = the number of principal components
+															required to explain the desired amount of variance in the data
+															output: plot of cumulative variance explained by consecutive numbers of axes.
+
+CountstoProps<-function(OTU)
+											input: n x p table of counts on p variables for n samples
+											output: n x p table of proportions of p variables within each of n samples
+
+TestDiffs<-function(Props1, Props2, CL)
+											input: Two n x p tables of measurements on p variables for each of n samples and confidence level, CL (= 0.8)
+											output: Vector of length p of 1s, 0s, and -1s; ith entry indicates whether the ith column in first table is less than the ith column in second table (1), if ith column in first table is more than the ith column in second table (-1), or no difference in corresponding columns (0). Paired t-test is used for each column.
+
+plotIntensityCountsdiff<- function(df, df2, counts, counts2, title)
+												input: df = getDeciles or getTenths for taxa
+															 df2 = getDeciles or getTenths for same taxa measured on same individuals in different circumstance
+															 counts: OTU counts for first set of observations
+															 counts2: OTU counts for observations on same individuals in different circumstance
+															 title: user supplied title
+												output: intensity plot with two rows intensities for two sets of rank indices using the same species from two different data sets and colored by whether the counts increased (purple) or decreased (green) in the second data set with respect to the first data set.  Difference is measured by subtracting the counts range of the second data set from the first.
+
+plotIntensityPropsdiff<- function(df, df2, counts, counts2, title)
+												input: df = getDeciles or getTenths for taxa
+															 df2 = getDeciles or getTenths for same taxa measured on same individuals in different circumstance
+															 counts: OTU counts for first set of observations
+															 counts2: OTU counts for observations on same individuals in different circumstance
+															 title: user supplied title
+												output: intensity plot with two rows intensities for two sets of rank indices using the same species from two different data sets and colored by whether the proportions increased (red), decreased (blue), or stayed the same (gray) in the second data set with respect to the first data set.  Change is determined by t-test as in function TestDiffs (above).  
+
+
+Example: 
+
+blues<-sequential_hcl(10, h = 264, c = c(90, 90), l = c(95, 20), power =0.8)
+mdist<-getDistances(Prop.pca$co)
+mdec<-getDeciles(mdist)
+InterestingTaxa.dec<-mdec[ c("      "Aerococcus",
+                                    "Anaeroglobus",
+                                    "Atopobium",
+                                    "Sneathia",
+                                    "Streptococcus", "Ureaplasma", "Rothia"),]
+plotIntensity(InterestingTaxa.dec)
+          legend("topright", inset=c(-0.17,0.3), c("First decile", "Second decile", "Third decile", "Fourth decile", "Fifth decile", "Sixth decile", "Seventh decile", "Eighth decile", "Ninth decile", "Tenth decile"), xpd = TRUE, horiz = FALSE, bty = "n", pch = rep(15, 10), col = blues, cex = 1)
+          title(xlab="Number of PCs used", ylab="Taxon")

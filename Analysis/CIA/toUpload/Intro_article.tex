@@ -1,0 +1,732 @@
+%% BioMed_Central_Tex_Template_v1.06
+%%                                      %
+%  bmc_article.tex            ver: 1.06 %
+%                                       %
+
+%%IMPORTANT: do not delete the first line of this template
+%%It must be present to enable the BMC Submission system to
+%%recognise this template!!
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                     %%
+%%  LaTeX template for BioMed Central  %%
+%%     journal article submissions     %%
+%%                                     %%
+%%          <8 June 2012>              %%
+%%                                     %%
+%%                                     %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                 %%
+%% For instructions on how to fill out this Tex template           %%
+%% document please refer to Readme.html and the instructions for   %%
+%% authors page on the biomed central website                      %%
+%% http://www.biomedcentral.com/info/authors/                      %%
+%%                                                                 %%
+%% Please do not use \input{...} to include other tex files.       %%
+%% Submit your LaTeX manuscript as one .tex document.              %%
+%%                                                                 %%
+%% All additional figures and files should be attached             %%
+%% separately and not embedded in the \TeX\ document itself.       %%
+%%                                                                 %%
+%% BioMed Central currently use the MikTex distribution of         %%
+%% TeX for Windows) of TeX and LaTeX.  This is available from      %%
+%% http://www.miktex.org                                           %%
+%%                                                                 %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%% additional documentclass options:
+ %[doublespacing]
+% [linenumbers]   - put the line numbers on margins
+
+%%% loading packages, author definitions
+
+%\documentclass[twocolumn]{bmcart}% uncomment this for twocolumn layout and comment line below
+%
+\documentclass[doublespacing]{bmcart}
+
+%\doublespacing
+%\linenumbers
+
+%%% Load packages
+\usepackage{amsthm,amsmath}
+%\RequirePackage{natbib}
+%\RequirePackage[authoryear]{natbib}% uncomment this for author-year bibliography
+\RequirePackage{hyperref}
+\usepackage[utf8]{inputenc} %unicode support
+%\usepackage[applemac]{inputenc} %applemac support if unicode package fails
+%\usepackage[latin1]{inputenc} %UNIX support if unicode package fails
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                             %%
+%%  If you wish to display your graphics for   %%
+%%  your own use using includegraphic or       %%
+%%  includegraphics, then comment out the      %%
+%%  following two lines of code.               %%
+%%  NB: These line *must* be included when     %%
+%%  submitting to BMC.                         %%
+%%  All figure files must be submitted as      %%
+%%  separate graphics through the BMC          %%
+%%  submission process, not included in the    %%
+%%  submitted article.                         %%
+%%                                             %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\def\includegraphic{}
+\def\includegraphics{}
+\def\I{\mathbf{I}}
+\def\H{\mathbf{H}}
+\def\Q{\mathbf{Q}}
+\def\D{\mathbf{D}}
+\def\F{\mathbf{F}}
+\def\B{\mathbf{B}}
+\def\U{\mathbf{U}}
+\def\V{\mathbf{V}}
+\def\X{\mathbf{X}}
+\def\A{\mathbf{A}}
+\def\K{\mathbf{K}}
+\def\G{\mathbf{G}}
+\newcommand{\diag}{\operatorname{diag}}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{mathtools, bbm}
+
+
+%%% Put your definitions there:
+\startlocaldefs
+\endlocaldefs
+
+
+%%% Begin ...
+\begin{document}
+
+%%% Start of article front matter
+\begin{frontmatter}
+
+\begin{fmbox}
+\dochead{Research}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the title of your article here     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title{Intensity Plots and other options for Visualizing Microbiome Data}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the authors here                   %%
+%%                                          %%
+%% Specify information, if available,       %%
+%% in the form:                             %%
+%%   <key>={<id1>,<id2>}                    %%
+%%   <key>=                                 %%
+%% Comment or delete the keys which are     %%
+%% not used. Repeat \author command as much %%
+%% as required.                             %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\author[
+   %addressref={aff1},                   % id's of addresses, e.g. {aff1,aff2}                    
+   noteref={n1},                        % id's of article notes, if any
+   %email={ejacks20@uwyo.edu}   % email address
+]{\inits{E}\fnm{Eugenie} \snm{Jackson}}
+\author[
+   %addressref={aff1},
+    noteref={n1},
+   %email={esmirnov@uwyo.edu}
+]{\inits{ES}\fnm{Ekaterina} \snm{Smirnova}}
+\author[
+   addressref={aff1},
+   %email={menon.anju@gmail.com}
+]{\inits{AM}\fnm{Anju} \snm{Menon}}
+\author[
+   addressref={aff1},
+corref={aff1},   % id of corresponding address, if any
+  noteref={n1},
+  email={lata@uwyo.edu}
+]{\inits{SH}\fnm{S} \snm{Huzurbazar}}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter the authors' addresses here        %%
+%%                                          %%
+%% Repeat \address commands as much as      %%
+%% required.                                %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\address[id=aff1]{%                           % unique id
+  \orgname{Department of Statistics, University of Wyoming}, % university, etc
+  \street{1000 E. University Avenue, Box 3332},                     %
+  \postcode{WY 82072}                                % post or zip code
+  \city{Laramie},                              % city
+  \cny{USA}                                    % country
+}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Enter short notes here                   %%
+%%                                          %%
+%% Short notes will be after addresses      %%
+%% on first page.                           %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{artnotes}
+%\note{Sample of title note}     % note to the article
+\note[id=n1]{Equal contributor} % note, connected to author
+\end{artnotes}
+
+\end{fmbox}% comment this for two column layout
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The Abstract begins here                 %%
+%%                                          %%
+%% Please refer to the Instructions for     %%
+%% authors on http://www.biomedcentral.com  %%
+%% and include the section headings         %%
+%% accordingly for your article type.       %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstractbox}
+
+\begin{abstract} % abstract
+\parttitle{Background} %if any
+Dimension reduction for high-dimensional sparse 16S rRNA data is necessary for descriptive data analysis. Most visualization options are restricted to 3 dimensions, while more than 3 dimensions are necessary to capture the relationships between taxa or subjects in microbiome data. We develop intensity plots as a way of highlighting the changing contribution of taxa or subjects as the number of principal components of the ordination method is changed.
+
+\parttitle{Methods}
+For ordination methods implemented in R packages, use of visualization tools from the QIIME pipeline requires the time intensive task of formatting R output to make it readable by QIIME; we present code for such an output transfer. We develop intensity plots for taxa and subjects where the intensity indicates the relative position of the taxon/subject within the data, and we also develop `inclusion in intensity deciles' plots which provide a quick visualization of taxa/subjects that are close to the `center' or that contribute to dissimilarity.  For 2 OTU tables linked to the same subjects, we develop co-inertia analysis based on principal coordinates analysis. We provide R code for all the visualizations. 
+
+\parttitle{Results}
+Using two data sets, we illustrate the various plots for data from 1 OTU table, as well as for longitudinal data where 2 tables are linked to the same subjects. We illustrate and discuss the differences between covariance versus correlation PCA, and using the latter, show how patterns for subjects and taxa change as the number of PCs, or alternatively, the dimension of the reduction is varied. For longitudinal data, we examine changing intensity patterns over the two time periods for taxa as well as subjects.
+
+\parttitle{Conclusion}
+PCA based on correlation avoids the confounding of high abundance taxa with highest contributions to overall variability. Exploring intensity plots as a function of increasing number of PCs gives insight into the changing role of taxa as well as subjects. Inclusion in decile plots help clarify similarities and differences between covariate classes as the number of PCs changes.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The keywords begin here                  %%
+%%                                          %%
+%% Put each keyword in separate \kwd{}.     %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{keyword}
+\kwd{ordination methods}
+\kwd{dimension reduction}
+\kwd{compositional shifts of taxa}
+\end{keyword}
+
+% MSC classifications codes, if any
+%\begin{keyword}[class=AMS]
+%\kwd[Primary ]{}
+%\kwd{}
+%\kwd[; secondary ]{}
+%\end{keyword}
+
+\end{abstractbox}
+%
+%\end{fmbox}% uncomment this for twcolumn layout
+
+\end{frontmatter}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% The Main Body begins here                %%
+%%                                          %%
+%% Please refer to the instructions for     %%
+%% authors on:                              %%
+%% http://www.biomedcentral.com/info/authors%%
+%% and include the section headings         %%
+%% accordingly for your article type.       %%
+%%                                          %%
+%% See the Results and Discussion section   %%
+%% for details on how to create sub-sections%%
+%%                                          %%
+%% use \cite{...} to cite references        %%
+%%  \cite{koon} and                         %%
+%%  \cite{oreg,khar,zvai,xjon,schn,pond}    %%
+%%  \nocite{smith,marg,hunn,advi,koha,mouse}%%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%% start of article main body
+% <put your article body there>
+
+%%%%%%%%%%%%%%%%
+%% Background %%
+%%
+\section*{Background}
+
+Data visualization is a crucial part of the first steps of any statistical analysis. Such visualization is complicated in many modern data settings, including for microbiome data where sequencing of the variable region of the 16S rRNA gene yields counts on a large number of taxa with counts of zero in a number of samples. For human microbiome data, the taxa are often the species-level taxonomic units, also called operational taxonomic units (OTUs), with the samples as individuals.  The resulting data form large sparse matrices that cannot be readily visualized or analyzed, necessitating a first task of dimension reduction by one of many multivariate dimension reduction methods. These ordination methods, widely used in ecology to understand relationships between ecological communities, include principal components analysis (PCA), correspondence analysis (CA), principal coordinate analysis (PCoA) also called multidimensional scaling (MDS) as well as extensions such as non-symmetric correspondence analysis (NSCA); see \cite{Legendre} for details.  There are two key steps in implementing ordination methods, data transformation followed by singular value decomposition;  ordination methods are characterized by specific data transformations. For example, in PCA,  transformations of the observed taxa matrix are used to obtain either a covariance or correlation matrix, while PCoA requires a matrix with distances between taxa or subjects. In the second step, the method-specific transformed data matrix is decomposed to find the {\it principal components} (PCs) of that particular ordination analysis. Figure 1 gives an overview of the options as used in various microbiome studies. Analyses in the microbiome literature often start with plots of the first two or three PCs or dimensions especially in relation to covariate categories, and from these, patterns are gleaned and conclusions are drawn.
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=12cm]{OTUtoOrdinationFlow.pdf}
+%\caption{{\small Flow chart showing options for ordination methods for one OTU table }}
+%\label{fig:sketch}
+%\end{figure}
+
+In `textbook' multivariate data sets, adequate reduction to two or three dimensions is readily achieved, but with microbiome data, this is hardly the case. As an example, consider PCA with the correlation or covariance matrix as the transformed matrix; adequacy of the reduced dimension is often judged as the number of PCs needed to explain a large percentage of the original variance or correlation, examples of total inertia. Traditionally, this percentage is closer to 90 (see \cite{Izenman} among others), while a quick perusal of the human and other microbiome literature yields a list of papers where conclusions are drawn from patterns observed from the first two or three PCs that often explain less than 40\% of the variation. 
+For example, in \cite{Sellitto}, two PCs explaining 14.7\% of total inertia are used; since these plots {\it do not explain} 85.3\% of total inertia, the conclusions drawn from these visualizations might be incomplete.  Along those lines, the following studies present PCA or PCoA analyses to draw conclusions based on two PCs that cumulatively account for 6.64\% \cite{Gong}, 27.44\%  \cite{Kraneveld}, 40.6\% \cite{Boutin}, 24.73\% \cite{Claud}, 22.9\% \cite{Shankar}, 30.2\% \cite{Dickson}, 24.9\% \cite{Pourabedin}, 29.71\% \cite{Lu}, 70.6\% \cite{Langille} and 25.7\% \cite{Hansen} of the total inertia. In addition, other studies neglect to mention how much of the total inertia is explained by the ordination presented, eg.  \cite{Fouts} and \cite{Cribbs}.  These studies span a variety of microbiome analyses:  human airways (oral, throat, nose, sputum, lung) \cite{Gong, Kraneveld, Boutin, Cribbs}, human gut \cite{Claud, Shankar}, chicken gut \cite{Pourabedin}, and mice gut  \cite{Lu, Langille, Hansen}. 
+
+Ordination  methods, widely used in microbial ecology to describe relationships among communities, have been implemented in various statistical software packages, most notably using R \cite{R}. The package {\it ade4} \cite{Dray1, Dray2, Chessel} is the most comprehensive in the range of ordination methods implemented.  The {\it adegraphics} \cite{adegraphics} package provides improved visualization for the output from {\it ade4}. The {\it vegan} package \cite{vegan}, in addition to having many ordination methods implemented, can also be used to compute distance matrices with respect to different metrics, and to display distance and similarity information for the taxa.  The {\it phyloseq} package \cite{phyloseq} links major packages developed for phylogenetic analyses using sequenced data and handles internal tasks associated with organizing data in formats required by the individual packages. However, the graphics produced by these packages lack interactivity and other tools which could help in visualizing ordination results for a large number of taxa in more than two or three dimensions while simultaneously examining relationships across covariate classes or subgroups.  
+
+Traditional visualization of ordination results in more than 2 dimensions is difficult, but the loss of information from restricting to an inaccurate approximation of the data matrix is equally disconcerting. Keeping this in mind, we explored other options for visualization of more than two or three PCs, and also developed code for some novel visualizations. In this paper, we consider a common scenario where an ordination method is chosen and implemented via the R package {\it ade4}  \cite{Dray1, Dray2, Chessel} and the task at hand is to visually explore results from the ordination methods; i.e., examine the patterns of the PCs with respect to taxa and samples, with the latter potentially grouped according to covariate classes. An important point is that we would like to examine a sufficient number of PCs that collectively explain a high proportion of the variation in the data matrix keeping in mind that this number will vary across data sets. 
+
+The first option is to use available plots from {\it adegraphics}, which, as we discuss below, are somewhat restrictive. A second option is to use the graphics available from the EMPeror project \cite{emperor} which provides tools for 3 D interactive visualization as an extension of the QIIME \cite{qiime} pipeline designed for 16S rRNA data. This interactive tool allows for plots of up to ten PCs and the user can change settings to display information by covariate classes of interest. However, the ordination methods that feature prominantly in QIIME are PCA,  PCoA and Procrustes analysis. We developed code for linking output from the R-based methods available in the {\it ade4} package with the interactive graphical techniques available in EMPeror via the QIIME interface. This allows the practitioner to combine the extended ordination methods available in R with the interactivity of EMPeror graphics. In addition, for those who use different pipelines in the first steps of microbiome data analysis including using packages written in R, this provides an interface for the results to be viewed in EMPeror.
+
+Finally, as we explored some vaginal microbiome data sets, we developed intensity plots that reveal aspects of the data that neither the {\it adegraphics} nor EMPeror plots were capable of elucidating. For instance, based on PCA, one can use intensity plots to subset the samples into groups as a function of their distance from the average, and these intensity plots can also be examined as increasing numbers of PCs are included accounting for more variation. Similarly, one can examine taxa intensity plots which can point us towards taxa that behave unusually or whose intensity changes dramatically with the number of PCs. We provide explanations for these visualizations with R code in supplementary materials. 
+
+We illustrate the above visualizations via (i) a published dataset on the vaginal microbiome of reproductive age women \cite{Ravel} with PCA as the ordination method, and (ii) a dataset that was generated as part of the Vaginal Human Microbiome Project \cite{Fettweis} at Virginia Commonwealth University, where the ordination method is PCoA, and the covariate subsetting the data is diagnosis of bacterial vaginosis (BV). The first data set has $n > p$, namely, more samples than taxa, while the second one has $n < p$. We provide code for ordination analysis in R with {\it ade4}, along with the interface to the QIIME pipeline for graphics in EMPeror and for the intensity plots in R.  The code and visualization methods presented here can be extended to other ordination methods since they use the output of the second step, the singular value decomposition, which is common to all ordination methods. Moreover, ideas for visualization can also be extended to understand other aspects of microbiome studies. 
+
+\section*{Methods}
+As our goal is to explore different ways of visualizing results from ordination methods, we first present brief explanations for PCA and PCoA as methods for one OTU table, and for an extension of PCoA to co-inertia analysis (CoIA) for two OTU tables.
+
+Among the various packages in R that implement ordination methods,  {\it ade4} \cite{Dray1, Dray2, Chessel} has the most complete set of methods which leads us to use it for the first step in our analyses. Central to the implementation is the eigen-decomposition of a matrix $\H$, where formulation of $\H$ from the data matrix $\mathbf{X}=\mathbf{X}_{n \times p}$, for $n$ samples and $p$ taxa, is specific to the ordination method being used. Here we discuss how $\H$ is constructed for PCA, PCoA and CoIA with an emphasis on linking matrix operations to the quantities for plotting and exploring the data. Finally, we present options for visualizations beyond those available in $\it ade4$ and the associated $\it adegraphics$. 
+\subsection*{One table methods} 
+\subsubsection*{Principal components analysis (PCA)}
+In this well known technique, the $p$ taxa are expressed as linear combinations of new variables called {\it principal components} by decomposing the matrix of either taxa covariances or correlations. For covariance  PCA, the data matrix  $\mathbf{X}$ is centered by taxa (column) means, while the centered matrix is further transformed by scaling via taxa standard deviations for correlation PCA. The transformed matrix, denoted by $\mathbf {\tilde X}$, is combined with $\D = \frac{1}{n}\mathbf I_n$ containing row weights, and a column weights matrix $\Q= \mathbf I_p$, with $\mathbf I_p$ a $p \times p$ identity matrix; note that $\Q$ is not always the identity, for example in correspondence analysis. The matrix to be eigen-decomposed, $\H$, and its eigen-decomposition are 
+\begin{equation}\label{eq:PCA_Decomp}
+\H =
+  \begin{cases}
+    \mathbf {\tilde X}^T\mathbf D \mathbf {\tilde X} \mathbf Q = \U \mathbf{\Lambda} \U^T	& \text{if $n  > p$} \\
+    \mathbf {\tilde X}\mathbf Q \mathbf {\tilde X}^T \mathbf D = \V \mathbf{\Lambda} \V^T	& \text{if $n  \leq p$}.
+  \end{cases}
+\end{equation}
+In many microbiome applications, the number of samples $n$ can be much smaller than the number of taxa $p$ so that the separate eigen-decompositions in eq. (\ref{eq:PCA_Decomp}) provide computational ease (see \cite{Dray1, Cruz_Holmes, Yata} for details and theoretical properties). The eigen-decomposition yields two sets of axes used in visualization of ordination results in the reduced dimensional space. Specifically, in {\it ade4}, 
+\begin{itemize}
+\item for $n > p$, the set of {\it right eigenvectors} $\U$ from eq. (\ref{eq:PCA_Decomp}) are scaled to obtain a set of axes 
+\begin{equation*}
+ \begin{cases}
+    \A = \Q^{-1/2}\U								& \text{taxa loadings} \\
+    \K = \tilde{\X}\Q^{1/2}\U\mathbf{\Lambda}^{-1/2}	& \text{sample scores},
+  \end{cases}
+\end{equation*} 
+\item for $n \leq p$, eigen-decomposition of $\H$ produces a set of {\it left eigenvectors} $\V$ in eq. (\ref{eq:PCA_Decomp}) that in \textit{ade4} are scaled to obtain a set of axes 
+\begin{equation*}
+ \begin{cases}
+    \A =   \mathbf {\tilde X}^T\D^{1/2}\V\mathbf{\Lambda}^{-1/2} 			& \text{taxa loadings} \\
+    \K =  \D^{-1/2}\V										& \text{sample scores}.
+  \end{cases}
+\end{equation*} 
+\end{itemize}
+
+\subsubsection*{Principal coordinates analysis (PCoA)}
+PCoA, usually called MDS in the statistics literature, is an eigen-decomposition of a distance matrix. Pairwise distances between samples (rows) of $\mathbf X$ are computed with respect to some distance metric; popular metrics are Bray-Curtis, Jaccard, Jensen-Shannon, UniFrac, and weighted UniFrac distances. The distance matrix, denoted here by the $n \times n$ matrix $\mathbf B$, is then squared element-wise, $\mathbf B^{(2)}$, and centered according to a procedure proposed by Gower \cite{Gower}, to give $\H$ as 
+\begin{equation}\label{eq:Gower}
+\H = -\frac{1}{2}\mathbf D^{1/2}\mathbf F \mathbf B^{(2)} \mathbf F \mathbf D^{1/2} = \V \mathbf{\Lambda} \V^T, ~\mbox{where} ~\mathbf F = (\mathbf I_n - \D \mathbf J),
+\end{equation}
+where $\D$ is the row weights matrix from above and $\mathbf J$ is an $n \times n$ matrix of ones.
+The $\H$ in eqn. (\ref{eq:Gower}) can be rewritten as $\H = \mathbf {\tilde X}\mathbf {\tilde X}^T$ with $\mathbf{\tilde X = V  \Lambda}^{1/2}$ giving {\it approximate Euclidian distances for each sample from the origin}. 
+Since PCoA eigen-decomposes a standardized matrix of distances between samples, only sample scores as a function of the eigenvectors are available for further examination and information about individual taxa is unavailable,
+\begin{equation*}
+ \begin{cases}
+    \A =  \I									 			&  \\
+    \K =  \D^{-1/2}\V										& \text{sample scores},
+  \end{cases}
+\end{equation*} 
+with the taxa loadings matrix $\A$ as the identity matrix. 
+
+\subsubsection*{General Framework}
+As shown in Figure 2, the ordination method-specific matrices of sample scores $\K$, taxa loadings $\A$ and eigenvalues $\mathbf{\Lambda}$ derived from the eigen-decomposition of $\H$ correspond to the singular value decomposition of $\tilde{\X}$.  The results of this one--table decomposition in $\it ade4$ contain a table of sample scores, denoted \$l1, and a table of taxa loadings, denoted \$c1.  The scores and loadings are used to construct lower dimensional visualizations of samples and taxa, especially via biplots.  The entries in $\mathbf{\Lambda^{1/2}}$ (these are standard deviations in PCA) reflect the importance of the dimensions in the singular value decomposition; mathematically they are the lengths of the axes.  For visualization purposes they are used to scale \$l1 and \$c1 to obtain the scaled sample scores (\$li) and scaled taxa loadings (\$co) which represent the configuration of samples or taxa in various plots. 
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=14cm]{figureCreator2.pdf}
+%\caption{{\small Relationship between transformed matrix $\tilde{\X}$ and sample scores, taxa loadings and singular values, using \textit{ade4} notation. }}
+%\label{fig:Decomp}
+%\end{figure}
+\subsection*{Two-table methods}
+\subsubsection*{Co-inertia  analysis (CoIA)}
+Co-inertia analysis allows for simultaneous exploratory analysis of two multidimensional tables by linking the common rows (samples) so that data across the columns (eg. taxa) of the two tables can be visualized.  CoIA can thus be used for visualization of microbiome data collected longitudinally on the same samples at two different times. Implementations of CoIA in the literature 
+ \cite{Dray3} rely on PCA, CA, or NSCA. Covariance PCA and NSCA are highly biased towards abundant taxa, while correlation PCA and CA give a lot more weight to rare taxa. Distance based methods, especially those relying on UniFrac or Jensen-Shannon divergence, are less prone to either of these extremes, often have biological interpretation, and are widely used in microbiome data analyses. Here we extend CoIA using distance matrices derived from OTU tables on the same subjects at two different time periods. 
+
+First, from the OTU tables at two different times (eg. baseline and disease state, or different stages of pregnancy), we construct distances matrices from separate PCoAs to give $\tilde{\X}_{1}$  and $\tilde{\X}_{2}$. Next, as suggested in \cite{Dray3}, the two matrices are coupled to give $\H$ which is then eigen-decomposed, 
+\begin{equation}\label{eq:co-inert}
+\H = (\tilde{\X}_{2}^T\D \tilde{\X}_{1})^T  (\tilde{\X}_{2}^T \D \tilde{\X}_{1}) = \U\Lambda\U^T = (\V\Lambda^{1/2}\U^T)^T(\V\Lambda^{1/2}\U^T), 
+\end{equation}
+with $\D$ as the row weights matrix. The eigen-decomposition in eq. (\ref{eq:co-inert}) is used to obtain co-inertia axes that are {\it common} to both OTU tables, 
+\begin{equation*}
+ \begin{cases}
+	 \V =  (\tilde{\X}_{2}^T\D \tilde{\X}_{1})\U\mathbf{\Lambda}^{-1/2}				& \text{OTU 1 co-inertia axes}\\
+    	\U 									 									& \text{OTU 2 co-inertia axes}.
+  \end{cases}
+\end{equation*} 
+Finally, the common representation of  samples from time 1 to 2 are given by the co-inertia sample scores 
+\begin{equation}{\label{eq:G1G2}}
+ \begin{cases}
+    \G_{1} = \tilde{\X}_{1}\V								 			& \text{OTU 1 co-inertia sample scores} \\
+    \G_{2} = 	\tilde{\X}_{2}\U  												& \text{OTU 2 co-inertia sample scores}.
+  \end{cases}
+\end{equation} 
+The distance between the $i^{th}$ sample's co-inertia sample scores is obtained by comparison, on the $r$ axes, of the co-inertia sample scores for time periods 1 and 2,
+\begin{equation}\label{eq:di}
+d_i = \sqrt{\Big(\sum_{j=1}^k (g_{ij}^{1} - g_{ij}^{2})^2\Big)},  
+\end{equation}
+where $\boldsymbol g_i^{1} = (g_{i1}^{1}, \dots, g_{ir}^{1})$ and $\boldsymbol g_i^{2} = (g_{i1}^{2}, \dots, g_{ir}^{2})$ are the $i^{th}$ rows of sample score matrices $\G_{1}$ and $\G_{2}$ respectively. Smaller values for the distance $d_i$ indicates more similarity in  $i^{th}$ sample's distance information across the two time periods.  
+
+\subsection*{Exploring ordination results visually}
+\subsubsection*{Visualization using ade4 and adegraphics}
+The list of plots possible for the output from one table using {\it ade4} and {\it adegraphics} include scree plots, two dimensional (based on 2 PCs) sample and taxa plots as well as biplots, and confidence ellipses that represent inertia of the groups of samples under the bivariate normality assumption. The enhanced {\it adegraphics} allows one to color and rescale each point on a samples plot according to information from a continuous covariate.  One can also zoom in to concentrate on a subset of variables.  For CoIA, the plots provided with {\it adegraphics} help visualize the difference between each row's observations in two tables by plotting the distances $d_i, i = 1, \dots, n$ based on the first two co-inertia axes. One main drawback of  {\it ade4} and {\it adegraphics} is that they are not interactive and visualization is restricted to two dimensions.   The plots work extremely well for data with a smaller number of taxa than in human microbiome data. With over $50$ points for samples or taxa, the plots can be cluttered and difficult to interpret; see Additional File 1: Figure S1.
+
+\subsubsection*{Inputting {\it ade4} output into QIIME and EMPeror for other plots}
+For a dataset decomposed using {\it ade4}, we provide code (Additional File 2: Code S1) that formats the {\it ade4} output and covariate information and makes it readable by QIIME for interactive visualization in EMPeror; note that {\it ade4} is written in R while QIIME is written in Python. There are various interactive plots available in EMPeror.  One can obtain 3-dimensional plots of either sample scores or taxa loadings on any 3 of the first 10 PCs. In these plots, information from up to 3 categorical covariates can also be included in the form of scale, transparency, and color of the points.   Also available are 3-dimensional biplots where taxa and sample information can be plotted on the first 3 PCs along with information from up to 3 categorical covariates.  While these plots are very useful, they are, obviously, restricted by the inability to plot in more than 3 dimensions.  Parallel coordinates plots are available where the coordinates are the first 10 PCs with sample scores (or taxa loadings) on the 10 PCs yielding a line for each subject that can be color-coded by covariate classes of interest.  
+ 
+\subsubsection*{R code for intensity and other plots}
+
+The first decision in any ordination analysis is to choose how many dimensions to explore. In the statistics literature, a scree plot is routinely examined to either find a break after which the eigenvalues are very small so that the contribution of additional dimensions is negligible, or in the absence of a break, retain enough dimensions to obtain a good approximation of the matrix involved. In the PCA literature, this is often described as keeping enough PCs to explain a high percentage of the variation, usually above 80\%.  
+For human microbiome data, the percentage of variation explained by 2--3 PCs is usually quite low. Our approach is to examine different aspects of sample scores and taxa loadings as we increase the number of PCs or more generally, the dimension of the approximation. 
+
+As discussed in the next section, we provide code for an informative, color-coded scree plot (Additional File 3: Code S2).  We use intensity plots where the intensity is a function of the sample scores or taxa loadings plotted as the number of PCs is increased thereby increasing the dimension of the approximation. Different functions give different information, and we generally examine the changes in intensity for groups of samples or taxa as the number of PCs changes. The plots can be broadly classified into `intensity plots' and `inclusion in an intensity decile plots'. 
+
+Intensity plots for samples have samples (or subgroups of samples) on the vertical axis while the horizontal axis has an increasing number of PCs. The intensity of the points in a row indicates the distance of the sample from the origin or `center'  or `average' as the number of PCs increases. Smaller distances are coded with lighter colors indicating closeness to the center, and increasing distance from origin implies that the sample has a relatively different taxa profile compared to other samples.  Similar plots for taxa, as opposed to samples, with an increasing number of PCs on the horizontal axis display lower intensity with lighter colors implying that most samples have the taxon at about the same level, while darker color implies variation between the samples with respect to this taxon. 
+
+For the `inclusion in an intensity decile' plots using samples, the intensity or distance from the origin is fixed using a specific decile (eg. 1st or 10th), and the samples on the vertical axis are either included or excluded in that decile as the number of PCs increases; analogous plots can be made for taxa. Again, color coding the samples by covariate classes or taxa by biological groups can add another dimension of information allowing for visual comparison across groups. We provide code (Additional File 4: Code S3) that takes the {\it ade4} output and generates intensity plots and `inclusion in an intensity decile' plots.
+
+\section*{Results}
+
+We now present examples of visualization of ordination results using two different vaginal microbiome data sets. The examples were chosen to illustrate methods for one OTU table and for two OTU tables that are obtained from the same subjects as is the case in longitudinal analyses. While we use the \textit{ade4} package in R to conduct the ordination, we illustrate the results using \textit{adegraphics}, EMPeror and our contribution of intensity plots. We provide code that can be adapted to output from other ordination methods, and also suggest extensions.
+
+\subsection*{Vaginal microbiome data: one table with $n >p$ }
+
+Using PCA as the ordination method, we explore the 16S rRNA microbiome OTU table with $247$ taxa from $n=394$ reproductive age women analyzed in Ravel et al. \cite{Ravel}. We used a traditional filtering method implemented in the `{\it kOverA()}' function in the R package {\it genefilter} \cite{Gentleman}, where taxa with an expression measure above $k$ (we used 0) in less than $m$ (we used 5) samples are filtered out; leaving us with $p=135$ taxa. 
+Covariates available include race/ethnic information (Asian, Black, Hispanic, White), and those important for diagnosis of and predisposition towards bacterial vaginosis (BV), namely, Nugent score and vaginal pH levels. One of the goals in \cite{Ravel}  was to explore the composition of the vaginal microbiota in relation to BV.  Microbial diversity is often summarized by clustering microbiome profiles into community state types (CSTs).  In \cite{Ravel}, PCA based on the covariance matrix of relative abundances of the taxa was used to visualize membership in different CSTs.
+
+Vaginal microbiome data sets are often dominated by highly abundant {\it Lactobacillus} species along with a lot of rare taxa. In such cases where the scales of measurement vary widely, the general recommendation in the statistics literature is to base PCA on the correlation matrix (eg. \cite{Izenman} among others). In Figure 3, we present scree plots using both correlation and covariance based PCA. With correlation PCA, 61 PCs were required to explain 90\% of the variation, much larger than the 4 using covariance PCA.  This result is typical for sparse data which contain a small number of dominant values (abundant taxa) that explain the bulk of the variation in covariance PCA but not nearly so with correlation PCA. In supplementary materials (Additional File 3: Code S2), we provide R code for making similar scree plots where the color-coding is for user-specified ranges in cumulative amounts of variation explained; eg. $\leq 40\%$, $ \leq 70\%$, $ \leq 80\%$, and $\leq 90\%$ in Figure 3.  Coloring the screeplot in this manner is an easy step in exploring the number of PCs to use for further data visualization. 
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=12cm]{../Plots_ms/Ravel/Screeplot.png}
+%\caption{{\small Scree Plots for the data from Ravel et al. \cite{Ravel} using covariance and correlation for PCA }}
+%\label{fig:scree}
+%\end{figure}
+
+We conducted PCA using the correlation matrix. As discussed in the previous section, 3-dimensional interactive plots are available in EMPeror \cite{emperor}, we present such a plot  (Additional File 5: Figure S2)  where the points, shown as spheres, are colored by ethnicity and scaled by Nugent score category. However, the 3 correlation-based PCs for this data only explain about 19\% of the total variation. Similarly, the interactive biplot  (Additional File 6: Figure S3) shows the subjects represented by solid spheres and taxa within the same plot, with the twenty most prevalent taxa as transparent gray spheres whose diameter reflects taxa abundance; spheres representing the various \textit{Lactobacilli} species are close to each other. Individuals with low scores also have highly abundant \textit{Lactobacilli} and cluster together. While the interactivity and ability to color these plots is extremely useful, they are limited by visualization in up to 3 dimensions. 
+
+A parallel coordinates plot from EMPeror (Additional File 7: Figure S4). shows, on the left, 108 samples classified as CST IV, while on the right are the 286 from CSTs I--III and V,  dominated by various \textit{Lactobacilli} species. Sample scores on 10 individual PCs provide the coordinates, each sample is represented by a line which can be subset further by another covariate, or examined individually. The plots in EMPeror, though very useful in terms of interactivity and ability to visualize groupings according to covariate classes, are limited by the inability to examine results in more than 3 dimensions or for parallel coordinates plots for more than 10 dimensions.  
+
+Given these limitations, and the inability to assess the cumulative effect of PCs, we explored other types of plots. For the correlation PCA of these data, in Figure 4 we present plots of the inclusion of samples in the $1^{st}$ and $10^{th}$ decile as the number of PCs included is increased from 1 to 61.  Only the women who were present in at least one column are included in the plots with the samples grouped by race/ethnic covariate information. Of the 394 women, 176 are in the $1^{st}$ decile with 76 in the $10^{th}$ and 5 appearing in both. The $1^{st}$ decile is useful in defining a `center' or `average' taxa profile since proximity to the origin is a measure of how close a sample is to the mean measurements of the variables, here the taxa proportions. However, this can change as the number of PCs is changed. For instance, subject 250 in the last row would be considered `average' if only one PC is used, while Subject 359 in the top row is consistently identified as `average' when at least 10 PCs are used.  The $10^{th}$ decile helps to identify samples with more dissimilar taxa profiles, as they are farthest from the origin. In the plots, inclusion stabilizes as at least 31 PCs explaining $\approx$ 70\% of the variation are included. 
+
+Table \ref{table:deciles} displays a summary of how many samples are included if up to 5 PCs are used versus more than 45 with `Intersection' as the number of samples at the intersection of $\leq 5$ and $>45$ PCs used within that decile. The intersection is negligible for the first decile indicating that the samples with `average' profile change as the number of PCs changes. However, from the $10^{th}$ decile, the samples with dissimilar taxa profiles are more stable.
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=12cm]{../Plots_ms/Ravel/PAEth_sidebyside.pdf}
+%\caption{Inclusion in intensity deciles plots. $1^{st}$ decile indicates closest to the origin or average taxa profile while $10^{th}$ indicates farthest or most variable. The vertical lines correspond to the \% variation explained using the scree plot for correlation PCA in Figure 3. Note that inclusion appears to stabilize past 31 PCs corresponding to at least 70\% of variation} 
+%\label{fig:inclusion}
+%\end{figure}
+
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=12.7cm]{../Plots_ms/Ravel/InterestingTaxaWithLabels.png}
+%\caption{Taxa Intensity plots using correlation PCA for taxa that dominate the CSTs (I, II, III, IV) as found in \cite{Ravel} and 3 other taxa; note that colors are alternated for labels for this order}
+%\label{fig:TaxaIntensity}
+%\end{figure}
+
+%\begin{figure}[h]
+%\centering
+%\includegraphics[width=12.7cm]{../Plots_ms/Ravel/InterestingTaxaWithLabelsCov.png}
+%\caption{Taxa Intensity plots using covariance PCA for taxa that dominate the CSTs (I, II, III, IV) as found in \cite{Ravel} and 3 other taxa; note that colors are alternated for labels for this order}
+%\label{fig:CovTaxaIntensity}
+%\end{figure}
+
+
+Similarly, 5 women (S129, S224, S230, S288, S307) appear in both deciles and examining subject 230 who is representative of the 5, we see that she seems close to the origin when 1 or 2 PCs are used, but is found to be far from the origin when 16 PCs are used.  Inspection of the OTU table reveals that subject 230 has the largest and second largest proportions, respectively, of the relatively rare taxa \textit{Lactobacillales.1} and  \textit{Lactobacillus.3}.  Because her taxa values are close to the mean for more abundant taxa, she does not appear to be unusual when a small number of PCs are used, as the more abundant taxa load heavier on the first couple of PCs.  Her covariate information identifies her as Black, in the low Nugent score category, and with a microbiome dominated by \textit{L. gasseri}. The inclusion plots make identification of such subjects much easier compared to the other plots presented earlier.
+
+In Figure 5 we present a taxa intensity plot using correlation PCA for the subset of the 135 taxa that are identified in \cite{Ravel} as dominating the five CSTs and 3 other taxa, specifically, \textit{Ureaplasma}, \textit{Lactobacillus vaginalis}, and \textit{Rothia}; in Figure 6, the corresponding plot using covariance PCA is presented. In the latter, 4 PCs explain up to $90\%$ of the variation,  and the taxa that contribute the most to variability (darker colors) correspond to those used to define the CSTs. However, the abundance data (proportions multiplied by the total number of reads) indicate that the 4 most abundant taxa are the four species of \textit{Lactobacilli} that largely characterize CSTs I, II, III and V; the taxa that contribute the most to variability are confounded with the highly abundant taxa, as is often the case when covariance PCA is used. In fact, all the taxa from the list are among the most abundant. From Figure 5 we see that the intensity patterns for these taxa change as the number of PCs are increased with correlation PCA. 
+Of the additional taxa in Figure 5,  \textit{Ureaplasma}, associated with the diagnosis of BV, was detected in small proportions in 147 subjects with only 3 women having proportions greater than 10\% and one of those had a high Nugent score.  \textit{L. vaginalis}, although not one of the dominant \textit{Lactobacilli} species, is considered protective against BV and was detected in small proportions in about a third of the women (124), with only one having proportions greater than 10\%. \textit{Rothia} is a common oral bacterium rarely found in vaginal microbiome samples and among the six women with \textit{Rothia}, none had a high Nugent score.
+
+\subsection*{Vaginal Human Microbiome Project (VaHMP) data example}
+
+The second vaginal microbiome dataset is from the Human Microbiome Project II at Virginia Commonwealth University (VCU) \cite{Fettweis}. The data, from female volunteers recruited during regular visits to a VCU clinic, are obtained from vaginal swab samples and health questionnaires.  The full data set contains 1--8 visits on 4118 women, here we use a subset of 36 non-pregnant women who transitioned from a state of `Pre BV' to `BV' during consecutive visits that were 19 to 765 days apart with a median of 192 days; BV was diagnosed using the Amsel criterion. A total of $378$ taxa were identified; we used the R package \textit{DESeq} (\cite{Hausser}) to adjust for library size and to filter the data while keeping the two OTU tables together.  For the \textit{DESeq} library size factor estimation, a pseudo-count of $1$ was added to each element of the OTU tables, rows of the original OTU tables were then adjusted using the estimates. As in the previous example, taxa were filtered out if they were present in less than $5$ samples using the {\it genefilter} package in R, resulting in $p=94$ taxa for our analysis.  The final data are still sparse with a large number of zeros.
+
+Given data from two consecutive visits from the same women, we conduct CoIA after PCoA, with the distance as the Jensen-Shannon divergence metric \cite{Lin} computed with the R package {\it entropy} \cite{Hausser}. Computation of this metric uses logarithms of frequencies, which is problematic with zeros. We used the common solution that estimates OTU frequencies from normalized counts using a James-Stein type shrinkage estimator implemented in the function {\it KL.shrink()} in the {\it entropy} package. 
+
+In Figure 7, we present a plot of the distances from CoIA, using r=2 from eq. (\ref{eq:di}). The distances are calculated and plotted using the first two axes from the eigen-decomposition, with the coordinates from the appropriate entries of $\G_1$ and $\G_2$ in eq.(\ref{eq:G1G2}); the two axes together explain about 74\% of the variation. We highlight 5 women, subjects labeled 3, 8, 12, 21, and 26 to illustrate different patterns. Subjects 3, 12 and 21 cluster close together at the `Pre BV' state, and while 12 and 21 remain close in the `BV' state, subject 3 changes dramatically. Of the remaining two, 8 transitions in the opposite direction as 12 and 21, while 26 appears to be outlying in both states. The value of such a plot, code for which is in  (Additional File 8: Code S4), is in revealing potential clustering patterns and in highlighting subjects whose data could be explored further. Though this plot indicates changes in clustering, it should be noted that it does so based on 2 components explaining 74\% of the variation. 
+%\begin{figure}[h!]
+%\caption{\csentence{Co-inertia plot: the two axes are the first two eigenvectors, each line is for a woman with the line directed from the `Pre BV' to the `BV' state.}}
+%\includegraphics[width=12cm]{../Plots_ms/VampNoBVtoBV/NoBV_to_BV_Coinertia2.png}
+%\label{fig:coia}
+%\end{figure}
+One idea is to incorporate (cumulative) information to obtain a `distance-intensity' plot as $k$ or the number of axes increases and the cumulative percentage of the eigenvalues is closer to 90\%. Such a plot with the samples colored according to some important covariate class would give information about the nature of the change from one state to the next. 
+
+As mentioned earlier, PCoA and CoIA after PCoA are based on distances between samples. A possibility is to look for clusterings of women, eg. 12 and 21 vs 3, and examine their OTU profiles by looking at the OTU frequencies. Admittedly, examining proportions for 94 taxa is cumbersome, which once again leads back to examining intensity plots for the subjects based on PCA, and examining the taxa with unusually high loadings and their role in the subgroup of women.  
+
+Since there are two OTU tables, we now examine the taxa intensity profiles as the number of PCs increases for 8 taxa of interest for BV.  In Figure 8, the top line for each taxon is the intensity in the `Pre BV' state, while the second intensity profile is for the `BV' state; the coloring for the second state indicates whether the range of OTU counts increased or decreased according to paired t-test results at significance level 0.05 when comparing proportions in the pre-BV and BV states.  The top two taxa, the \textit{Lactobacilli} species are both indicative of a healthier vaginal microbiome, and the taxa intensity plots as well as the changes in proportions demonstrate this. For both states, these have intensities that place the taxa closer to the origin or average, and the proportion decreases significantly from Pre BV to BV for \textit{L.iners}. The next 5 have been suggested for use in diagnosis of BV. For most, the intensity profiles indicate a shift in the taxa from away from the origin (darker colors) in the Pre BV state to closer to the origin (lighter color) in the BV state, indicating that in the BV state, these taxa are part of the `average' profile; the one exception is \textit{Atopobium vaginae}.  In addition, the proportions increase significantly for 3 of the 5.  The $8^{th}$ taxon, \textit{Tenericutes OTU M1} is not diagnostic for BV but is considered to be strongly associated \cite{fettweis2014differences}; the profile for the `No BV' state indicates it is in the lower deciles or closer to the `average' taxa profiles while it moves closer to the upper deciles in the `BV' state, though there is no significant change in proportions.
+
+%\begin{figure}[h!]
+%\caption{\csentence{Intensity plots for some taxa of interest for BV. For each taxon, top rows have intensity for `Pre BV'  and bottom row has `BV' intensities, where red indicates an increase in the proportion of taxa while blue indicates a decrease. The decrease or increase was inferred using an 80\% confidence interval for the differences in proportions. }}
+%\hspace*{-.59cm}\includegraphics[width=15cm, height=8cm]{../Plots_ms/VAmpNoBVtoBV/NoBV_to_BV_intensityOfInterestOctober.png}
+%\label{fig:taxa_of_interest}
+%\end{figure}
+
+
+\section*{Discussion}
+
+Visualization of data is the first step in any data analysis, and visualization of sparse large dimensional data as contained in an OTU table obtained for microbiome studies presents special challenges. Specifically, visualization is restricted to lower-dimensions but examining only the lowest dimensional results for a large dimensional data set can result in loss of information. Given this possibility, we advocate using various plots that can help glean information at different levels. Species and taxa plots as well as biplots as available in \textit{adegraphics} and EMPeror, though very informative, can only be viewed in up to 3 dimensions. Parallel coordinate plots can be very useful especially if they are interactive as in EMPeror, but they can get cluttered. None of these can simultaneously also give a gauge of contribution loss or change as the dimension is changed, eg. as more PCs are added or removed. Intensity plots, though two-dimensional in their current formulation, are a means of assessing this change in contribution. As all these plots elucidate different aspects of the ordination analysis, we advocate using all of them to reveal patterns in the data.
+
+Consider our first example where the findings of  Ravel et al.  \cite{Ravel} indicate that the vaginal microbiome of Hispanic and Black women is not dominated by the \textit{Lactobacilli} species as compared to that of white and Asian women. Traditionally, a high proportion of \textit{Lactobacilli} was associated with `healthy' vaginal microflora, and  one of the goals in  \cite{Ravel} was characterizing composition of `normal' microbiome communities for each race/ethnic group. Subjects close to the origin in PCA plots can be viewed as women with `average' taxa profiles. Therefore examining taxa present in the majority of these samples is a step towards characterizing a race/ethnic group's  taxa profile.  These can serve as a benchmark of what is considered `normal' for each group.    
+
+Depending on the number of PCs used, the samples considered as `average' for each group appear to be different. In Figure 3, the $1^{st}$ decile plot illustrates that samples viewed as close to the origin based on $1-3$ PCs are different from ones that are close to the origin when a sufficient amount of variability is taken into account. Among Hispanic women, the women considered `average' using $1-3$ PCs are not `average' when using $61$ components, with the possible exception of subject $S142$. Table \ref{table:n_taxa} compares the number of women and taxa identified as having `average' taxa composition based on the $1-3$ and $61$ PCs.  
+
+
+
+The list of `average' taxa present in each race/ethnic group along with the number of women whose OTUs contain these taxa is tabulated in (Additional File 9: Table S1). For Asian, Black and White women, the taxa identified as `average' using 61 PCs corresponding to $90\%$ variability are a subset of the much longer list of taxa when $1-3$ PCs are used. For Hispanic women, $4$ taxa identified as `average' using $61$ PCs that do not appear when $1-3$ PCs are used. The $9$ taxa common to all groups using 61 PCs are  {\it Lactobacillales 5, Lactobacillales 2, Lactobacillus iners, Ureaplasma, Lactobacillus crispatus, Lactobacillus vaginalis,  Lactobacillus jensenii, Streptococcus} and {\it Lactobacillus gasseri}.  These are the core vaginal microbiome taxa, and their presence among the `average' taxa common to all ethnic groups is highlighted by our use of inclusion in $1^{st}$ decile plots. All these taxa, with the exception of \textit{Ureaplasma}, produce lactic acid \cite{Ravel}; bolstering the notion of conservation of lactic acid production regardless of species composition. Finally, despite the detrimental role \textit{Ureaplasma} may play in neonatal outcomes \cite{fettweis2014differences}, it has been estimated that the bacteria can be found in the vaginal microbiomes of 40--70\% of asymptomatic, sexually active women \cite{remington2011infectious}.
+
+Taxa intensity plots as presented in Figure 5 for the first example and Figure 8 for the second example illustrate that the position of a taxon relative to the others, ie. its ordination, can change as the number of PCs or dimension of the reduction changes.  Dimension should not be reduced so drastically that substantial information loss occurs. While deciding on how much reduction to settle on is a difficult question, it should not be driven by our inability to visualize in more than 3 dimensions. Plots for fixed dimensions give a snapshot of the relationships between taxa, while intensity plots give an idea of the changing contributions of each taxon. Examining intensity plots to see how many PCs `stabilize' the plots might be a good way of helping decide on the reduction of the dimension. Once that is decided on, plots that capture relationships in up to 3 dimensions can be examined. 
+
+\section*{Conclusions}
+For large-dimensional data, dimension reduction is necessary for any visualization. We develop intensity plots for both taxa and subjects that capture their changing positions as the dimension of the reduction is changed. We illustrate these using PCA, arguing that with very different magnitudes of abundance data, correlation PCA should be used. With covariance-based PCA for such data, the largest contributors to overall variation are the taxa with the largest abundances, thus confounding dissimilarity pattern with the abundance pattern. For longitudinal data from two or more time points, questions of how to reduce dimension remain. In addition to using techniques such as CoIA, examining the intensity plots for taxa or subjects in each time period also provides insight into their changing roles over time. While existing R packages and add-ons to the QIIME pipeline provide useful visualizations, augmenting those with intensity plots provides a glimpse into patterns that might potentially be missed or over-interpreted if additional dimensions are not included. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                          %%
+%% Backmatter begins here                   %%
+%%                                          %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{backmatter}
+
+\section*{List of abbreviations}
+
+ BV: bacterial vaginosis 
+ 
+ CA: correspondence analysis 
+ 
+ CoIA: co-inertia analysis 
+ 
+ CST: community state type 
+ 
+ MDS: multidimensional scaling 
+ 
+ NSCA: non-symmetric correspondence analysis 
+ 
+ OTU: Operational taxonomic unit  
+ 
+ PC: principal component 
+ 
+ PCA: principal components analysis 
+ 
+ PCoA: principal coordinate analysis 
+ 
+ VaHMP: Vaginal Human Microbiome Project 
+ 
+ VCU: Virginia Commonwealth University 
+
+\section*{Ethics approval and consent to participate}
+
+Neither data set came from trials of health care interventions. Data set 1 is publicly available. Data set 2 was generated as part of the VCU NIH  Microbiome II project. Specifically, the Institutional Review Board at Virginia Commonwealth University approved this study under protocol HM12169. 
+ 
+
+\section*{Consent for publication}
+  Not applicable.
+
+\section*{Availability of data and materials}
+
+There are 2 datasets supporting the conclusions of this article.
+
+The data from Ravel, et al. \cite{Ravel} is available at \url{http://www.pnas.org/content/suppl/2010/06/03/1002611107.DCSupplemental/st04.xlsx}.
+
+The sequencing reads for the 16S rRNA data from the VaHMP project have been deposited into NIH's Short Read Archive under BioProjectID PRJNA46877. Clinical diagnostic data is available through the Research Alliance for Microbiome Science (RAMS) Registry at Virginia Commonwealth University (\url{http://vmc.vcu.edu/ramsregistry}).
+
+The link for the BioProject is
+\url{https://www.ncbi.nlm.nih.gov/bioproject/PRJNA46877}
+
+The materials supporting the conclusions of this article are included within the article and its additional files.
+
+Project name: MB-Intensity-plots
+
+Project home page: \url{https://github.com/GenieJx/MB-Intensity-plots }
+
+Archived version:  \url{https://doi.org/10.5281/zenodo.167450} 
+
+Operating system: Platform independent
+
+Programming language: R
+
+\section*{Competing interests}
+  The authors declare that they have no competing interests.
+
+
+\section*{Funding}
+EJ, ES and SH were funded by NSF--DMS--1100615. EJ and SH were funded by a pilot grant from the Mountain West Consortium for Clinical and Translational Infrastructure grant from
+National Institute of General Medical Sciences (P20GM103440) - NIH.  AM was partially funded by the Office of Research and Economic Development at the University of Wyoming. All co-authors were at the U of WY when the work was conducted. 
+
+\section*{Authors' contributions}
+EJ conceptualized and programmed the initial visualizations; both the plots and interpretations were further developed with input from the other authors, in particular, AM. ES made the ordination methods accessible and clarified notation and output from \textit {ade4}, and extended CoIA using PCOA. EJ and ES conducted the data analyses, and with AM contributed to interpretation. SH developed the background ideas and context, constantly questioned every detail, and with input from others, wrote the manuscript. All authors read and approved the final manuscript.
+
+   
+\section*{Authors' information}
+E. Jackson, S. Huzurbazar, Department of Statistics, University of Wyoming.
+E. Smirnova, Department of Mathematical Sciences, University of Montana
+A. Menon, Shionogi, Inc. New Jersey, USA.
+
+\section*{Acknowledgements}
+The authors with to thank Jennifer Fettweis and Paul Brooks at VCU for useful insights and use of data, and Ed Bedrick at U of AZ for useful input and encouragement on the ideas in the manuscript.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                  The Bibliography                       %%
+%%                                                         %%
+%%  Bmc_mathpys.bst  will be used to                       %%
+%%  create a .BBL file for submission.                     %%
+%%  After submission of the .TEX file,                     %%
+%%  you will be prompted to submit your .BBL file.         %%
+%%                                                         %%
+%%                                                         %%
+%%  Note that the displayed Bibliography will not          %%
+%%  necessarily be rendered by Latex exactly as specified  %%
+%%  in the online Instructions for Authors.                %%
+%%                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% if your bibliography is in bibtex format, use those commands:
+\bibliographystyle{bmc-mathphys} % Style BST file (bmc-mathphys, vancouver, spbasic).
+\bibliography{Intro_article}      % Bibliography file (usually '*.bib' )
+% for author-year bibliography (bmc-mathphys or spbasic)
+% a) write to bib file (bmc-mathphys only)
+% @settings{label, options="nameyear"}
+% b) uncomment next line
+%\nocite{label}
+
+% or include bibliography directly:
+% \begin{thebibliography}
+% \bibitem{b1}
+% \end{thebibliography}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Figures                       %%
+%%                               %%
+%% NB: this is for captions and  %%
+%% Titles. All graphics must be  %%
+%% submitted separately and NOT  %%
+%% included in the Tex document  %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%
+%% Do not use \listoffigures as most will included as separate files
+
+
+\section*{Figures}
+
+
+
+\subsection* {Figure 1} Flow chart showing options for ordination methods for one OTU table.
+
+\subsection* {Figure 2} Relationship between transformed matrix $\tilde{\X}$ and sample scores, taxa loadings and singular values, using \textit{ade4} notation. 
+
+\subsection* {Figure 3} Scree Plots for the data from Ravel et al. \cite{Ravel} using covariance and correlation for PCA.
+
+\subsection* {Figure 4} Inclusion in intensity deciles plots. $1^{st}$ decile indicates closest to the origin or average taxa profile while $10^{th}$ indicates farthest or most variable. The vertical lines correspond to the \% variation explained using the scree plot for correlation PCA in Figure 3. Note that inclusion appears to stabilize past 31 PCs corresponding to at least 70\% of variation.
+
+\subsection* {Figure 5} Taxa Intensity plots using correlation PCA for taxa that dominate the CSTs (I, II, III, IV) as found in \cite{Ravel} and 3 other taxa; note that colors are alternated for labels for this order.
+
+\subsection* {Figure 6} Taxa Intensity plots using covariance PCA for taxa that dominate the CSTs (I, II, III, IV) as found in \cite{Ravel} and 3 other taxa; note that colors are alternated for labels for this order.
+
+\subsection* {Figure 7} Co-inertia plot: the two axes are the first two eigenvectors, each line is for a woman with the line directed from the `Pre BV' to the `BV' state.
+
+\subsection* {Figure 8} Intensity plots for some taxa of interest for BV. For each taxon, top rows have intensity for `Pre BV'  and bottom row has `BV' intensities, where red indicates an increase in the proportion of taxa while blue indicates a decrease. The decrease or increase was inferred using an 80\% confidence interval for the differences in proportions.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Tables                        %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Use of \listoftables is discouraged.
+%%
+\section*{Tables}
+
+\begin{table}[h]
+\caption{Number of samples included in deciles as up to 5 versus more than 45 PCs are used}
+\begin{tabular}{|l||c|c|c|c||c|c|c|c|}
+\hline
+ &\multicolumn{4}{c||}{ $1^{st}$ decile (near origin)}&\multicolumn{4}{c|}{$10^{th}$ decile (far from origin)}\\
+\cline{2-9}
+ &Total& 1--5 PCs&$>45$ PCs&Intersection&Total& 1--5 PCs& $>45$ PCs&Intersection\\
+\hline\hline
+Asian&44&17&15&0&21&15&16&11\\
+Black&43&29&4&0&21&13&6&4\\
+Hispanic&41&20&19&4&22&17&15&10\\
+White&48&28&9&0&12&9&8&5\\
+\hline
+\end{tabular}
+\label{table:deciles}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Comparison of the number of women and taxa identified as `average' for each ethnic group based on $1-3$ and $61$ PCs.}
+\begin{tabular}{|c|cc|cc|} \hline
+				&	\multicolumn{2}{c|}{$1-3$ PC} &\multicolumn{2}{c|}{$61$ PC}\\
+				&	number of women 	& number of taxa 	& number of women 	& number of taxa \\ \hline
+White			& $23$		&$95$	&$8$			&$26$	\\
+Hispanic			&$15$		&$78$	&$16$		&$38$	\\
+Black			&$28$		&$99$	&$4$			&$12$	\\
+Asian			&$14$		&$70$	&$12$		&$22$	\\ \hline
+number of taxa present&			&		&			&		\\
+in all ethnic groups	&			&$50$	&			&$9$		\\ \hline
+\end{tabular}
+\label{table:n_taxa}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                               %%
+%% Additional Files              %%
+%%                               %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section*{Additional Files}
+
+
+\subsection*{Additional File 1: Figure S1}  Correlation PCA was performed on the data from Ravel \cite{Ravel}.  We used the \textit{adegraphics} package to produce a scatter plot of the taxa loadings for the first two PCs and used the \textit{addhist} method to add univariate marginal distributions.
+
+\subsection*{Additional File 2: Code S1} Code to format single table {\it ade4} output and covariate information for interactive visualization in EMPeror through QIIME.  
+
+\subsection*{Additional File 3: Code S2}  Code to produce color-coded scree plots as in Figure 2.
+
+\subsection*{Additional File 4: Code S3} Code to take {\it ade4} output and generate intensity plots and `inclusion in an intensity decile plots'.
+
+
+\subsection*{Additional File 5: Figure S2}
+EMPeror: 3-d plot of 3 covariance-based PCs: colors represent ethnicity and scaling represents Nugent score category with green (Black), turquoise (Hispanic), coral (Asian) and pink (White) for sphere colorings.
+
+\subsection*{Additional File 6: Figure S3}
+EMPeror: Biplot with 3 PCs as axes,  20 most abundant taxa are shown and labeled along with all 394 samples.  Samples are colored by ethnicity and scaled by Nugent category, with low Nugent scores presented as larger spheres. 
+
+\subsection*{Additional File 7: Figure S4}
+EMPeror: Parallel coordinates plot on 10 PCs for individuals from CST IV on the left. Contrast this plot with the parallel coordinates plot on the right for individuals from all other CSTs, those dominated by \textit{Lactobacillus} species.
+
+\subsection*{Additional File 8: Code S4} Code to take {\it ade4} output and generate co-inertia plot.
+
+\subsection*{Additional File 9: Table S1}  Table of `average' taxa present in each race/ethnic group along with the number of women whose OTUs contain these taxa.
+
+
+
+
+\end{backmatter}
+\end{document}
