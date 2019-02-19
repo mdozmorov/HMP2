@@ -3,12 +3,15 @@ title: "16S and cytokines combination"
 output: pdf_document
 ---
 
+Check: Evaluation of integrative clustering methods for the analysis of multi-omics data
+https://academic.oup.com/bib/advance-article-abstract/doi/10.1093/bib/bbz015/5316049?redirectedFrom=fulltext
+
 ```{r setup, include=FALSE}
 rm(list=ls())
 knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning= FALSE)
 ```
 
-```{r}
+```{r, echo = FALSE}
 #token 35f0903098e0c9ef30faf7514e382e6bbd5c7179
 #BiocManager::install("HMP2Data")
 
@@ -23,6 +26,9 @@ library(magrittr)
 library(Hmisc)
 library(colorspace)
 library(ade4)
+library(vegan)
+library(gridExtra)
+
 source("ScreePlot.R")
 source("CIAPlots.R")
 
@@ -207,29 +213,146 @@ rownames(combined_16S_mtx) <- substr(
 all(rownames(combined_16S_mtx) == rownames(combined_16S_mtx))
 ```
 
-16S PCA on centered and scaled data
+We first center  16S data to work with PCA on the covariance matrix $\Sigma_X = Cov(X)$ and  then, to normalize the data, we divide each value of $X$ by the total variance: $\sqrt{\mbox{tr}(\Sigma_X)}$, which is equivalent to dividing the matrix by $\sqrt{\sum_{k=1}^r \lambda_k}$, where $\lambda_k$ are the eigevalues of $\Sigma_X$ and $r$ is the rank of $X$. This is the standartization approach used in multiple co-inertia analysis, which combines several tables. 
 
 ```{r}
-taxa.pca <- dudi.pca(combined_16S_mtx, scannf=FALSE, nf =61,
-                     center = TRUE, scale = TRUE)
+taxa_mtx <- scale(combined_16S_mtx, center = TRUE, scale = FALSE)
+#use fast trace computation formula: tr(A^B) = sum(A*B), where '*' operator refers to elemetwise product
+taxa_tr <- sum(taxa_mtx*taxa_mtx)/(dim(taxa_mtx)[1]-1)
+taxa_mtx <- taxa_mtx/sqrt(taxa_tr)
+taxa.pca <- dudi.pca(taxa_mtx, scannf=FALSE, nf =61,
+                     center = FALSE, scale = FALSE)
 breaks <- c(50, 70, 80, 90)
 scree.taxa.pca <- screePlot(taxa.pca, breaks) + 
            theme( panel.background = element_rect(fill = "white"),
                   panel.grid.major = element_line(colour = "grey90"))
-scree.taxa.pca
 ```
 
-Cytokines PCA on centered and scaled data
+Cytokines PCA on centered and scaled data, also normalized by the square root of total variances. 
 
 ```{r}
-cyto.pca <- dudi.pca(combined_Cyto_mtx, scannf=FALSE, nf =61,
-                     center = TRUE, scale = TRUE)
+cyto_mtx <- scale(combined_Cyto_mtx, center = TRUE, scale = TRUE)
+cyto_tr <- sum(cyto_mtx*cyto_mtx)/(dim(cyto_mtx)[1]-1)
+cyto_mtx <- cyto_mtx/sqrt(cyto_tr)
+cyto.pca <- dudi.pca(cyto_mtx, scannf=FALSE, nf =61,
+                     center = FALSE, scale = FALSE)
 breaks <- c(50, 70, 80, 90)
 scree.cyto.pca <- screePlot(cyto.pca, breaks) + 
            theme( panel.background = element_rect(fill = "white"),
                   panel.grid.major = element_line(colour = "grey90"))
-scree.cyto.pca
+
 ```
+
+```{r, echo = FALSE}
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend<-g_legend(scree.cyto.pca)
+
+scree.pca <- grid.arrange(arrangeGrob(scree.taxa.pca + theme(legend.position="none") + ggtitle("Taxa PCA"),
+                         scree.cyto.pca + theme(legend.position="none")+ ggtitle("Cytokines PCA"),
+                         nrow=1),
+             mylegend, nrow=2,heights=c(10, 1))
+scree.pca
+```
+
+```{r, echo = FALSE}
+p.taxa_pca <- PlotPCA(Res.pca = taxa.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "red")
+```
+
+```{r, echo = FALSE}
+p.cyto_pca <- PlotPCA(Res.pca = cyto.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "blue")
+```
+
+
+```{r, echo=FALSE}
+grid.arrange(p.taxa_pca+ggtitle("taxa samples PCA"), p.cyto_pca+ggtitle("cytokines samples PCA"), ncol = 2)
+```
+
+
+
+```{r, echo = FALSE}
+p.taxa_pca.sp <- PlotPCA(Res.pca = taxa.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "species",
+                     ptColor = "red")+
+              theme_bw() + geom_point(color = "red")
+```
+
+```{r, echo = FALSE}
+p.cyto_pca.sp <- PlotPCA(Res.pca = cyto.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "species",
+                     ptColor = "red")+
+              theme_bw() + geom_point(color = "blue")
+```
+
+
+```{r, echo=FALSE}
+grid.arrange(p.taxa_pca.sp+ggtitle("taxa variables PCA"), p.cyto_pca.sp+ggtitle("cytokines variables PCA"), ncol = 2)
+```
+
+
+
+```{r, echo=FALSE, eval = FALSE}
+# Individual tables analysis PCoA
+#calculate pairwise distances
+cyto_dist <- vegdist(combined_Cyto_mtx, method= "bray", binary_dist=F)
+
+n.pc = 3
+cyto_mds <- dudi.pco(cyto_dist, scannf = FALSE, nf = n.pc)
+#Samples Plots $l1
+p.cyto_mds <- PlotPCA(Res.pca = cyto_mds,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "blue")
+             
+```
+
+```{r, echo=FALSE, eval = FALSE}
+#calculate pairwise distances
+taxa_dist <- vegdist(combined_16S_mtx, method= "bray", binary_dist=F)
+
+n.pc = 3
+taxa_mds <- dudi.pco(taxa_dist, scannf = FALSE, nf = n.pc)
+#Samples Plots $l1
+p.taxa_mds <- PlotPCA(Res.pca = taxa_mds,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "red")
+```
+
+```{r, echo=FALSE, eval = FALSE}
+grid.arrange(p.taxa_mds+ggtitle("taxa PCoA"), p.cyto_mds+ggtitle("cytokines PCoA"), ncol = 2)
+```
+
 
 #Combine the tables using co-inertia
 
@@ -271,7 +394,7 @@ rownames(Samp.coin$Dissimilarity[Samp.coin$Dissimilarity$Quantile >= 0.9, ])
 
 Plots of  taxa weights 
 
-```{r}
+```{r, eval = FALSE}
 #Plot Canonical weights based on No BV taxa as reference point
 CW.coin.ca <- PlotCW(coin = coin, name="Coin", path = pathtoplots, color = "magenta",
             Title1 = "Canonical weights for taxa",
@@ -285,7 +408,25 @@ CW.coin.ca <- PlotCW(coin = coin, name="Coin", path = pathtoplots, color = "mage
 
 ```
 
+```{r}
+p.vars <- PlotCoinVars(coin, tab1 = "taxa", tab2 = "cytokines", 
+             Labels1 = NULL, #colnames(combined_16S_mtx)
+             Labels2 = colnames(combined_Cyto_mtx),
+             label = TRUE,PtSize=2,LblSize=2,
+             hjust = 0, vjust = -1.5)
+p.vars
+```
 
+Taxa that correspond to larger lodings: 324, 53, 263, 542, 290, 494, 57, 60
+
+```{r, echo = TRUE}
+taxa.inx <- c(324, 53, 263, 542, 290, 494, 57, 60)
+taxa.ids <- colnames(combined_16S_mtx)[taxa.inx]
+#look up these taxa ids in phyloqes
+tax_table(momspi16S_phyloseq)[rownames(tax_table(momspi16S_phyloseq)) %in% taxa.ids,c("Genus", "Species")]
+```
+
+ 
 
 ## Additional details about the method.
 

@@ -107,7 +107,7 @@ screePlot = function(First.pca, breaks) {
 PlotPCA <- function(Res.pca, Env_Var=NULL,axes = c(1,2), color=NULL, 
                     shape=NULL, UN= NULL, plot_type = c("species", "samples"),
                     Vect = FALSE, linetype=2, ArrLen=0.15, ArrAngle=20,
-                    pCaiv = FALSE, ptSize = 3){
+                    pCaiv = FALSE, ptSize = 3, ptColor = "blue"){
   
   percvar <- round((100 * Res.pca$eig/sum(Res.pca$eig))[axes],2)
   
@@ -159,7 +159,7 @@ PlotPCA <- function(Res.pca, Env_Var=NULL,axes = c(1,2), color=NULL,
   ord_map = aes_string(x = x, y = y, color = color, shape = shape, 
                        na.rm = TRUE)
   
-  p <- ggplot(df, ord_map) + geom_point(size = ptSize, na.rm = TRUE)
+  p <- ggplot(df, ord_map) + geom_point(size = ptSize, na.rm = TRUE, ptColor = ptColor)
   
   #Add percent var explained by axes on plot
   strivar = as(c(p$label$x, p$label$y), "character")

@@ -203,6 +203,52 @@ Plot <- Plot + ggtitle(Title) + scale_x_discrete(name = "Quantile") + scale_y_co
 
 return(Plot)
 }
+
+
+################################################################
+PlotCoinVars <- function(coin, tab1 = "Table1", tab2 = "Table2", 
+                         Labels1 = NULL, Labels2 = NULL, label = TRUE,
+                         hjust = 0, vjust = -1.5, PtSize = 2, LblSize = 2){
+
+  if(is.null(Labels1)){Labels1 <- 1:nrow(coin$co)} #tab1 labels
+  if(is.null(Labels2)){Labels2 <- 1:nrow(coin$li)} #tab2 labels
+  
+  #extract scores for each table
+  x = colnames(coin$co)[1]
+  y = colnames(coin$co)[2]
+  
+  #first table data
+  df1 <- data.frame(coin$co$Comp1, coin$co$Comp2, Labels1, rep(tab1, nrow(coin$co)))
+  rownames(df1) <- rownames(coin$co)
+  names(df1) <- c(x,y,  "Labels", "Table")
+  
+  #second table data
+  df2 <- data.frame(coin$li$Axis1, coin$li$Axis2, Labels2, rep(tab2, nrow(coin$li)))
+  rownames(df2) <- rownames(coin$li)
+  names(df2) <- c(x,y, "Labels", "Table")
+  
+  #conbine two tables for plotting
+  df <- rbind(df1, df2)
+  ord_map = aes_string(x = x, y = y, color = "Table", shape = "Table")
+  
+  CW_X <- ggplot(df, ord_map) + geom_point( size = PtSize) + 
+          scale_color_manual(values = c("red", "blue")) + theme_bw()+
+          xlab("") + ylab("") +theme(legend.title=element_blank())
+  
+  if(label == TRUE) { 
+      #Last thing: Fix order of labels
+      lbl_map = aes_string(x = x, y = y, label = "Labels")  
+      CW_X <- CW_X + geom_text(data = df, mapping = lbl_map, size = LblSize, vjust = vjust, hjust = hjust)
+  }
+  return(CW_X)
+}
+#####################################################################
+
+
+
+###################################################################
+#this plotting function corresponds to the same plot presented in co-inertia papers
+#but it contains improved graphics
 ###################################################################
 PlotCW <- function(coin, name, path, color = "red",
             Title1 = "Canonical Weights for the First Visit",
