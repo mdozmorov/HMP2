@@ -1,0 +1,425 @@
+---
+title: "16S and cytokines combination"
+output: pdf_document
+---
+
+
+```{r setup, include=FALSE}
+rm(list=ls())
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning= FALSE)
+```
+
+```{r, echo = FALSE}
+#token 35f0903098e0c9ef30faf7514e382e6bbd5c7179
+#BiocManager::install("HMP2Data")
+
+#devtools::install_github("jstansfield0/HMP2Data", auth_token = "35f0903098e0c9ef30faf7514e382e6bbd5c7179")
+
+library(HMP2Data)
+library(phyloseq)
+library(SummarizedExperiment)
+library(MultiAssayExperiment)
+library(dplyr)
+library(magrittr)
+library(Hmisc)
+library(colorspace)
+library(ade4)
+library(vegan)
+library(gridExtra)
+
+source("ScreePlot.R")
+source("CIAPlots.R")
+
+pathtoplots <- file.path(getwd(), "Plots/")#change me 
+  
+```
+# MOMS-PI
+
+The MOMS-PI data can be loaded as follows.
+
+## 16S data
+
+Load 16S data as a matrix, rows are Greengene IDs, columns are sample names:
+
+```{r, echo = TRUE}
+data("momspi16S_mtx")
+
+```
+
+Load the Greengenes taxonomy table as a matrix, rows are Greengene IDs, columns are taxonomic ranks:
+
+```{r, echo = TRUE}
+data("momspi16S_tax")
+# Check if Greengene IDs match between the 16S and taxonomy data
+# all.equal(rownames(momspi16S_mtx), rownames(momspi16S_tax)) # Should be TRUE
+```
+
+Load the 16S sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r, echo = TRUE}
+data("momspi16S_samp")
+
+# Check if sample names match between the 16S and sample data
+# all.equal(colnames(momspi16S_mtx), rownames(momspi16S_samp)) # Should be TRUE
+```
+
+The `momspi16S` function assembles those matrices into a `phyloseq` object.
+
+```{r, message=FALSE}
+momspi16S_phyloseq <- momspi16S()
+momspi16S_phyloseq
+```
+
+## Cytokine data
+
+The MOMS-PI cytokine data can be loaded as a matrix, rownames are cytokine names, colnames are sample names:
+
+```{r}
+data("momspiCyto_mtx")
+dim(momspiCyto_mtx)
+```
+
+Load the cytokine sample annotation data as a matrix, rows are samples, columns are annotations:
+
+```{r}
+data("momspiCyto_samp")
+dim(momspiCyto_samp)
+```
+
+
+
+```{r, echo=FALSE, eval = FALSE}
+#The function `momspiCytokines` will make a `SummarizedExperiment` containing cytokine data
+momspiCyto <- momspiCytokines()
+momspiCyto
+#The cytokine data contains data for `r nrow(momspiCyto)` cytokines over `r ncol(momspiCyto)` samples.
+```
+
+
+
+# Multi-table analysis
+
+Combine 16S and cytokines data
+
+```{r, echo = FALSE}
+#order both sets by visit number within a subject
+momspi16S_samp <- momspi16S_samp[
+  with(momspi16S_samp, order(subject_id, sample_body_site, visit_number)),
+] 
+
+momspiCyto_samp <- momspiCyto_samp[
+  with(momspiCyto_samp, order(subject_id, sample_body_site, visit_number)),
+] 
+
+#merge data by subject id and sample_body_site
+combined_samp <- merge(momspi16S_samp, momspiCyto_samp, 
+                       by = c("subject_id", "sample_body_site", 
+                        "project_name", "study_full_name",
+                        "subject_gender", "subject_race"))
+
+```
+
+```{r}
+#select data collected at the same visit
+combined_samp <- merge(momspi16S_samp, momspiCyto_samp, 
+                       by = c("subject_id", "sample_body_site", 
+                        "project_name", "study_full_name",
+                        "subject_gender", "subject_race",
+                        "visit_number"))
+
+table(combined_samp$visit_number)
+
+```
+
+Select first visit data, this assures that samples we look at were taken at the same time and at the first or second trimester. We don't have trimesters information in the data, but know it from the study design. 
+
+```{r, echo=FALSE}
+#select earliest visit from each subject
+#combined_samp.agg <- aggregate(visit_number ~  subject_id, data = combined_samp, min)
+#combined_samp <- merge(combined_samp.agg, combined_samp, by = c("subject_id"))
+#combined_samp <- combined_samp[combined_samp$visit_number %in% c(1,2),]
+```
+
+
+```{r, echo = TRUE}
+#select data from first visit only
+combined_samp <- combined_samp[combined_samp$visit_number ==  1,]
+
+table(combined_samp$sample_body_site)#all vaginal samples
+```
+
+The two objects we use for combined 16S and cytokines analysis are: 'combined_16S_mtx' and 'combined_Cyto_mtx'. Phylogenetic information for those OTUs is available in 'tax_table(combined_16S_phyloseq)' object. 
+
+```{r}
+#select 16S data for those samples
+combined_16S_phyloseq <- subset_samples(momspi16S_phyloseq, file %in% combined_samp$file.x)
+
+#get rif of otus that are not observed in any sample for this subset
+combined_16S_phyloseq %<>%
+    taxa_sums() %>%
+    is_greater_than(0) %>%
+    prune_taxa(combined_16S_phyloseq)
+
+combined_16S_mtx <- otu_table(combined_16S_phyloseq)
+
+combined_Cyto_mtx <- momspiCyto_mtx[, colnames(momspiCyto_mtx) %in% combined_samp$file.y ]
+dim(combined_Cyto_mtx)
+
+```
+
+We match the samples (contained in columns of both tables)  by the file names contained in colnames of each table.
+
+In 'combined_samp' object the names of matched files names for 16S data are recorded in column 'file.x' and for cytokines data in column 'file.y'. 
+
+```{r}
+#make sure all samples across 3 tables are in the same order
+combined_samp <- combined_samp[order(combined_samp$subject_id),]
+#reorder cytokines samples
+combined_Cyto_mtx <- combined_Cyto_mtx[,combined_samp$file.y]
+#reorder taxa samples
+combined_16S_mtx <- combined_16S_mtx[,combined_samp$file.x]
+```
+
+# Co-inertia analysis
+
+## Basics:
+
+\begin{itemize}
+
+	\item Let $Z_1$ and  $Z_2$ be 16S and cytokines tables respectively
+	\item rows: same $n$ women at first visit 
+	\item Columns: $p_1$ taxa, $p_2$ cytokines  
+	\item To visualize differences/similarities among taxa and cytokines data sets we view samples as  rows while taxa and cytokines as columns
+	\item PCA analysis for each table: $(X, Q_X, D)$ and $(Y, Q_Y, D)$
+	\item Co-inertia axes: $Y^TDX = K\Lambda^{1/2}A^T$ of decomposition $(Y^TDX,Q_X, Q_Y)$
+	\item Plot $F_X = XA $ and $F_Y = YK$
+\end{itemize}
+
+```{r}
+combined_16S_mtx <- t(combined_16S_mtx)
+combined_16S_mtx <- combined_16S_mtx/apply(combined_16S_mtx, 1, sum)
+combined_Cyto_mtx <- t(combined_Cyto_mtx)
+
+#cut the last 5 characters that correspond to the -omics type identifier
+rownames(combined_Cyto_mtx) <- substr(
+  rownames(combined_Cyto_mtx), 1,nchar(rownames(combined_Cyto_mtx))-5)
+
+rownames(combined_16S_mtx) <- substr(
+  rownames(combined_16S_mtx), 1,nchar(rownames(combined_16S_mtx))-5)
+
+#make sure all rownames match
+all(rownames(combined_16S_mtx) == rownames(combined_16S_mtx))
+```
+
+We first center  16S data to work with PCA on the covariance matrix $\Sigma_X = Cov(X)$ and  then, to normalize the data, we divide each value of $X$ by the total variance: $\sqrt{\mbox{tr}(\Sigma_X)}$, which is equivalent to dividing the matrix by $\sqrt{\sum_{k=1}^r \lambda_k}$, where $\lambda_k$ are the eigevalues of $\Sigma_X$ and $r$ is the rank of $X$. This is the standartization approach used in multiple co-inertia analysis, which combines several tables. 
+
+```{r}
+taxa_mtx <- scale(combined_16S_mtx, center = TRUE, scale = FALSE)
+#use fast trace computation formula: tr(A^B) = sum(A*B), where '*' operator refers to elemetwise product
+taxa_tr <- sum(taxa_mtx*taxa_mtx)/(dim(taxa_mtx)[1]-1)
+taxa_mtx <- taxa_mtx/sqrt(taxa_tr)
+taxa.pca <- dudi.pca(taxa_mtx, scannf=FALSE, nf =61,
+                     center = FALSE, scale = FALSE)
+```
+
+```{r, echo = FALSE}
+breaks <- c(50, 70, 80, 90)
+scree.taxa.pca <- screePlot(taxa.pca, breaks) + 
+           theme( panel.background = element_rect(fill = "white"),
+                  panel.grid.major = element_line(colour = "grey90"))
+```
+
+Cytokines PCA on centered and scaled data, also normalized by the square root of total variances. 
+
+```{r}
+cyto_mtx <- scale(combined_Cyto_mtx, center = TRUE, scale = TRUE)
+cyto_tr <- sum(cyto_mtx*cyto_mtx)/(dim(cyto_mtx)[1]-1)
+cyto_mtx <- cyto_mtx/sqrt(cyto_tr)
+cyto.pca <- dudi.pca(cyto_mtx, scannf=FALSE, nf =61,
+                     center = FALSE, scale = FALSE)
+
+```
+
+```{r, echo=FALSE}
+breaks <- c(50, 70, 80, 90)
+scree.cyto.pca <- screePlot(cyto.pca, breaks) + 
+           theme( panel.background = element_rect(fill = "white"),
+                  panel.grid.major = element_line(colour = "grey90"))
+
+```
+
+```{r, echo = FALSE, eval = FALSE}
+#extract legend
+#https://github.com/hadley/ggplot2/wiki/Share-a-legend-between-two-ggplot2-graphs
+g_legend<-function(a.gplot){
+  tmp <- ggplot_gtable(ggplot_build(a.gplot))
+  leg <- which(sapply(tmp$grobs, function(x) x$name) == "guide-box")
+  legend <- tmp$grobs[[leg]]
+  return(legend)}
+
+mylegend<-g_legend(scree.cyto.pca)
+
+scree.pca <- grid.arrange(arrangeGrob(scree.taxa.pca + theme(legend.position="none") + ggtitle("Taxa PCA"),
+                         scree.cyto.pca + theme(legend.position="none")+ ggtitle("Cytokines PCA"),
+                         nrow=1),
+             mylegend, nrow=2,heights=c(10, 1))
+
+```
+
+```{r, echo = FALSE}
+p.taxa_pca <- PlotPCA(Res.pca = taxa.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "red")
+```
+
+```{r, echo = FALSE}
+p.cyto_pca <- PlotPCA(Res.pca = cyto.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "blue")
+```
+
+
+```{r, echo=FALSE, eval = FALSE}
+grid.arrange(p.taxa_pca+ggtitle("taxa samples PCA"), p.cyto_pca+ggtitle("cytokines samples PCA"), ncol = 2)
+```
+
+
+
+```{r, echo = FALSE}
+p.taxa_pca.sp <- PlotPCA(Res.pca = taxa.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "species",
+                     ptColor = "red")+
+              theme_bw() + geom_point(color = "red")
+```
+
+```{r, echo = FALSE}
+p.cyto_pca.sp <- PlotPCA(Res.pca = cyto.pca,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "species",
+                     ptColor = "red")+
+              theme_bw() + geom_point(color = "blue")
+```
+
+
+```{r, echo=FALSE, eval = FALSE}
+grid.arrange(p.taxa_pca.sp+ggtitle("taxa variables PCA"), p.cyto_pca.sp+ggtitle("cytokines variables PCA"), ncol = 2)
+```
+
+
+
+```{r, echo=FALSE, eval = FALSE}
+# Individual tables analysis PCoA
+#calculate pairwise distances
+cyto_dist <- vegdist(combined_Cyto_mtx, method= "bray", binary_dist=F)
+
+n.pc = 3
+cyto_mds <- dudi.pco(cyto_dist, scannf = FALSE, nf = n.pc)
+#Samples Plots $l1
+p.cyto_mds <- PlotPCA(Res.pca = cyto_mds,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "blue")
+             
+```
+
+```{r, echo=FALSE, eval = FALSE}
+#calculate pairwise distances
+taxa_dist <- vegdist(combined_16S_mtx, method= "bray", binary_dist=F)
+
+n.pc = 3
+taxa_mds <- dudi.pco(taxa_dist, scannf = FALSE, nf = n.pc)
+#Samples Plots $l1
+p.taxa_mds <- PlotPCA(Res.pca = taxa_mds,  Env_Var = data.frame(groups), 
+                     axes = c(1,2), 
+                     color = NULL,
+                     shape= NULL,
+                     plot_type = "samples",
+                     ptColor = "blue")+
+              theme_bw() + geom_point(color = "red")
+```
+
+```{r, echo=FALSE, eval = FALSE}
+grid.arrange(p.taxa_mds+ggtitle("taxa PCoA"), p.cyto_mds+ggtitle("cytokines PCoA"), ncol = 2)
+```
+
+
+#Combine the tables using co-inertia
+
+```{r}
+coin <- coinertia(taxa.pca, cyto.pca, scannf = FALSE, nf = 2)
+```
+
+RV coefficient -- measure of similarity between 16S and cytokines tables
+
+```{r}
+RV<- coin$RV
+RV
+```
+
+\newpage
+
+Plots of  variables  weights: interpretation is similar to interpretation of PCA variables plots. Cytokines (blue) projected in the same direction as taxa (red) have more similarity. 
+
+```{r, echo= FALSE}
+p.vars <- PlotCoinVars(coin, tab1 = "taxa", tab2 = "cytokines", 
+             Labels1 = NULL, #colnames(combined_16S_mtx)
+             Labels2 = colnames(combined_Cyto_mtx),
+             label = TRUE,PtSize=2,LblSize=2,
+             hjust = 0, vjust = -1.5)
+p.vars
+```
+
+Taxa that correspond to larger lodings: 324, 53, 263, 542, 290, 494, 57, 60
+
+```{r, echo = TRUE}
+taxa.inx <- c(324, 53, 263, 542, 290, 494, 57, 60)
+taxa.ids <- colnames(combined_16S_mtx)[taxa.inx]
+#look up these taxa ids in phyloqes
+tax_table(momspi16S_phyloseq)[rownames(tax_table(momspi16S_phyloseq)) %in% taxa.ids,c("Genus", "Species")]
+```
+
+\newpage
+
+Sample scores plots. Length of the arrows indicates the samples that have larger differences across two data sets.
+
+```{r, echo= FALSE}
+
+Samp.coin <- CoinertiaPlot(coin = coin, 
+                  Quant = 0.9, Prop.Var = 0.9,
+                  Env_Var=NULL, 
+                  Env_Var2 = NULL,
+                  color=NULL, shape=NULL,
+                  PtColor= "magenta",PtShape=1, PtSize=1,
+                  linetype=1, LblSize=3, 
+                  LabelsOpt = NULL,
+                  ArrLen=0.10, ArrAngle=20)
+
+Samp.coin$p + theme_bw()
+
+```
+
+Samples with largest difference across two data sets. Samples with arrow lengths in 0.9 quatile are chosen. 
+
+```{r}
+#Taxa with major differences across two sets
+rownames(Samp.coin$Dissimilarity[Samp.coin$Dissimilarity$Quantile >= 0.9, ])
+```
+
+
+ 
