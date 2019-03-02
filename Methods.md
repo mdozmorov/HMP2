@@ -12,9 +12,9 @@ All publicly available data were downloaded from the Human Microbiome Project Da
         - Per instructions, add Aspera path to `.bash_profile`: `export PATH=/Users/mdozmorov/Applications/Aspera\ CLI/bin:$PATH`; for Linux: `export PATH=/home/mdozmorov/.aspera/cli/bin:$PATH`
     - Clone https://github.com/ihmpdcc/hmp_client, `bin/manifest2ascp.py` from here will be used to create Aspera download script
         - Generic example: `./manifest2ascp.py --manifest=hmp_cart_t2d_june_12_2017.tsv --user=username --password=password --ascp_path=/path/to/ascp/bin/ascp --ascp_options="-l 200M" > ascp-commands.sh`
-        - 16S: `./hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_41c0aca569.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S.sh`; for Linux `python2 hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_41c0aca569.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/home/mdozmorov/.aspera/cli/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S.sh`
-            - In `ascp-commands_biom_16S`, replace `Aspera CLI` to `Aspera\ CLI`
-            - `chmod +x ascp-commands_biom_16S.sh` and `./ascp-commands_biom_16S.sh` will download files into `ptb` folder. 11/09/2018
+        - 16S: `./hmp_client/bin/manifest2ascp.py --manifest=data.MOMS-PI/hmp_cart_2ae82fd042.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`; for Linux `python2 hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_41c0aca569.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/home/mdozmorov/.aspera/cli/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`
+            - In `ascp-commands_biom_16S_MOMS-PI.sh`, replace `Aspera CLI` to `Aspera\ CLI`
+            - `chmod +x ascp-commands_biom_16S_MOMS-PI.sh` and `./ascp-commands_biom_16S_MOMS-PI.sh` will download files into `ptb` folder. 11/09/2018
        - host_cytokine: `./hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_b10350603.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_host_cytokine.sh`
 
 
@@ -25,7 +25,8 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 - Files/Matrix Type: "wgs_community", "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
 - Files/Format: "FASTQ" - 6,208 files
 - Files/Format: "raw" - 6,161 files
-- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.T2D/hmp_cart_50199a791.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_T2D.sh`
+- Download 16S data into `t2d` folder: `./hmp_client/bin/manifest2ascp.py --manifest=data.T2D/hmp_cart_186fbec36f.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_T2D.sh`
+- After download: `cd t2d; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; rm otu_table.biom; cd ..`
 
 ## IBDMBD notes
 

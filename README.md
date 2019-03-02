@@ -25,6 +25,8 @@
 
 - `read_ibd_t2d_biom.rda` - Make phyloseq objects for T2D and IBD data from biom files
 
+- `preprocess_T2D_16S.Rmd` - HMP2Data T2D BIOM processing
+
 ## host_cytokine
 
 - [Samples/Studies: MOMS-PI, Files/Matrix Type: "host_cytokine" - selects 872 files](https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%22host_cytokine%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D), Downloaded 11/09/2018
@@ -45,10 +47,8 @@
     - `EDA_biom_16S_122123.Rmd` - Analysis of the `hmp2_phyloseq_16S_momspi.rda` `phyloseq` object created 12-23-2018 by `preprocess_phyloseq_16S.Rmd`, NAs replaced by zeros. Summarized the data by genus and saves it as `hmp2_phyloseq_16S_momspi_genus.rda` object. MD, 12-23-2018.
 
 - `data`
+    - `gg_13_5_taxonomy.txt.gz` - Greengenes taxonomy, downloaded from http://greengenes.secondgenome.com/downloads/database/13_5, 03-02-2019
     - `biom_nonreadable.tsv` - 63 nonreadable `.biom` files, created in `preprocess_biom_16S.Rmd::problemFiles`
-    - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 16S `.biom` files, 11/09/2018
-    - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 16S `.biom` files, 11/09/2018
-    - `hmp_cart_metadata_26015b0c41_extended.tsv` - extended metadata for 9107 readable 16S `.biom` files, added slots from .biom files (available on-demand)
     - `downloaded_ascp.txt` - list of files downloaded with `ascp-commands_biom_16S.sh`, 11/09/2018
 
     - `hmp_cart_b10350603.tsv` - manifest for all 872 cytokine `.txt` files, 12/13/2018
@@ -56,9 +56,14 @@
     - `hmp2_phyloseq_16s_T2D.rda` - phyloseq object for T2D data
     - `hmp2_phyloseq_16s_ibd.rda` - phyloseq object for IBD data
 
+- `data.MOMS-PI`
+    - `hmp_cart_2ae82fd042.tsv` - manifest for all 9,170 16S `.biom` files, 03-02-2019
+    - `hmp_cart_metadata_a84257946b.tsv` - metadata for all 9,170 16S `.biom` files, 03-02-2019
+
 - `data.T2D`
-    - `hmp_cart_50199a791.tsv` - manifest for 1,418 `biom` files for T2D study, 12-25-2018.
-    - `hmp_cart_metadata_12019e21a0.tsv` - metadata for 1,418 `biom` files for T2D study, 12-25-2018.
+    - `ascp-commands_biom_16S_T2D.sh` - download 2,208 16S BIOM files, 03-02-2019
+    - `hmp_cart_186fbec36f.tsv` - manifest, 03-02-2019
+    - `hmp_cart_metadata_12019e21a0.tsv` - metadata, 03-02-2019
 
 - `data.IBD`
     - `hmp_cart_2bcd863c2e.tsv` - manifest for 1,466 `biom` files for IBD study, 12-25-2018.
