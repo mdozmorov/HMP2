@@ -67,8 +67,9 @@
     - `hmp_cart_metadata_12019e21a0.tsv` - metadata, 03-02-2019
 
 - `data.IBD`
-    - `hmp_cart_7739731395.tsv` - manifest for all 9,170 16S `.biom` files, 03-02-2019
-    - `hmp_cart_metadata_cba5e8bfe.tsv`- metadata for all 9,170 16S `.biom` files, 03-02-2019
+    - `ascp-commands_biom_16S_IBD.sh` - download 8,101 16S BIOM files, 03-02-2019
+    - `hmp_cart_7739731395.tsv` - manifest, 03-02-2019
+    - `hmp_cart_metadata_cba5e8bfe.tsv`- metadata, 03-02-2019
 
 - `scripts`
     - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
