@@ -45,7 +45,7 @@
     - `EDA_biom_16S_122123.Rmd` - Analysis of the `hmp2_phyloseq_16S_momspi.rda` `phyloseq` object created 12-23-2018 by `preprocess_phyloseq_16S.Rmd`, NAs replaced by zeros. Summarized the data by genus and saves it as `hmp2_phyloseq_16S_momspi_genus.rda` object. MD, 12-23-2018.
 
 - `data`
-    - `biom_nonreadable.tsv` - 63 nonreadable `.biom` files, created in `EDA_biom.Rmd::problemFiles`
+    - `biom_nonreadable.tsv` - 63 nonreadable `.biom` files, created in `preprocess_biom_16S.Rmd::problemFiles`
     - `hmp_cart_41c0aca569.tsv` - manifest for all 9,170 16S `.biom` files, 11/09/2018
     - `hmp_cart_metadata_26015b0c41.tsv` - metadata for all 9,170 16S `.biom` files, 11/09/2018
     - `hmp_cart_metadata_26015b0c41_extended.tsv` - extended metadata for 9107 readable 16S `.biom` files, added slots from .biom files (available on-demand)
