@@ -2,7 +2,7 @@ library(dplyr)
 options(stringsAsFactors = FALSE)
 
 # Make taxonomy table
-green <- read.table("../data/gg_13_5_taxonomy.txt.gz", sep = "\t")
+green <- read.table("data/gg_13_5_taxonomy.txt.gz", sep = "\t")
 # Get taxonomy column
 mtx_tax_table <- as.character(green$V2)
 # Split the combined strings, and combine them into data frame
@@ -31,4 +31,4 @@ colnames(mtx_tax_table) <- c("Kingdom", "Phylum", "Class", "Order", "Family", "G
 rownames(mtx_tax_table) <- green$V1 # Greengene IDs
 mtx_tax_table[1:5, 1:5]
 
-save(mtx_tax_table, file = "../data/gg_13_5_taxonomy.rda")
+save(mtx_tax_table, file = "data/gg_13_5_taxonomy.rda")

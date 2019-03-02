@@ -72,7 +72,7 @@
     - `hmp_cart_metadata_cba5e8bfe.tsv`- metadata, 03-02-2019
 
 - `scripts`
-    - `greengenes.R` - process `data/gg_13_5_taxonomy.txt.gz` into `mtx_tax_table` object
+    - `greengenes.R` - process `data/gg_13_5_taxonomy.txt.gz` into `mtx_tax_table` object. 03-02-2019
     - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
     - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
     
