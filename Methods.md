@@ -21,20 +21,22 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 ## T2D notes
 
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "T2D"
-- Files/Matrix Type: "16s_community" selects 1,418 `.biom` files
+- Format: "Biological Observation Matrix" 
+- Download 16S data into `t2d` folder: `./hmp_client/bin/manifest2ascp.py --manifest=data.T2D/hmp_cart_186fbec36f.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_T2D.sh`
+- After download: `cd t2d; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; rm otu_table.biom; cd ..`
+
 - Files/Matrix Type: "wgs_community", "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
 - Files/Format: "FASTQ" - 6,208 files
 - Files/Format: "raw" - 6,161 files
-- Download 16S data into `t2d` folder: `./hmp_client/bin/manifest2ascp.py --manifest=data.T2D/hmp_cart_186fbec36f.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_T2D.sh`
-- After download: `cd t2d; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; rm otu_table.biom; cd ..`
 
 ## IBDMBD notes
 
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "IBDMBD"
-- Files/Matrix Type: "16s_community" selects 86 `.biom` files. But Files/Format: "Biological Observation Matrix" (also, Files/Type: "abundance_matrix") selects 1,466 `.biom` files
+- Format: "Biological Observation Matrix" 
+- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_7739731395.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`
+
 - Files/Matrix Type: "wgs_community" selects 1,380 `.biom` files. 
 - Files/Type: "wgs_raw_seq_set" selects 1,388 `.tar` files
 - Files/Matrix Type: "host_cytokine", "host_transcriptome", "microb_metatranscriptome" - not available
 - Files/Format: "FASTQ" - 2,686 files
 - Files/Format: "raw" - 6,161 files
-- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_2bcd863c2e.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`
