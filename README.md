@@ -57,8 +57,9 @@
     - `hmp2_phyloseq_16s_ibd.rda` - phyloseq object for IBD data
 
 - `data.MOMS-PI`
-    - `hmp_cart_2ae82fd042.tsv` - manifest for all 9,170 16S `.biom` files, 03-02-2019
-    - `hmp_cart_metadata_a84257946b.tsv` - metadata for all 9,170 16S `.biom` files, 03-02-2019
+    - `ascp-commands_biom_16S_MOMS-PI.sh` - download 2,208 16S BIOM files, 03-02-2019
+    - `hmp_cart_2ae82fd042.tsv` - manifest, 03-02-2019
+    - `hmp_cart_metadata_a84257946b.tsv` - metadata, 03-02-2019
 
 - `data.T2D`
     - `ascp-commands_biom_16S_T2D.sh` - download 2,208 16S BIOM files, 03-02-2019
@@ -66,8 +67,8 @@
     - `hmp_cart_metadata_12019e21a0.tsv` - metadata, 03-02-2019
 
 - `data.IBD`
-    - `hmp_cart_2bcd863c2e.tsv` - manifest for 1,466 `biom` files for IBD study, 12-25-2018.
-    - `hmp_cart_metadata_35c73e52bd.tsv`- metadata for 1,466 `biom` files for IBD study, 12-25-2018.
+    - `hmp_cart_7739731395.tsv` - manifest for all 9,170 16S `.biom` files, 03-02-2019
+    - `hmp_cart_metadata_cba5e8bfe.tsv`- metadata for all 9,170 16S `.biom` files, 03-02-2019
 
 - `scripts`
     - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
