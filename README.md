@@ -57,14 +57,14 @@
     - `hmp2_phyloseq_16s_ibd.rda` - phyloseq object for IBD data
 
 - `data.MOMS-PI`
-    - `ascp-commands_biom_16S_MOMS-PI.sh` - download 2,208 16S BIOM files, 03-02-2019
-    - `hmp_cart_2ae82fd042.tsv` - manifest, 03-02-2019
-    - `hmp_cart_metadata_a84257946b.tsv` - metadata, 03-02-2019
+    - `ascp-commands_biom_16S_MOMS-PI.sh` - download 9170 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-02-2019
+    - `hmp_cart_16d395b515.tsv` - manifest, 03-0e-2019
+    - `hmp_cart_metadata_4568fb1008.tsv` - metadata, 03-03-2019
 
 - `data.T2D`
-    - `ascp-commands_biom_16S_T2D.sh` - download 2,208 16S BIOM files, 03-02-2019
-    - `hmp_cart_186fbec36f.tsv` - manifest, 03-02-2019
-    - `hmp_cart_metadata_12019e21a0.tsv` - metadata, 03-02-2019
+    - `ascp-commands_biom_16S_T2D.sh` - download 2308 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-02-2019
+    - `hmp_cart_9df8de87d3.tsv` - manifest, 03-03-2019
+    - `hmp_cart_metadata_44df19f9ef.tsv` - metadata, 03-03-2019
 
 - `data.IBD`
     - `ascp-commands_biom_16S_IBD.sh` - download 572 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-03-2019
