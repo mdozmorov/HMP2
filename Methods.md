@@ -21,7 +21,7 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 ## T2D notes
 
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "T2D"
-- Format: "Biological Observation Matrix" 
+- Format: Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community 
 - Download 16S data into `t2d` folder: `./hmp_client/bin/manifest2ascp.py --manifest=data.T2D/hmp_cart_186fbec36f.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_T2D.sh`
 - After download: `cd t2d; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; rm otu_table.biom; cd ..`
 
@@ -32,7 +32,7 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 ## IBDMBD notes
 
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "IBDMBD"
-- Format: "Biological Observation Matrix" 
+- Format: Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community
 - Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_2246151709.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`
 
 - Files/Matrix Type: "wgs_community" selects 1,380 `.biom` files. 
