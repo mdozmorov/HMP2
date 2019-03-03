@@ -14,7 +14,8 @@ All publicly available data were downloaded from the Human Microbiome Project Da
         - Generic example: `./manifest2ascp.py --manifest=hmp_cart_t2d_june_12_2017.tsv --user=username --password=password --ascp_path=/path/to/ascp/bin/ascp --ascp_options="-l 200M" > ascp-commands.sh`
         - 16S: `./hmp_client/bin/manifest2ascp.py --manifest=data.MOMS-PI/hmp_cart_2ae82fd042.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`; for Linux `python2 hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_41c0aca569.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/home/mdozmorov/.aspera/cli/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`
             - In `ascp-commands_biom_16S_MOMS-PI.sh`, replace `Aspera CLI` to `Aspera\ CLI`
-            - `chmod +x ascp-commands_biom_16S_MOMS-PI.sh` and `./ascp-commands_biom_16S_MOMS-PI.sh` will download files into `ptb` folder. 11/09/2018
+            - `chmod +x ascp-commands_biom_16S_MOMS-PI.sh` and `./ascp-commands_biom_16S_MOMS-PI.sh` will download files into `ptb` folder.
+            - After download: `cd ptb; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
        - host_cytokine: `./hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_b10350603.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_host_cytokine.sh`
 
 
@@ -34,6 +35,8 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "IBDMBD"
 - Format: Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community
 - Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_2246151709.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`
+- Manual step: neet to change "mdozmorov@aspera2.ihmpdcc.org" to "mdozmorov@aspera.ihmpdcc.org" in the `ascp-commands_biom_16S_IBD.sh` script
+- After download: `cd ibd; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
 
 - Files/Matrix Type: "wgs_community" selects 1,380 `.biom` files. 
 - Files/Type: "wgs_raw_seq_set" selects 1,388 `.tar` files
