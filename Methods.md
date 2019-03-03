@@ -1,8 +1,8 @@
 # Methods
 
-All publicly available data were downloaded from the Human Microbiome Project Data Portal (https://portal.hmpdacc.org/) on 11/09/2018. Specifically, "Project: Integrative Human Microbiome Project" was selected, followed by the selection of the study ("MOMS-PI" - Multi-Omics Microbiome Study - Pregnancy Initiative, "IBDMBD" - Inflammatory Bowel Disease Multi-Omics Data, "T2D" - Type 2 Diabetes Mellitus). Subsequent filters were applied to obtain "16s_community" data in BIOM format [@Buttigieg:2016aa], "host_cytokine" data in text format, sample annotation text files. The data were downloaded using Aspera client for Mac v.3.8.1. BIOM files were processed using the `biomformat` v.1.10.0 and `phyloseq` v.1.26.1 R packages. Custom scripts were used to convert the data into the `phyloseq` object.
+All publicly available data were downloaded from the Human Microbiome Project Data Portal (https://portal.hmpdacc.org/) on 11/09/2018. Specifically, "Project: Integrative Human Microbiome Project" was selected, followed by the selection of the study ("MOMS-PI" - Multi-Omics Microbiome Study - Pregnancy Initiative, "IBDMBD" - Inflammatory Bowel Disease Multi-Omics Data, "T2D" - Type 2 Diabetes Mellitus). Subsequent filters were applied to obtain "16s_community" data in "Biological Observation Matrix" (BIOM) format [@Buttigieg:2016aa], "host_cytokine" data in text format, sample annotation text files. The data were downloaded using Aspera client for Mac v.3.8.1. BIOM files were processed using the `biomformat` v.1.10.0 and `phyloseq` v.1.26.1 R packages. Custom scripts were used to convert the data into the `phyloseq` object.
 
-## Downloading data https://portal.hmpdacc.org
+## Downloading MOMS-PI data https://portal.hmpdacc.org
 
 - Install Aspera client to download files
     - Register your `username` and `password` at https://www.hmpdacc.org/hmp/register/ (approval takes time)
@@ -33,7 +33,7 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "IBDMBD"
 - Format: "Biological Observation Matrix" 
-- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_7739731395.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`
+- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.IBD/hmp_cart_2246151709.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_IBD.sh`
 
 - Files/Matrix Type: "wgs_community" selects 1,380 `.biom` files. 
 - Files/Type: "wgs_raw_seq_set" selects 1,388 `.tar` files

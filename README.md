@@ -67,9 +67,9 @@
     - `hmp_cart_metadata_12019e21a0.tsv` - metadata, 03-02-2019
 
 - `data.IBD`
-    - `ascp-commands_biom_16S_IBD.sh` - download 8,101 16S BIOM files, 03-02-2019
-    - `hmp_cart_7739731395.tsv` - manifest, 03-02-2019
-    - `hmp_cart_metadata_cba5e8bfe.tsv`- metadata, 03-02-2019
+    - `ascp-commands_biom_16S_IBD.sh` - download 572 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-03-2019
+    - `hmp_cart_2246151709.tsv` - manifest, 03-03-2019
+    - `hmp_cart_metadata_14ca36907.tsv`- metadata, 03-03-2019
 
 - `scripts`
     - `greengenes.R` - process `data/gg_13_5_taxonomy.txt.gz` into `mtx_tax_table` object. 03-02-2019
