@@ -1,5 +1,5 @@
 ---
-title: "T2D data processing"
+title: "MOMS-PI data processing"
 author: "Mikhail Dozmorov"
 date: "`r Sys.Date()`"
 output:
@@ -34,17 +34,17 @@ load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts
 # Data folder
 dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
 # File names
-fileNameIn1  <- "data.T2D/hmp_cart_9df8de87d3.tsv"          # Manifest
-fileNameIn2  <- "data.T2D/hmp_cart_metadata_44df19f9ef.tsv" # Metadata
-fileNameOut1 <- "data.T2D/files_16S_unreadable.txt"         # Unreadable 16S files
+fileNameIn1  <- "data.MOMS-PI/hmp_cart_16d395b515.tsv"          # Manifest
+fileNameIn2  <- "data.MOMS-PI/hmp_cart_metadata_4568fb1008.tsv" # Metadata
+fileNameOut1 <- "data.MOMS-PI/files_16S_unreadable.txt"         # Unreadable 16S files
 # Files for matching filenames
-fileNameOut2 <- "data.T2D/files_16S_actual_only.txt"        # Downloaded, but no annotations
-fileNameOut3 <- "data.T2D/files_16S_listed_only.txt"        # Annotated, but not downloaded
-fileNameOut4 <- "data.T2D/files_16S_actual_and_listed.txt"  # Downloaded AND Annotated
+fileNameOut2 <- "data.MOMS-PI/files_16S_actual_only.txt"        # Downloaded, but no annotations
+fileNameOut3 <- "data.MOMS-PI/files_16S_listed_only.txt"        # Annotated, but not downloaded
+fileNameOut4 <- "data.MOMS-PI/files_16S_actual_and_listed.txt"  # Downloaded AND Annotated
 # Files for saving the results
-fileNameOut5 <- "data.T2D/T2D16S_mtx.rda"  # BIOM data
-fileNameOut6 <- "data.T2D/T2D16S_samp.rda" # Annotation data
-fileNameOut7 <- "data.T2D/T2D16S_tax.rda"  # Taxonomy data
+fileNameOut5 <- "data.MOMS-PI/MOMSPI16S_mtx.rda"  # BIOM data
+fileNameOut6 <- "data.MOMS-PI/MOMSPI16S_samp.rda" # Annotation data
+fileNameOut7 <- "data.MOMS-PI/MOMSPI16S_tax.rda"  # Taxonomy data
 ```
 
 ```{r}
@@ -67,7 +67,7 @@ mtx1 <- mtx1[!(mtx1$file_name == "otu_table.biom"), ]
 
 ```{r}
 # All downloaded files
-files <- list.files(file.path(dataDir, "t2d"), pattern = "biom", full.names = TRUE)
+files <- list.files(file.path(dataDir, "ptb"), pattern = "biom", full.names = TRUE)
 # Set progress bar
 pb <- txtProgressBar(min = 1, max = length(files), style = 3)
 
@@ -147,31 +147,33 @@ all.equal(rownames(mtx_biom), rownames(mtx_tax_table))
 
 ```{r}
 # Rename matrices for the package
-T2D16S_mtx  <- mtx_biom
-T2D16S_samp <- mtx1
-T2D16S_tax  <- mtx_tax_table
+MOMSPI16S_mtx  <- mtx_biom
+MOMSPI16S_samp <- mtx1
+MOMSPI16S_tax  <- mtx_tax_table
 # Save them
-save(T2D16S_mtx,  file = fileNameOut5) # BIOM data
-save(T2D16S_samp, file = fileNameOut6) # Annotation data
-save(T2D16S_tax,  file = fileNameOut7) # Taxonomy data
+save(MOMSPI16S_mtx,  file = fileNameOut5) # BIOM data
+save(MOMSPI16S_samp, file = fileNameOut6) # Annotation data
+save(MOMSPI16S_tax,  file = fileNameOut7) # Taxonomy data
 ```
 
 Data dimensions for the first version of the package
 
 ```
-> dim(T2D16S_mtx)
-[1] 10815  1319
-> dim(T2D16S_samp)
-[1] 1319   10
-> dim(T2D16S_tax)
-[1] 10815     7
+> dim(momspi16S_mtx)
+[1] 7665 9107
+> dim(momspi16S_samp)
+[1] 9107    9
+> dim(momspi16S_tax)
+[1] 7665    7
 ```
 
 Data dimensions, current
 
 ```{r echo=TRUE}
 # Check dimensions
-dim(T2D16S_mtx)
-dim(T2D16S_samp)
-dim(T2D16S_tax)
+dim(MOMSPI16S_mtx)
+dim(MOMSPI16S_samp)
+dim(MOMSPI16S_tax)
 ```
+
+

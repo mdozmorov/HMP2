@@ -25,6 +25,7 @@
 
 - `read_ibd_t2d_biom.rda` - Make phyloseq objects for T2D and IBD data from biom files
 
+- `preprocess_MOMSPI_16S.Rmd` - HMP2Data MOMS-PI BIOM processing
 - `preprocess_T2D_16S.Rmd` - HMP2Data T2D BIOM processing
 
 ## host_cytokine
