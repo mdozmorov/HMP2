@@ -1,5 +1,5 @@
 ---
-title: "T2D data processing"
+title: "IBD data processing"
 author: "Mikhail Dozmorov"
 date: "`r Sys.Date()`"
 output:
@@ -37,17 +37,17 @@ dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
 # Use phyloseq or low-level reading of BIOM files
 phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
 # File names
-fileNameIn1  <- "data.T2D/hmp_cart_9df8de87d3.tsv"          # Manifest
-fileNameIn2  <- "data.T2D/hmp_cart_metadata_44df19f9ef.tsv" # Metadata
-fileNameOut1 <- "data.T2D/files_16S_unreadable.txt"         # Unreadable 16S files
+fileNameIn1  <- "data.IBD/hmp_cart_2246151709.tsv"          # Manifest
+fileNameIn2  <- "data.IBD/hmp_cart_metadata_14ca36907.tsv"  # Metadata
+fileNameOut1 <- "data.IBD/files_16S_unreadable.txt"         # Unreadable 16S files
 # Files for matching filenames
-fileNameOut2 <- "data.T2D/files_16S_actual_only.txt"        # Downloaded, but no annotations
-fileNameOut3 <- "data.T2D/files_16S_listed_only.txt"        # Annotated, but not downloaded
-fileNameOut4 <- "data.T2D/files_16S_actual_and_listed.txt"  # Downloaded AND Annotated
+fileNameOut2 <- "data.IBD/files_16S_actual_only.txt"        # Downloaded, but no annotations
+fileNameOut3 <- "data.IBD/files_16S_listed_only.txt"        # Annotated, but not downloaded
+fileNameOut4 <- "data.IBD/files_16S_actual_and_listed.txt"  # Downloaded AND Annotated
 # Files for saving the results
-fileNameOut5 <- "data.T2D/T2D16S_mtx.rda"  # BIOM data
-fileNameOut6 <- "data.T2D/T2D16S_samp.rda" # Annotation data
-fileNameOut7 <- "data.T2D/T2D16S_tax.rda"  # Taxonomy data
+fileNameOut5 <- "data.IBD/IBD16S_mtx.rda"  # BIOM data
+fileNameOut6 <- "data.IBD/IBD16S_samp.rda" # Annotation data
+fileNameOut7 <- "data.IBD/IBD16S_tax.rda"  # Taxonomy data
 ```
 
 ```{r}
@@ -70,7 +70,7 @@ mtx1 <- mtx1[!(mtx1$file_name == "otu_table.biom"), ]
 
 ```{r}
 # All downloaded files
-files <- list.files(file.path(dataDir, "t2d"), pattern = "biom", full.names = TRUE)
+files <- list.files(file.path(dataDir, "ibd"), pattern = "biom", full.names = TRUE)
 # Set progress bar
 pb <- txtProgressBar(min = 1, max = length(files), style = 3)
 
@@ -105,6 +105,8 @@ my_import_biom <- function(file, phyloseq_import_biom = TRUE) {
   return(mtx_biom)
 }
 ```
+
+
 
 ```{r}
 # Check if biom files in the specified folder can be read
@@ -154,6 +156,8 @@ all.equal(colnames(mtx_biom), mtx1$file_name)
 # Check overlap between Greengenes IDs and BIOM IDs
 # mtx_venn <- Venn2(rownames(mtx_tax_table), rownames(mtx_biom), c("Greengenes", "biom"))
 setdiff(rownames(mtx_biom), rownames(mtx_tax_table)) # Should be 0
+intersect(rownames(mtx_biom), rownames(mtx_tax_table)) %>% length
+
 # Subset and match the taxonomy table to the BIOM table
 mtx_tax_table <- mtx_tax_table[ rownames(mtx_tax_table) %in% rownames(mtx_biom), ]
 mtx_tax_table <- mtx_tax_table[ match(rownames(mtx_biom), rownames(mtx_tax_table)), ]
@@ -163,31 +167,32 @@ all.equal(rownames(mtx_biom), rownames(mtx_tax_table))
 
 ```{r}
 # Rename matrices for the package
-T2D16S_mtx  <- mtx_biom
-T2D16S_samp <- mtx1
-T2D16S_tax  <- mtx_tax_table
+IBD16S_mtx  <- mtx_biom
+IBD16S_samp <- mtx1
+IBD16S_tax  <- mtx_tax_table
 # Save them
-save(T2D16S_mtx,  file = fileNameOut5) # BIOM data
-save(T2D16S_samp, file = fileNameOut6) # Annotation data
-save(T2D16S_tax,  file = fileNameOut7) # Taxonomy data
+save(IBD16S_mtx,  file = fileNameOut5) # BIOM data
+save(IBD16S_samp, file = fileNameOut6) # Annotation data
+save(IBD16S_tax,  file = fileNameOut7) # Taxonomy data
 ```
 
 Data dimensions for the first version of the package
 
 ```
-> dim(T2D16S_mtx)
-[1] 10815  1319
-> dim(T2D16S_samp)
-[1] 1319   10
-> dim(T2D16S_tax)
-[1] 10815     7
+> dim(IBD16S_mtx)
+[1] 1777 1435
+> dim(IBD16S_samp)
+[1] 1435   11
+> dim(IBD16S_tax)
+[1] 1777    7
 ```
 
 Data dimensions, current
 
 ```{r echo=TRUE}
 # Check dimensions
-dim(T2D16S_mtx)
-dim(T2D16S_samp)
-dim(T2D16S_tax)
+dim(IBD16S_mtx)
+dim(IBD16S_samp)
+dim(IBD16S_tax)
 ```
+

@@ -23,6 +23,7 @@ options(stringsAsFactors = FALSE)
 
 ```{r libraries}
 library(phyloseq)
+library(biomformat)
 library(dplyr)
 library(readr)
 library(magrittr)
@@ -33,6 +34,8 @@ load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts
 ```{r settings}
 # Data folder
 dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+# Use phyloseq or low-level reading of BIOM files
+phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
 # File names
 fileNameIn1  <- "data.MOMS-PI/hmp_cart_16d395b515.tsv"          # Manifest
 fileNameIn2  <- "data.MOMS-PI/hmp_cart_metadata_4568fb1008.tsv" # Metadata
@@ -90,12 +93,26 @@ mtx1  <- mtx1[1:30, ]
 ```
 
 ```{r}
+my_import_biom <- function(file, phyloseq_import_biom = TRUE) {
+  if (phyloseq_import_biom) { # phyloseq way
+    mtx_biom <- import_biom(file) %>% otu_table() %>% as.data.frame() 
+    mtx_biom <- data.frame(ID = rownames(mtx_biom), mtx_biom)
+  } else { # bioformat way
+    mtx_biom <- read_biom(file)
+    mtx_biom_data <- biom_data(mtx_biom, parallel = TRUE) # Extract data one time 
+    mtx_biom <- data.frame(ID = names(mtx_biom_data), mtx_biom_data)
+  }
+  return(mtx_biom)
+}
+```
+
+```{r}
 # Check if biom files in the specified folder can be read
 unreadable_files <- list()
 # Collect a list of unreadable files
 for(i in 1:length(files)) {
   setTxtProgressBar(pb, i)
-  res <- try(mtx_biom <- import_biom(files[i]), TRUE)
+  res <- try(mtx_biom <- my_import_biom(files[i], phyloseq_import_biom), TRUE)
   if(isTRUE(class(res)=="try-error")) { 
     unreadable_files <- c(unreadable_files, basename(files[i])) 
   } else { next }
@@ -115,8 +132,7 @@ if(length(unreadable_files) > 0) {
 mtx_list <- list()
 for(i in 1:length(files)) {
   setTxtProgressBar(pb, i)
-  mtx_biom <- import_biom(files[[i]]) %>% otu_table() %>% as.data.frame()
-  mtx_biom <- data.frame(ID = rownames(mtx_biom), mtx_biom)
+  mtx_biom <- my_import_biom(files[[i]], phyloseq_import_biom)
   colnames(mtx_biom) <- c("ID", paste0('s', i))
   mtx_list <- c(mtx_list, list(mtx_biom))
 }
