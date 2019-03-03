@@ -75,11 +75,7 @@
 
 - `scripts`
     - `greengenes.R` - process `data/gg_13_5_taxonomy.txt.gz` into `mtx_tax_table` object. 03-02-2019
-    - `ascp-commands_biom_16S.sh` - download 16S `.biom` files into `ptb` folder, 11/09/2018
-    - `ascp-commands_biom_16S_nonreadable.sh` - download nonreadable `.biom` files, listed in `data/biom_nonreadable.tsv`
-    
-    - `ascp-commands_biom_host_cytokine.sh` - download host_cytokine `.txt` files into `ptb` folder, 12/13/2018
-    
+
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
