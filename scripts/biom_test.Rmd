@@ -1,0 +1,66 @@
+---
+output: pdf_document
+---
+
+```{r}
+library(phyloseq)
+library(biomformat)
+# Data folder, adjust as needed
+dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb_nonreadable/"
+# Use phyloseq or low-level reading of BIOM files
+phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
+# All nonreadable files
+files <- list.files(dataDir, pattern = "biom", full.names = TRUE)
+length(files) 
+```
+
+```{r}
+my_import_biom <- function(file, phyloseq_import_biom = TRUE) {
+  if (phyloseq_import_biom) { # phyloseq way
+    mtx_biom <- import_biom(file) %>% otu_table() %>% as.data.frame() 
+    mtx_biom <- data.frame(ID = rownames(mtx_biom), mtx_biom)
+  } else { # bioformat way
+    mtx_biom <- read_biom(file)
+    mtx_biom_data <- biom_data(mtx_biom, parallel = TRUE) # Extract data one time 
+    mtx_biom <- data.frame(ID = names(mtx_biom_data), mtx_biom_data)
+  }
+  return(mtx_biom)
+}
+```
+
+
+```{r}
+# Test any file
+mtx_biom <- my_import_biom(files[1], phyloseq_import_biom = FALSE) # biomformat way
+```
+
+Error in read_biom(file) : Both attempts to read input file:
+/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb_nonreadable//EP016061_K20_MV1D.otu_table.biom
+either as JSON (BIOM-v1) or HDF5 (BIOM-v2).
+Check file path, file name, file itself, then try again.
+In addition: Warning message:
+In strsplit(conditionMessage(e), "\n") :
+
+```{r}
+mtx_biom <- my_import_biom(files[1], phyloseq_import_biom = TRUE) # phyloseq way
+```
+
+Error in read_biom(biom_file = BIOMfilename) : 
+  Both attempts to read input file:
+/Users/mdozmorov/Documents/Data/GitHub/HMP2/ptb_nonreadable//EP016061_K20_MV1D.otu_table.biom
+either as JSON (BIOM-v1) or HDF5 (BIOM-v2).
+Check file path, file name, file itself, then try again.
+In addition: Warning message:
+In strsplit(conditionMessage(e), "\n") :
+
+```{r eval=FALSE}
+# biomformat way
+mtx_biom <- read_biom(files[1]) 
+# Testing biomformat functions
+biom_data(mtx_biom) %>% as.data.frame()
+biom_shape(mtx_biom)
+colnames(mtx_biom)
+rownames(mtx_biom)
+header(mtx_biom)
+```
+

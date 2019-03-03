@@ -76,7 +76,7 @@
 
 - `scripts`
     - `greengenes.R` - process `data/gg_13_5_taxonomy.txt.gz` into `mtx_tax_table` object. 03-02-2019
-
+    - `biom_test.Rmd` - testing nonreadable BIOM files. 03-03-2019
     - `convert_biom2json.sh` - convert biom files to json format. Not working on "merlot" cluster
     - `download_moms-pi.sh` - download MOMS-PI data from http://vmc.vcu.edu/resources/momspi
     - `phyloseq_analysis.R` - phyloseq analysis vignette code
