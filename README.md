@@ -58,9 +58,12 @@
     - `hmp2_phyloseq_16s_ibd.rda` - phyloseq object for IBD data
 
 - `data.MOMS-PI`
-    - `ascp-commands_biom_16S_MOMS-PI.sh` - download 9170 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-02-2019
+    - `ascp-commands_biom_16S_MOMS-PI.sh` - download 9170 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS MOMS-PI  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-02-2019
     - `hmp_cart_16d395b515.tsv` - manifest, 03-0e-2019
     - `hmp_cart_metadata_4568fb1008.tsv` - metadata, 03-03-2019
+    - `ascp-commands_biom_cytokines_MOMS-PI.sh` - download 1396 cytokine text files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS MOMS-PI  AND File Format IS CSV  AND File Matrix Type IS host_cytokine, 03-04-2019
+    - `hmp_cart_3bab9c656f.tsv` - manifest, cytokines, 03-04-2019
+    - `hmp_cart_metadata_a4e66965d.tsv` - metadata, cytokines, 03-04-2019
 
 - `data.T2D`
     - `ascp-commands_biom_16S_T2D.sh` - download 2308 16S BIOM files, Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community, 03-02-2019

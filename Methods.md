@@ -2,7 +2,7 @@
 
 All publicly available data were downloaded from the Human Microbiome Project Data Portal (https://portal.hmpdacc.org/) on 11/09/2018. Specifically, "Project: Integrative Human Microbiome Project" was selected, followed by the selection of the study ("MOMS-PI" - Multi-Omics Microbiome Study - Pregnancy Initiative, "IBDMBD" - Inflammatory Bowel Disease Multi-Omics Data, "T2D" - Type 2 Diabetes Mellitus). Subsequent filters were applied to obtain "16s_community" data in "Biological Observation Matrix" (BIOM) format [@Buttigieg:2016aa], "host_cytokine" data in text format, sample annotation text files. The data were downloaded using Aspera client for Mac v.3.8.1. BIOM files were processed using the `biomformat` v.1.10.0 and `phyloseq` v.1.26.1 R packages. Custom scripts were used to convert the data into the `phyloseq` object.
 
-## Downloading MOMS-PI data https://portal.hmpdacc.org
+## Downloading data https://portal.hmpdacc.org
 
 - Install Aspera client to download files
     - Register your `username` and `password` at https://www.hmpdacc.org/hmp/register/ (approval takes time)
@@ -12,12 +12,26 @@ All publicly available data were downloaded from the Human Microbiome Project Da
         - Per instructions, add Aspera path to `.bash_profile`: `export PATH=/Users/mdozmorov/Applications/Aspera\ CLI/bin:$PATH`; for Linux: `export PATH=/home/mdozmorov/.aspera/cli/bin:$PATH`
     - Clone https://github.com/ihmpdcc/hmp_client, `bin/manifest2ascp.py` from here will be used to create Aspera download script
         - Generic example: `./manifest2ascp.py --manifest=hmp_cart_t2d_june_12_2017.tsv --user=username --password=password --ascp_path=/path/to/ascp/bin/ascp --ascp_options="-l 200M" > ascp-commands.sh`
-        - 16S: `./hmp_client/bin/manifest2ascp.py --manifest=data.MOMS-PI/hmp_cart_2ae82fd042.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`; for Linux `python2 hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_41c0aca569.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/home/mdozmorov/.aspera/cli/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`
-            - In `ascp-commands_biom_16S_MOMS-PI.sh`, replace `Aspera CLI` to `Aspera\ CLI`
-            - `chmod +x ascp-commands_biom_16S_MOMS-PI.sh` and `./ascp-commands_biom_16S_MOMS-PI.sh` will download files into `ptb` folder.
-            - After download: `cd ptb; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
-       - host_cytokine: `./hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_b10350603.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_host_cytokine.sh`
+        - In `ascp-commands.sh`, replace `Aspera CLI` to `Aspera\ CLI`
+        - `chmod +x ascp-commands.sh` and `./ascp-commands.sh` will download files.
+        
+## MOMS-PI 16S
 
+- https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "MOMS-PI"
+- Format: Project Name IS Integrative Human Microbiome Project  AND Study Name IS IBDMDB  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community
+- Download 16S data: `./hmp_client/bin/manifest2ascp.py --manifest=data.MOMS-PI/hmp_cart_2ae82fd042.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`
+- After download: `cd ptb; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
+
+
+        - 16S: ; for Linux `python2 hmp_client/bin/manifest2ascp.py --manifest=data/hmp_cart_41c0aca569.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/home/mdozmorov/.aspera/cli/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_16S_MOMS-PI.sh`
+            - After download: `cd ptb; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
+
+## MOMS-PI cytokine notes
+
+- https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "MOMS-PI"
+- Format: Project Name IS Integrative Human Microbiome Project  AND Study Name IS MOMS-PI  AND File Format IS CSV  AND File Matrix Type IS host_cytokine 
+- Download data: `./hmp_client/bin/manifest2ascp.py --manifest=data.MOMS-PI/hmp_cart_3bab9c656f.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_cytokines_MOMS-PI.sh`
+- After download: `mv ptb ptb_cytokines; cd ptb_cytokines; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
 
 ## T2D notes
 
