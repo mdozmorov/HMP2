@@ -1,0 +1,230 @@
+---
+title: "MOMS-PI cytokine data processing"
+author: "Mikhail Dozmorov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: no
+  html_document:
+    theme: cerulean
+    toc: yes
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE}
+# Set up the environment
+library(knitr)
+opts_chunk$set(cache.path='cache/', fig.path='img/', cache=F, tidy=T, fig.keep='high', echo=F, dpi=100, warnings=F, message=F, comment=NA, warning=F, results='as.is', fig.width = 10, fig.height = 6) #out.width=700, 
+library(pander)
+panderOptions('table.split.table', Inf)
+set.seed(1)
+library(dplyr)
+options(stringsAsFactors = FALSE)
+```
+
+```{r libraries}
+# library(phyloseq)
+# library(biomformat)
+library(dplyr)
+library(readr)
+library(magrittr)
+source("https://raw.githubusercontent.com/mdozmorov/MDmisc/master/R/venn.R")
+# load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts/greengenes.R
+```
+
+```{r settings}
+# Data folder
+dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+# Use phyloseq or low-level reading of BIOM files
+phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
+# File names
+fileNameIn1  <- "data.MOMS-PI/hmp_cart_3bab9c656f.tsv"          # Manifest
+fileNameIn2  <- "data.MOMS-PI/hmp_cart_metadata_a4e66965d.tsv" # Metadata
+fileNameOut1 <- "data.MOMS-PI/files_cytokine_unreadable.txt"         # Unreadable files
+# Files for matching filenames
+fileNameOut2 <- "data.MOMS-PI/files_cytokine_actual_only.txt"        # Downloaded, but no annotations
+fileNameOut3 <- "data.MOMS-PI/files_cytokine_listed_only.txt"        # Annotated, but not downloaded
+fileNameOut4 <- "data.MOMS-PI/files_cytokine_actual_and_listed.txt"  # Downloaded AND Annotated
+# Files for saving the results
+fileNameOut5 <- "data.MOMS-PI/momspiCyto_mtx.rda"  # Main data
+fileNameOut6 <- "data.MOMS-PI/momspiCyto_samp.rda" # Annotation data
+# fileNameOut7 <- "data.MOMSPI/momspiCyto_tax.rda"  # Taxonomy data
+```
+
+```{r}
+mtx1 <- read_tsv(fileNameIn1) # Manifest
+mtx1 %<>% arrange(sample_id)  # Sort by sample_id
+mtx2 <- read_tsv(fileNameIn2) # Metadata
+mtx2 %<>% arrange(sample_id)  # Sort by sample_id
+all.equal(mtx1$sample_id, mtx2$sample_id) # Should be TRUE
+
+# Add file names
+mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
+mtx1 <- left_join(mtx1, mtx2, by = "sample_id") # Join by sample_id
+mtx1 <- mtx1[!duplicated(mtx1), ]                  # Remove duplicates
+
+# Remove files that all have generic `otu_table.biom` name
+# They are downloaded in the same folder and impossible to distinguish
+# indistinguishable_sample_id <- mtx1$sample_id[mtx1$file_name == "otu_table.biom"]
+# mtx1 <- mtx1[!(mtx1$file_name == "otu_table.biom"), ]
+```
+
+```{r}
+# All downloaded files
+files <- list.files(file.path(dataDir, "ptb_cytokines"), pattern = "txt", full.names = TRUE)
+# Set progress bar
+pb <- txtProgressBar(min = 1, max = length(files), style = 3)
+
+# Overlap between Downloaded (Actual) and Annotated (Listed) files
+mtx_venn <- Venn2(files %>% basename, mtx1$file_name, c("Actual", "Listed"))
+# Save the lists
+writeLines(mtx_venn$id[mtx_venn$Actual == 1 & mtx_venn$Listed == 0 ], fileNameOut2) # Downloaded, but no annotations
+writeLines(mtx_venn$id[mtx_venn$Actual == 0 & mtx_venn$Listed == 1 ], fileNameOut3) # Annotated, but not downloaded
+writeLines(mtx_venn$id[mtx_venn$Actual == 1 & mtx_venn$Listed == 1 ], fileNameOut4) # Downloaded AND Annotated
+
+# Match the order
+mtx1 <- mtx1[match(basename(files), mtx1$file_name), ]
+all.equal(basename(files), mtx1$file_name)
+```
+
+```{r eval = FALSE}
+# Manually subset files and annotation for faster processing
+files <- files[1:30]
+mtx1  <- mtx1[1:30, ]
+```
+
+```{r eval=FALSE}
+my_import_biom <- function(file, phyloseq_import_biom = TRUE) {
+  if (phyloseq_import_biom) { # phyloseq way
+    mtx_biom <- import_biom(file) %>% otu_table() %>% as.data.frame() 
+    mtx_biom <- data.frame(ID = rownames(mtx_biom), mtx_biom)
+  } else { # bioformat way
+    mtx_biom <- read_biom(file)
+    mtx_biom_data <- biom_data(mtx_biom, parallel = TRUE) # Extract data one time 
+    mtx_biom <- data.frame(ID = names(mtx_biom_data), mtx_biom_data)
+  }
+  return(mtx_biom)
+}
+```
+
+```{r}
+# Check if biom files in the specified folder can be read
+unreadable_files <- list()
+# Collect a list of unreadable files
+for(i in 1:length(files)) {
+  setTxtProgressBar(pb, i)
+  res <- try(suppressMessages(mtx_biom <- read_tsv(files[i])))
+  if(isTRUE(class(res)=="try-error")) { 
+    unreadable_files <- c(unreadable_files, basename(files[i])) 
+  } else { next }
+}
+unreadable_files <- unlist(unreadable_files)
+
+# Remove unreadable files from the lists
+if(length(unreadable_files) > 0) {
+  files <- files[ !(basename(files) %in% unreadable_files) ]
+  mtx1  <- mtx1[  !(mtx1$file_name %in% unreadable_files), ]
+  writeLines(unreadable_files, fileNameOut1) # Save the list of unreadable files
+}
+```
+
+```{r}
+# Read in all BIOM files
+mtx_list <- list()
+for(i in 1:length(files)) {
+  setTxtProgressBar(pb, i)
+  suppressMessages(mtx_biom <- read_tsv(files[i]))
+  colnames(mtx_biom) <- c("ID", paste0('s', i))
+  mtx_list <- c(mtx_list, list(mtx_biom))
+}
+# Combine all elements in a list into a data frame, merging by both IDs. Time consuming, over 5 hours
+mtx_biom <- mtx_list %>% purrr::reduce(full_join, by = c("ID"))
+mtx_biom[1:5, 1:5]
+
+mtx_biom_rownames <- mtx_biom$ID  # Save ID column for rownames
+mtx_biom <- mtx_biom[, -1]        # Remove ID column
+mtx_biom[is.na(mtx_biom)] <- 0    # Replace NAs with zeros
+mtx_biom <- as.matrix(mtx_biom)   # Convert to matrix
+rownames(mtx_biom) <- mtx_biom_rownames  # Add rownames
+colnames(mtx_biom) <- files %>% basename # Add colnames  
+all.equal(colnames(mtx_biom), mtx1$file_name)
+```
+
+Recode "out-of-range" "OOR <" and "OOR >" as -2 and -1
+
+```{r}
+mtx_biom[ mtx_biom == "OOR >"] <- -1
+mtx_biom[ mtx_biom == "OOR <"] <- -2
+class(mtx_biom) <- "numeric"
+```
+
+
+```{r eval=FALSE}
+# Check overlap between Greengenes IDs and BIOM IDs
+# mtx_venn <- Venn2(rownames(mtx_tax_table), rownames(mtx_biom), c("Greengenes", "biom"))
+setdiff(rownames(mtx_biom), rownames(mtx_tax_table)) # Should be 0
+# Subset and match the taxonomy table to the BIOM table
+mtx_tax_table <- mtx_tax_table[ rownames(mtx_tax_table) %in% rownames(mtx_biom), ]
+mtx_tax_table <- mtx_tax_table[ match(rownames(mtx_biom), rownames(mtx_tax_table)), ]
+all.equal(rownames(mtx_biom), rownames(mtx_tax_table))
+```
+
+
+```{r}
+# Rename matrices for the package
+momspiCyto_mtx  <- mtx_biom
+momspiCyto_samp <- mtx1
+# momspiCyto_tax  <- mtx_tax_table
+# Make them compatible with the current objects in the R package
+colnames(momspiCyto_mtx) <- sub(pattern = ".CytokineProfile.txt", replacement = "", x = colnames(momspiCyto_mtx)) # Clean up sample names
+momspiCyto_samp <- as.data.frame(momspiCyto_samp)
+momspiCyto_samp$file_name  <- sub(pattern = ".CytokineProfile.txt", replacement = "", x = momspiCyto_samp$file_name) # Clean up sample names
+all.equal(colnames(momspiCyto_mtx), momspiCyto_samp$file_name)
+rownames(momspiCyto_samp) <- colnames(momspiCyto_mtx)
+# Save them
+save(momspiCyto_mtx,  file = fileNameOut5) # Main data
+save(momspiCyto_samp, file = fileNameOut6) # Annotation data
+# save(momspiCyto_tax,  file = fileNameOut7) # Taxonomy data
+```
+
+Data dimensions, current
+
+```{r echo=TRUE}
+# Check dimensions
+dim(momspiCyto_mtx)
+dim(momspiCyto_samp)
+# dim(momspiCyto_tax)
+momspiCyto_mtx[1:5, 1:5]
+class(momspiCyto_mtx)
+momspiCyto_samp[1:5, 1:5]
+class(momspiCyto_samp)
+```
+
+Data dimensions for the first version of the package
+
+```
+> # Check dimensions
+> dim(momspiCyto_mtx)
+[1]  29 872
+> dim(momspiCyto_samp)
+[1] 872   9
+> # dim(momspiCyto_tax)
+> momspiCyto_mtx[1:5, 1:5]
+          EP036702_K10_MVAX EP062329_K10_MP1P EP062329_K10_MVAX EP062329_K20_MVAX EP062329_K30_MVAX
+Eotaxin               73.91             83.21             11.32             36.42             25.98
+FGF_basic            307.07              0.00              0.00              0.00              0.00
+G-CSF                430.87            324.73              0.00            126.38            120.45
+GM-CSF              7615.00              0.00            505.35            478.16            526.17
+IFN-g                481.79            274.65              0.00            129.54             85.67
+> class(momspiCyto_mtx)
+[1] "matrix"
+> momspiCyto_samp[1:5, 1:5]
+                                         sample_id                       subject_id sample_body_site visit_number subject_gender
+EP036702_K10_MVAX 858ed4564f11795ec13dda4c109e7125 88af6472fb03642dd5eaf8cddcbf6b85           vagina            1         female
+EP062329_K10_MP1P c1a3c2242013072d08ebe1b80968fa51 858ed4564f11795ec13dda4c10a11c73       blood cell            1         female
+EP062329_K10_MVAX c1a3c2242013072d08ebe1b8096ee262 858ed4564f11795ec13dda4c10a11c73           vagina            1         female
+EP062329_K20_MVAX c1a3c2242013072d08ebe1b8096bc388 858ed4564f11795ec13dda4c10a11c73           vagina            2         female
+EP062329_K30_MVAX c1a3c2242013072d08ebe1b80970308d 858ed4564f11795ec13dda4c10a11c73           vagina            3         female
+> class(momspiCyto_samp)
+[1] "data.frame"
+```
+
