@@ -31,7 +31,7 @@ All publicly available data were downloaded from the Human Microbiome Project Da
 - https://portal.hmpdacc.org, select "Data", Samples/Projects: "Integrative Human Microbiome Project", Samples/Studies: "MOMS-PI"
 - Format: Project Name IS Integrative Human Microbiome Project  AND Study Name IS MOMS-PI  AND File Format IS CSV  AND File Matrix Type IS host_cytokine 
 - Download data: `./hmp_client/bin/manifest2ascp.py --manifest=data.MOMS-PI/hmp_cart_3bab9c656f.tsv --user=mdozmorov --password=FNEMHgvf --ascp_path=/Users/mdozmorov/Applications/Aspera\ CLI/bin/ascp --ascp_options="-l 200M" > ascp-commands_biom_cytokines_MOMS-PI.sh`
-- After download: `mv ptb ptb_cytokines; cd ptb_cytokines; find . -type f -name "*.biom" -exec mv {} . \; && rm -r genome; cd ..`
+- After download: `mv ptb ptb_cytokines; cd ptb_cytokines; find . -type f -name "*.txt" -exec mv {} . \; && rm -r cytokine; cd ..`
 
 ## T2D notes
 
