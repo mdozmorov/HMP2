@@ -196,4 +196,10 @@ Data dimensions, current
 dim(T2D16S_mtx)
 dim(T2D16S_samp)
 dim(T2D16S_tax)
+T2D16S_mtx[1:5, 1:5]
+class(T2D16S_mtx)
+T2D16S_samp[1:5, 1:5]
+class(T2D16S_samp)
+T2D16S_tax[1:5, 1:5]
+class(T2D16S_tax)
 ```
