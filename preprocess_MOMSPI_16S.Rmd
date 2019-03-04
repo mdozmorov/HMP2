@@ -163,13 +163,13 @@ all.equal(rownames(mtx_biom), rownames(mtx_tax_table))
 
 ```{r}
 # Rename matrices for the package
-MOMSPI16S_mtx  <- mtx_biom
-MOMSPI16S_samp <- mtx1
-MOMSPI16S_tax  <- mtx_tax_table
+momspi16S_mtx  <- mtx_biom
+momspi16S_samp <- mtx1
+momspi16S_tax  <- mtx_tax_table
 # Save them
-save(MOMSPI16S_mtx,  file = fileNameOut5) # BIOM data
-save(MOMSPI16S_samp, file = fileNameOut6) # Annotation data
-save(MOMSPI16S_tax,  file = fileNameOut7) # Taxonomy data
+save(momspi16S_mtx,  file = fileNameOut5) # BIOM data
+save(momspi16S_samp, file = fileNameOut6) # Annotation data
+save(momspi16S_tax,  file = fileNameOut7) # Taxonomy data
 ```
 
 Data dimensions for the first version of the package
