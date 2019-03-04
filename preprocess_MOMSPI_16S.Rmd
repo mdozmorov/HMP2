@@ -139,13 +139,13 @@ for(i in 1:length(files)) {
 # Combine all elements in a list into a data frame, merging by both IDs. Time consuming, over 5 hours
 mtx_biom <- mtx_list %>% purrr::reduce(full_join, by = c("ID"))
 mtx_biom[1:5, 1:5]
-mtx_biom[is.na(mtx_biom)] <- 0
 
-rownames(mtx_biom) <- mtx_biom$ID
-mtx_biom           <- mtx_biom[, -1]
-
-mtx_biom <- as.matrix(mtx_biom)
-colnames(mtx_biom) <- files %>% basename
+mtx_biom_rownames <- mtx_biom$ID  # Save ID column for rownames
+mtx_biom <- mtx_biom[, -1]        # Remove ID column
+mtx_biom[is.na(mtx_biom)] <- 0    # Replace NAs with zeros
+mtx_biom <- as.matrix(mtx_biom)   # Convert to matrix
+rownames(mtx_biom) <- mtx_biom_rownames  # Add rownames
+colnames(mtx_biom) <- files %>% basename # Add colnames  
 all.equal(colnames(mtx_biom), mtx1$file_name)
 ```
 
@@ -178,17 +178,6 @@ save(momspi16S_samp, file = fileNameOut6) # Annotation data
 save(momspi16S_tax,  file = fileNameOut7) # Taxonomy data
 ```
 
-Data dimensions for the first version of the package
-
-```
-> dim(momspi16S_mtx)
-[1] 7665 9107
-> dim(momspi16S_samp)
-[1] 9107    9
-> dim(momspi16S_tax)
-[1] 7665    7
-```
-
 Data dimensions, current
 
 ```{r echo=TRUE}
@@ -204,4 +193,48 @@ momspi16S_tax[1:5, 1:5]
 class(momspi16S_tax)
 ```
 
+Data dimensions for the first version of the package
+
+```
+> # Check dimensions
+> dim(momspi16S_mtx)
+[1] 7665 9107
+> dim(momspi16S_samp)
+[1] 9107    9
+> dim(momspi16S_tax)
+[1] 7665    7
+> momspi16S_mtx[1:5, 1:5]
+        EP003595_K10_MV1D EP003595_K100_BRCD EP003595_K90_BCKD EP003595_K90_BRCD EP004835_K10_MCKD
+100039                  0                  0                 0                 0                 0
+1000547                 0                  0                 0                 0                 0
+1005406                 0                  0                 0                 0                 0
+1005533                 0                  0                 0                 0                 0
+1007399                 0                  0                 0                 0                 0
+> class(momspi16S_mtx)
+[1] "matrix"
+> momspi16S_samp[1:5, ]
+                                          sample_id                       subject_id sample_body_site visit_number subject_gender
+EP003595_K10_MV1D  8938ac880f194a32bc6b736c15714d95 858ed4564f11795ec13dda4c10a0d657           vagina            1         female
+EP003595_K100_BRCD 8938ac880f194a32bc6b736c15717f36 858ed4564f11795ec13dda4c10a0d657           rectum           10         female
+EP003595_K90_BCKD  8938ac880f194a32bc6b736c157154e4 858ed4564f11795ec13dda4c10a0d657    buccal mucosa            9         female
+EP003595_K90_BRCD  8938ac880f194a32bc6b736c157164d6 858ed4564f11795ec13dda4c10a0d657           rectum            9         female
+EP004835_K10_MCKD  e50d0c183689e4053ccb35f8b2de153a e50d0c183689e4053ccb35f8b29d98c8    buccal mucosa            1         female
+                   subject_race study_full_name                         project_name               file
+EP003595_K10_MV1D       unknown          momspi Integrative Human Microbiome Project  EP003595_K10_MV1D
+EP003595_K100_BRCD      unknown          momspi Integrative Human Microbiome Project EP003595_K100_BRCD
+EP003595_K90_BCKD       unknown          momspi Integrative Human Microbiome Project  EP003595_K90_BCKD
+EP003595_K90_BRCD       unknown          momspi Integrative Human Microbiome Project  EP003595_K90_BRCD
+EP004835_K10_MCKD       unknown          momspi Integrative Human Microbiome Project  EP004835_K10_MCKD
+> class(momspi16S_samp)
+[1] "data.frame"
+> momspi16S_tax[1:5, 1:5]
+        Kingdom    Phylum           Class                Order             Family             
+100039  "Bacteria" "Firmicutes"     "Bacilli"            "Lactobacillales" "Enterococcaceae"  
+1000547 "Bacteria" "Firmicutes"     "Bacilli"            "Lactobacillales" "Streptococcaceae" 
+1005406 "Bacteria" "Firmicutes"     "Bacilli"            "Bacillales"      "Staphylococcaceae"
+1005533 "Bacteria" "Firmicutes"     "Bacilli"            "Lactobacillales" "Carnobacteriaceae"
+1007399 "Bacteria" "Proteobacteria" "Betaproteobacteria" "Neisseriales"    "Neisseriaceae"    
+> class(momspi16S_tax)
+[1] "matrix"
+```
 

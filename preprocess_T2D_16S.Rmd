@@ -139,13 +139,13 @@ for(i in 1:length(files)) {
 # Combine all elements in a list into a data frame, merging by both IDs. Time consuming, over 5 hours
 mtx_biom <- mtx_list %>% purrr::reduce(full_join, by = c("ID"))
 mtx_biom[1:5, 1:5]
-mtx_biom[is.na(mtx_biom)] <- 0
 
-rownames(mtx_biom) <- mtx_biom$ID
-mtx_biom           <- mtx_biom[, -1]
-
-mtx_biom <- as.matrix(mtx_biom)
-colnames(mtx_biom) <- files %>% basename
+mtx_biom_rownames <- mtx_biom$ID  # Save ID column for rownames
+mtx_biom <- mtx_biom[, -1]        # Remove ID column
+mtx_biom[is.na(mtx_biom)] <- 0    # Replace NAs with zeros
+mtx_biom <- as.matrix(mtx_biom)   # Convert to matrix
+rownames(mtx_biom) <- mtx_biom_rownames  # Add rownames
+colnames(mtx_biom) <- files %>% basename # Add colnames  
 all.equal(colnames(mtx_biom), mtx1$file_name)
 ```
 
@@ -178,17 +178,6 @@ save(T2D16S_samp, file = fileNameOut6) # Annotation data
 save(T2D16S_tax,  file = fileNameOut7) # Taxonomy data
 ```
 
-Data dimensions for the first version of the package
-
-```
-> dim(T2D16S_mtx)
-[1] 10815  1319
-> dim(T2D16S_samp)
-[1] 1319   10
-> dim(T2D16S_tax)
-[1] 10815     7
-```
-
 Data dimensions, current
 
 ```{r echo=TRUE}
@@ -203,3 +192,67 @@ class(T2D16S_samp)
 T2D16S_tax[1:5, 1:5]
 class(T2D16S_tax)
 ```
+
+Data dimensions for the first version of the package
+
+```
+> # Check dimensions
+> dim(T2D16S_mtx)
+[1] 10815  1319
+> dim(T2D16S_samp)
+[1] 1319   10
+> dim(T2D16S_tax)
+[1] 10815     7
+> T2D16S_mtx[1:5, 1:5]
+        HMP2_J05408_1_NS_T0_B0_0122_ZMGT937-1014_AAH7B.biom HMP2_J05409_1_ST_T0_B0_0122_ZMBH10Z-04_AAH7B.biom
+4121939                                                   3                                                 0
+386088                                                   13                                                 0
+893992                                                   21                                                 0
+364736                                                    4                                                43
+1064036                                                 884                                                 0
+        HMP2_J05410_1_ST_T0_B0_0120_ZLZQMEV-01_AA31J.biom HMP2_J05412_1_NS_T0_B0_0122_ZLZQMEV-1012_AAH7B.biom
+4121939                                                 0                                                   0
+386088                                                  0                                                  37
+893992                                                  0                                                  24
+364736                                                 92                                                   1
+1064036                                                 0                                                1294
+        HMP2_J05413_1_NS_T0_B0_0122_ZLZQMEV-1013_AAH7B.biom
+4121939                                                   0
+386088                                                   23
+893992                                                   25
+364736                                                    0
+1064036                                                1057
+> class(T2D16S_mtx)
+[1] "matrix"
+> T2D16S_samp[1:5, 1:5]
+                                                                             file_id                        sample_id
+HMP2_J05408_1_NS_T0_B0_0122_ZMGT937-1014_AAH7B.biom 76612bd9a41885add4f6b0b76819a034 c22b9238b5b9beec7a9a1fc7c32dd02c
+HMP2_J05409_1_ST_T0_B0_0122_ZMBH10Z-04_AAH7B.biom   76612bd9a41885add4f6b0b76817deb5 c22b9238b5b9beec7a9a1fc7c32d0107
+HMP2_J05410_1_ST_T0_B0_0120_ZLZQMEV-01_AA31J.biom   76612bd9a41885add4f6b0b76817047f c22b9238b5b9beec7a9a1fc7c32c2048
+HMP2_J05412_1_NS_T0_B0_0122_ZLZQMEV-1012_AAH7B.biom 76612bd9a41885add4f6b0b76818f987 c22b9238b5b9beec7a9a1fc7c32c620a
+HMP2_J05413_1_NS_T0_B0_0122_ZLZQMEV-1013_AAH7B.biom 76612bd9a41885add4f6b0b768188fca c22b9238b5b9beec7a9a1fc7c32c6a50
+                                                                                              file_name                       subject_id
+HMP2_J05408_1_NS_T0_B0_0122_ZMGT937-1014_AAH7B.biom HMP2_J05408_1_NS_T0_B0_0122_ZMGT937-1014_AAH7B.biom 88af6472fb03642dd5eaf8cddc33ec10
+HMP2_J05409_1_ST_T0_B0_0122_ZMBH10Z-04_AAH7B.biom     HMP2_J05409_1_ST_T0_B0_0122_ZMBH10Z-04_AAH7B.biom 88af6472fb03642dd5eaf8cddc33f0b4
+HMP2_J05410_1_ST_T0_B0_0120_ZLZQMEV-01_AA31J.biom     HMP2_J05410_1_ST_T0_B0_0120_ZLZQMEV-01_AA31J.biom 88af6472fb03642dd5eaf8cddc3410c8
+HMP2_J05412_1_NS_T0_B0_0122_ZLZQMEV-1012_AAH7B.biom HMP2_J05412_1_NS_T0_B0_0122_ZLZQMEV-1012_AAH7B.biom 88af6472fb03642dd5eaf8cddc3410c8
+HMP2_J05413_1_NS_T0_B0_0122_ZLZQMEV-1013_AAH7B.biom HMP2_J05413_1_NS_T0_B0_0122_ZLZQMEV-1013_AAH7B.biom 88af6472fb03642dd5eaf8cddc3410c8
+                                                    sample_body_site
+HMP2_J05408_1_NS_T0_B0_0122_ZMGT937-1014_AAH7B.biom     nasal cavity
+HMP2_J05409_1_ST_T0_B0_0122_ZMBH10Z-04_AAH7B.biom              feces
+HMP2_J05410_1_ST_T0_B0_0120_ZLZQMEV-01_AA31J.biom       nasal cavity
+HMP2_J05412_1_NS_T0_B0_0122_ZLZQMEV-1012_AAH7B.biom     nasal cavity
+HMP2_J05413_1_NS_T0_B0_0122_ZLZQMEV-1013_AAH7B.biom     nasal cavity
+> class(T2D16S_samp)
+[1] "data.frame"
+> T2D16S_tax[1:5, 1:5]
+        Kingdom    Phylum           Class            Order             Family                
+4121939 "Bacteria" "Actinobacteria" "Actinobacteria" "Actinomycetales" "Propionibacteriaceae"
+386088  "Bacteria" "Actinobacteria" "Actinobacteria" "Actinomycetales" "Propionibacteriaceae"
+893992  "Bacteria" "Actinobacteria" "Actinobacteria" "Actinomycetales" "Propionibacteriaceae"
+364736  "Bacteria" "Firmicutes"     "Clostridia"     "Clostridiales"   NA                    
+1064036 "Bacteria" "Firmicutes"     "Clostridia"     "Clostridiales"   "[Tissierellaceae]"   
+> class(T2D16S_tax)
+[1] "matrix"
+```
+
