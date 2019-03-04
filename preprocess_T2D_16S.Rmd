@@ -166,6 +166,12 @@ all.equal(rownames(mtx_biom), rownames(mtx_tax_table))
 T2D16S_mtx  <- mtx_biom
 T2D16S_samp <- mtx1
 T2D16S_tax  <- mtx_tax_table
+# Make them compatible with the current objects in the R package
+colnames(T2D16S_mtx) <- sub(pattern = ".biom", replacement = "", x = colnames(T2D16S_mtx)) # Clean up sample names
+T2D16S_samp <- as.data.frame(T2D16S_samp)
+T2D16S_samp$file_name  <- sub(pattern = ".biom", replacement = "", x = T2D16S_samp$file_name) # Clean up sample names
+all.equal(colnames(T2D16S_mtx), T2D16S_samp$file_name)
+rownames(T2D16S_samp) <- colnames(T2D16S_mtx)
 # Save them
 save(T2D16S_mtx,  file = fileNameOut5) # BIOM data
 save(T2D16S_samp, file = fileNameOut6) # Annotation data

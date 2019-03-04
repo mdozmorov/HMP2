@@ -166,6 +166,12 @@ all.equal(rownames(mtx_biom), rownames(mtx_tax_table))
 momspi16S_mtx  <- mtx_biom
 momspi16S_samp <- mtx1
 momspi16S_tax  <- mtx_tax_table
+# Make them compatible with the current objects in the R package
+colnames(momspi16S_mtx) <- sub(pattern = ".otu_table.biom", replacement = "", x = colnames(momspi16S_mtx)) # Clean up sample names
+momspi16S_samp <- as.data.frame(momspi16S_samp)
+momspi16S_samp$file_name  <- sub(pattern = ".otu_table.biom", replacement = "", x = momspi16S_samp$file_name) # Clean up sample names
+all.equal(colnames(momspi16S_mtx), momspi16S_samp$file_name)
+rownames(momspi16S_samp) <- colnames(momspi16S_mtx)
 # Save them
 save(momspi16S_mtx,  file = fileNameOut5) # BIOM data
 save(momspi16S_samp, file = fileNameOut6) # Annotation data
