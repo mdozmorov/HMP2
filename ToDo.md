@@ -1,6 +1,17 @@
 # ToDo
 
+- For 16S, Project Name IS Integrative Human Microbiome Project  AND Study Name IS MOMS-PI  AND File Format IS Biological Observation Matrix  AND File Matrix Type IS 16s_community. 
+    - https://portal.hmpdacc.org/search/f?filters=%7B%22op%22:%22and%22,%22content%22:%5B%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.study_name%22,%22value%22:%5B%22MOMS-PI%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22cases.project_name%22,%22value%22:%5B%22Integrative%20Human%20Microbiome%20Project%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_format%22,%22value%22:%5B%22Biological%20Observation%20Matrix%22%5D%7D%7D,%7B%22op%22:%22in%22,%22content%22:%7B%22field%22:%22files.file_matrix_type%22,%22value%22:%5B%2216s_community%22%5D%7D%7D%5D%7D&facetTab=files&pagination=%7B%22files%22:%"7B%22from%22:0,%22size%22:20,%22sort%22:%22file_name.raw:asc%22%7D%7D
+    - What is "Type"? It has "abundance_matrix" entry, selects
+
 - IBD data has non-Greengenes IDs, like "IP8BSoli" "UncTepi3" "Unc004ii" "Unc00re8" "Unc018j2" "Unc04u81" "Unc58370" "Unc05fip". What are they?
+
+- For cytokine data, what is the difference between "Type:cytokine" (all files are 0 size and have "empty suffix") and "Matrix Type:host_cytokine"?
+
+- Would we use "Matrix Type:wgs_community", Metaphlan2 analysis? "microb_metatranscriptome"?  What is the difference between the two?
+
+- "host_lipidomic"? 
+
 
 - For cytokines, "Recode "OOR <" and "OOR >" as -2 and -1" - add to documentation
 
