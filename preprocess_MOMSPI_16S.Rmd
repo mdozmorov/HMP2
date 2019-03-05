@@ -182,9 +182,9 @@ Data dimensions, current
 
 ```{r echo=TRUE}
 # Check dimensions
-dim(MOMSPI16S_mtx)
-dim(MOMSPI16S_samp)
-dim(MOMSPI16S_tax)
+dim(momspi16S_mtx)
+dim(momspi16S_samp)
+dim(momspi16S_tax)
 momspi16S_mtx[1:5, 1:5]
 class(momspi16S_mtx)
 momspi16S_samp[1:5, ]
