@@ -89,6 +89,10 @@
 
 ## URLs
 
+- The OSDF JSON-Schema files for the iHMP project, Heather Huot Creasy, HHuot@som.umaryland.edu, 03-08-2019. https://github.com/ihmpdcc/osdf-schemas
+    - `Schema_analysis.Rmd` - analysis
+
+
 ### Data
 
 - dbGAP controlled access for HMP2: [phs001523.v1.p1](https://www.ncbi.nlm.nih.gov/projects/gap/cgi-bin/study.cgi?study_id=phs001523.v1.p1#authorized-requests-section).
