@@ -33,7 +33,8 @@ load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts
 
 ```{r settings}
 # Data folder
-dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+# dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+dataDir <- "D:/HMP2/"
 # Use phyloseq or low-level reading of BIOM files
 phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
 # File names

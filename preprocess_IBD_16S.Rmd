@@ -28,12 +28,27 @@ library(dplyr)
 library(readr)
 library(magrittr)
 source("https://raw.githubusercontent.com/mdozmorov/MDmisc/master/R/venn.R")
+# load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts/greengenes.R
+# Load and format Silva taxonomy table
+# Table taken from here: https://raw.githubusercontent.com/JGiab/mgpred/master/taxonomic_profiles.tsv
+# mtx_tax_table <- read.table("data/maybe_silva_taxonomic_profiles.tsv")
+# mtx_tax_table <- mtx_tax_table[, c(1, 180:185)]
+# mtx_tax_table <- apply(mtx_tax_table, 2, function(x) gsub("_", "", x)) %>% apply(., 2, function(x) gsub(";", "", x))
+# colnames(mtx_tax_table) <- c("ID", "Kingdom", 'Phylum', 'Class', 'Order', 'Family', 'Genus')
+# mtx_tax_table <- cbind(mtx_tax_table, Species = NA)
+# rownames(mtx_tax_table) <- mtx_tax_table[,1]
+# mtx_tax_table <- mtx_tax_table[, -1]
+# save(mtx_tax_table, file = "data/silva_taxonomy_table.rda")
+load("data/silva_taxonomy_table.rda")
+mtx_tax_table_tmp <- mtx_tax_table
 load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts/greengenes.R
+mtx_tax_table <- rbind(mtx_tax_table, mtx_tax_table_tmp)
 ```
 
 ```{r settings}
 # Data folder
-dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+# dataDir <- "/Users/mdozmorov/Documents/Data/GitHub/HMP2/"
+dataDir <- "D:/HMP2/"
 # Use phyloseq or low-level reading of BIOM files
 phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
 # File names
