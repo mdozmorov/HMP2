@@ -46,9 +46,9 @@ fileNameOut2 <- "data.MOMS-PI/files_16S_actual_only.txt"        # Downloaded, bu
 fileNameOut3 <- "data.MOMS-PI/files_16S_listed_only.txt"        # Annotated, but not downloaded
 fileNameOut4 <- "data.MOMS-PI/files_16S_actual_and_listed.txt"  # Downloaded AND Annotated
 # Files for saving the results
-fileNameOut5 <- "data.MOMS-PI/MOMSPI16S_mtx.rda"  # BIOM data
-fileNameOut6 <- "data.MOMS-PI/MOMSPI16S_samp.rda" # Annotation data
-fileNameOut7 <- "data.MOMS-PI/MOMSPI16S_tax.rda"  # Taxonomy data
+fileNameOut5 <- "data.MOMS-PI/momspi16S_mtx.rda"  # BIOM data
+fileNameOut6 <- "data.MOMS-PI/momspi16S_samp.rda" # Annotation data
+fileNameOut7 <- "data.MOMS-PI/momspi16S_tax.rda"  # Taxonomy data
 ```
 
 ```{r}

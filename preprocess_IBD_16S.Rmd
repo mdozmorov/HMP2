@@ -28,22 +28,8 @@ library(dplyr)
 library(readr)
 library(magrittr)
 source("https://raw.githubusercontent.com/mdozmorov/MDmisc/master/R/venn.R")
-# load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts/greengenes.R
-# Load and format Silva taxonomy table
-# Table taken from here: https://raw.githubusercontent.com/JGiab/mgpred/master/taxonomic_profiles.tsv
-# mtx_tax_table <- read.table("data/maybe_silva_taxonomic_profiles.tsv")
-# mtx_tax_table <- mtx_tax_table[, c(1, 180:185)]
-# mtx_tax_table <- apply(mtx_tax_table, 2, function(x) gsub("_", "", x)) %>% apply(., 2, function(x) gsub(";", "", x))
-# colnames(mtx_tax_table) <- c("ID", "Kingdom", 'Phylum', 'Class', 'Order', 'Family', 'Genus')
-# mtx_tax_table <- cbind(mtx_tax_table, Species = NA)
-# rownames(mtx_tax_table) <- mtx_tax_table[,1]
-# mtx_tax_table <- mtx_tax_table[, -1]
-# save(mtx_tax_table, file = "data/silva_taxonomy_table.rda")
-load("data/silva_taxonomy_table.rda")
-mtx_tax_table_tmp <- mtx_tax_table
-load(file = "data/gg_13_5_taxonomy.rda") # mtx_tax_table for Greengenes, scripts/greengenes.R
-mtx_tax_table <- rbind(mtx_tax_table, mtx_tax_table_tmp)
 ```
+
 
 ```{r settings}
 # Data folder
@@ -52,119 +38,71 @@ dataDir <- "D:/HMP2/"
 # Use phyloseq or low-level reading of BIOM files
 phyloseq_import_biom <- FALSE # If FALSE, `read_biom` will be used
 # File names
-fileNameIn1  <- "data.IBD/hmp_cart_2246151709.tsv"          # Manifest
-fileNameIn2  <- "data.IBD/hmp_cart_metadata_14ca36907.tsv"  # Metadata
+fileNameIn1  <- "data_IBD_new/taxonomic_profiles.tsv"       # OTU table
+fileNameIn2  <- "data_IBD_new/hmp2_metadata.csv"            # Metadata
 fileNameOut1 <- "data.IBD/files_16S_unreadable.txt"         # Unreadable 16S files
 # Files for matching filenames
 fileNameOut2 <- "data.IBD/files_16S_actual_only.txt"        # Downloaded, but no annotations
 fileNameOut3 <- "data.IBD/files_16S_listed_only.txt"        # Annotated, but not downloaded
 fileNameOut4 <- "data.IBD/files_16S_actual_and_listed.txt"  # Downloaded AND Annotated
 # Files for saving the results
-fileNameOut5 <- "data.IBD/IBD16S_mtx.rda"  # BIOM data
-fileNameOut6 <- "data.IBD/IBD16S_samp.rda" # Annotation data
-fileNameOut7 <- "data.IBD/IBD16S_tax.rda"  # Taxonomy data
+fileNameOut5 <- "data_IBD_new/IBD16S_mtx.rda"  # BIOM data
+fileNameOut6 <- "data_IBD_new/IBD16S_samp.rda" # Annotation data
+fileNameOut7 <- "data_IBD_new/IBD16S_tax.rda"  # Taxonomy data
 ```
 
 ```{r}
-mtx1 <- read_tsv(fileNameIn1) # Manifest
-mtx1 %<>% arrange(sample_id)  # Sort by sample_id
-mtx2 <- read_tsv(fileNameIn2) # Metadata
-mtx2 %<>% arrange(sample_id)  # Sort by sample_id
-all.equal(mtx1$sample_id, mtx2$sample_id) # Should be TRUE
-
-# Add file names
-mtx1 %<>% mutate(file_name = sapply(mtx1$urls, function(x) strsplit(x, split = ",", fixed = TRUE)[[1]][1] %>% basename) %>% unname)
-mtx1 <- left_join(mtx1, mtx2, by = "sample_id") # Join by sample_id
-mtx1 <- mtx1[!duplicated(mtx1), ]                  # Remove duplicates
-
-# Remove files that all have generic `otu_table.biom` name
-# They are downloaded in the same folder and impossible to distinguish
-indistinguishable_sample_id <- mtx1$sample_id[mtx1$file_name == "otu_table.biom"]
-mtx1 <- mtx1[!(mtx1$file_name == "otu_table.biom"), ]
+mtx1 <- read_csv(fileNameIn2) # Metadata
+mtx1 %<>% arrange(`External ID`)  # Sort by sample_id
+# Convert to data.frame
+mtx1 <- as.data.frame(mtx1)
 ```
-
-```{r}
-# All downloaded files
-files <- list.files(file.path(dataDir, "ibd"), pattern = "biom", full.names = TRUE)
-# Set progress bar
-pb <- txtProgressBar(min = 1, max = length(files), style = 3)
-
-# Overlap between Downloaded (Actual) and Annotated (Listed) files
-mtx_venn <- Venn2(files %>% basename, mtx1$file_name, c("Actual", "Listed"))
-# Save the lists
-writeLines(mtx_venn$id[mtx_venn$Actual == 1 & mtx_venn$Listed == 0 ], fileNameOut2) # Downloaded, but no annotations
-writeLines(mtx_venn$id[mtx_venn$Actual == 0 & mtx_venn$Listed == 1 ], fileNameOut3) # Annotated, but not downloaded
-writeLines(mtx_venn$id[mtx_venn$Actual == 1 & mtx_venn$Listed == 1 ], fileNameOut4) # Downloaded AND Annotated
-
-# Match the order
-mtx1 <- mtx1[match(basename(files), mtx1$file_name), ]
-all.equal(basename(files), mtx1$file_name)
-```
-
-```{r eval = FALSE}
-# Manually subset files and annotation for faster processing
-files <- files[1:30]
-mtx1  <- mtx1[1:30, ]
-```
-
-```{r}
-my_import_biom <- function(file, phyloseq_import_biom = TRUE) {
-  if (phyloseq_import_biom) { # phyloseq way
-    mtx_biom <- import_biom(file) %>% otu_table() %>% as.data.frame() 
-    mtx_biom <- data.frame(ID = rownames(mtx_biom), mtx_biom)
-  } else { # bioformat way
-    mtx_biom <- read_biom(file)
-    mtx_biom_data <- biom_data(mtx_biom, parallel = TRUE) # Extract data one time 
-    mtx_biom <- data.frame(ID = names(mtx_biom_data), mtx_biom_data)
-  }
-  return(mtx_biom)
-}
-```
-
 
 
 ```{r}
-# Check if biom files in the specified folder can be read
-unreadable_files <- list()
-# Collect a list of unreadable files
-for(i in 1:length(files)) {
-  setTxtProgressBar(pb, i)
-  res <- try(mtx_biom <- my_import_biom(files[i], phyloseq_import_biom), TRUE)
-  if(isTRUE(class(res)=="try-error")) { 
-    unreadable_files <- c(unreadable_files, basename(files[i])) 
-  } else { next }
-}
-unreadable_files <- unlist(unreadable_files)
-
-# Remove unreadable files from the lists
-if(length(unreadable_files) > 0) {
-  files <- files[ !(basename(files) %in% unreadable_files) ]
-  mtx1  <- mtx1[  !(mtx1$file_name %in% unreadable_files), ]
-  writeLines(unreadable_files, fileNameOut1) # Save the list of unreadable files
-}
-```
-
-```{r}
-# Read in all BIOM files
-mtx_list <- list()
-for(i in 1:length(files)) {
-  setTxtProgressBar(pb, i)
-  mtx_biom <- my_import_biom(files[[i]], phyloseq_import_biom)
-  colnames(mtx_biom) <- c("ID", paste0('s', i))
-  mtx_list <- c(mtx_list, list(mtx_biom))
-}
-# Combine all elements in a list into a data frame, merging by both IDs. Time consuming, over 5 hours
-mtx_biom <- mtx_list %>% purrr::reduce(full_join, by = c("ID"))
-mtx_biom[1:5, 1:5]
-mtx_biom[is.na(mtx_biom)] <- 0
-
-rownames(mtx_biom) <- mtx_biom$ID
-mtx_biom           <- mtx_biom[, -1]
-
+# Read in OTU table
+mtx_biom <- read_tsv(fileNameIn1) %>% as.data.frame()
+# Set Taxa IDs as rownames
+rownames(mtx_biom) <- mtx_biom$`#OTU ID`
+# Drop OTU ID column
+mtx_biom <- mtx_biom[,-1]
+# Create taxonomy table
+mtx_tax_table <- mtx_biom$taxonomy
+mtx_tax_table <- read.table(text = mtx_tax_table, sep = ';') # Split into data.frame wiith column for each classifier
+# Remove underscores
+mtx_tax_table <- apply(mtx_tax_table, 2, function(x) gsub("_", "", x))
+mtx_tax_table <- apply(mtx_tax_table, 2, function(x) gsub(" ", "", x))
+# Set rownames & colnames
+rownames(mtx_tax_table) <- rownames(mtx_biom)
+colnames(mtx_tax_table) <- c("Kingdom", 'Phylum', 'Class', 'Order', 'Family', 'Genus')
+# Drop taxonomy column from mtx_biom
+mtx_biom <- mtx_biom[, -179]
+# convert OTU table to numeric matrix
 mtx_biom <- as.matrix(mtx_biom)
-colnames(mtx_biom) <- files %>% basename
-all.equal(colnames(mtx_biom), mtx1$file_name)
 ```
+
+```{r}
+# Subset metadata to only samples present in OTU table
+mtx1 <- mtx1[mtx1$`External ID` %in% colnames(mtx_biom), ]
+# Arrange samples
+mtx_biom <- mtx_biom[, order(colnames(mtx_biom))]
+mtx1 <- mtx1[order(mtx1$`External ID`), ]
+# Check IDs match
+all.equal(mtx1$`External ID`, colnames(mtx_biom))
+# Set rownames for sample data
+rownames(mtx1) <- mtx1$`External ID`
+# Change sample data column names to match with other datasets
+colnames(mtx1)[471] <- "subject_race"
+colnames(mtx1)[9] <- "visit_number"
+colnames(mtx1)[459] <- "subject_gender"
+colnames(mtx1)[2] <- "subject_id"
+# Change capitalization of levels
+mtx1$subject_gender <- sub("Female", "female", mtx1$subject_gender)
+mtx1$subject_gender <- sub("Male", "male", mtx1$subject_gender)
+# Since none of the races fall into categories of other dataset just set all to uknown
+mtx1$subject_race <- "unknown"
+```
+
 
 
 ```{r}
